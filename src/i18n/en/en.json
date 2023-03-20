@@ -1,0 +1,8 @@
+{
+  "appName": "Ba Bau",
+  "tabBar": {
+    "home": "Home",
+    "premium": "Premium",
+    "account": "Account"
+  }
+}
