@@ -3,5 +3,7 @@ export type RootNavigatorParamList = {
   Premium: undefined,
   Account: undefined,
   Splash: undefined,
-  Main: { screen?: string }
+  Main: { screen?: string },
+  Login: undefined,
+  ForgotPassword: undefined,
 };

@@ -9,7 +9,9 @@ import { EThemeColor, GlobalVariables } from 'constants/index';
 
 import { useTheme } from 'hooks/useTheme';
 
+import ForgotPasswordScreen from 'screens/forgotPassword/ForgotPasswordScreen';
 import SplashScreen from 'screens/launch/LaunchScreen';
+import LoginScreen from 'screens/login/LoginScreen';
 import MainScreen from 'screens/main';
 
 import { getThemeColor } from 'utils/getThemeColor';
@@ -18,13 +20,14 @@ const Stack = createNativeStackNavigator<RootNavigatorParamList>();
 
 const RootStack = () => {
     return (
-        <Stack.Navigator
-            screenOptions={{ headerShown: false, animation: 'slide_from_right' }}
-            initialRouteName="Splash"
-        >
+        <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }} initialRouteName="Login">
             <Stack.Screen name="Splash" component={SplashScreen} />
 
             <Stack.Screen name="Main" component={MainScreen} options={{ animation: 'fade' }} />
+
+            <Stack.Screen name="Login" component={LoginScreen} options={{ animation: 'fade_from_bottom' }} />
+
+            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         </Stack.Navigator>
     );
 };
