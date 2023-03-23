@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import SvgIcons from 'assets/svgs';
 
@@ -10,6 +11,7 @@ import TouchableOpacity from 'components/TouchableOpacity';
 import { useTheme } from 'hooks/useTheme';
 
 import { goToForgotPassword } from 'screens/forgotPassword/src/utils';
+import { goToRegister } from 'screens/register/src/utils';
 
 import { Fonts, Sizes } from 'themes';
 
@@ -20,6 +22,10 @@ const LoginScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const [securePassword, setSecurePassword] = useState<boolean>(true);
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+
+    const onLogin = () => {};
 
     const renderHeader = useCallback(() => {
         return (
@@ -35,7 +41,7 @@ const LoginScreen = () => {
     const renderInputEmail = () => (
         <View>
             <Text style={styles.title}>Email</Text>
-            <Input placeholder="Vui lòng nhập email" />
+            <Input value={email} onChangeText={setEmail} placeholder="Vui lòng nhập email" />
         </View>
     );
 
@@ -45,6 +51,8 @@ const LoginScreen = () => {
             <View style={styles.inputPasswordContainer}>
                 <Text style={styles.title}>Mật khẩu</Text>
                 <Input
+                    value={password}
+                    onChangeText={setPassword}
                     placeholder="Vui lòng nhập mật khẩu"
                     secureTextEntry={securePassword}
                     icon={<Icon width={scales(15)} height={scales(15)} />}
@@ -59,24 +67,33 @@ const LoginScreen = () => {
             <TouchableOpacity onPress={goToForgotPassword}>
                 <Text style={styles.forgotPassword}>Quên mật khẩu?</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={goToRegister}>
                 <Text style={styles.register}>Đăng ký</Text>
             </TouchableOpacity>
         </View>
     );
 
     const renderButton = () => (
-        <Button title="Đăng nhập" customStyles={{ marginTop: scales(30), marginBottom: scales(20) }} />
+        <Button
+            title="Đăng nhập"
+            onPress={onLogin}
+            customStyles={{ marginTop: scales(30), marginBottom: scales(20) }}
+        />
     );
 
     const renderContent = () => (
-        <ScrollView style={styles.content} keyboardShouldPersistTaps={'handled'}>
+        <KeyboardAwareScrollView
+            contentContainerStyle={styles.content}
+            extraHeight={scales(125)}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            enableOnAndroid>
             {renderHeader()}
             {renderInputEmail()}
             {renderInputPassword()}
             {renderForgotPasswordAndRegister()}
             {renderButton()}
-        </ScrollView>
+        </KeyboardAwareScrollView>
     );
 
     return <View style={styles.container}>{renderContent()}</View>;

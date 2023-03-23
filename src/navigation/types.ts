@@ -6,4 +6,5 @@ export type RootNavigatorParamList = {
   Main: { screen?: string },
   Login: undefined,
   ForgotPassword: undefined,
+  Register: undefined,
 };

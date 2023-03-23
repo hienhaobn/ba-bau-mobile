@@ -9,10 +9,9 @@ import { EThemeColor, GlobalVariables } from 'constants/index';
 
 import { useTheme } from 'hooks/useTheme';
 
-import ForgotPasswordScreen from 'screens/forgotPassword/ForgotPasswordScreen';
 import SplashScreen from 'screens/launch/LaunchScreen';
-import LoginScreen from 'screens/login/LoginScreen';
 import MainScreen from 'screens/main';
+import { Screen } from 'screens/screens';
 
 import { getThemeColor } from 'utils/getThemeColor';
 
@@ -25,9 +24,11 @@ const RootStack = () => {
 
             <Stack.Screen name="Main" component={MainScreen} options={{ animation: 'fade' }} />
 
-            <Stack.Screen name="Login" component={LoginScreen} options={{ animation: 'fade_from_bottom' }} />
+            <Stack.Screen name="Login" component={Screen.Login} options={{ animation: 'fade_from_bottom' }} />
 
-            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+            <Stack.Screen name="ForgotPassword" component={Screen.ForgotPassword} />
+
+            <Stack.Screen name="Register" component={Screen.Register} />
         </Stack.Navigator>
     );
 };
