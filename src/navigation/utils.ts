@@ -46,7 +46,6 @@ export function goBack() {
 }
 
 export function resetStack(name: keyof RootNavigatorParamList, params = {}) {
-    console.log('isReady', navigationRef);
     navigationRef.reset({
         index: 0,
         routes: [

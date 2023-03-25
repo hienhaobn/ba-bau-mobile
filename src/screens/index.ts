@@ -5,8 +5,7 @@ import Launch from './launch/LaunchScreen';
 import Login from './login/LoginScreen';
 import Premium from './premium/PremiumScreen';
 import Register from './register/RegisterScreen';
-
-import Splash from 'screens/launch/LaunchScreen';
+import VerifyOTP from './verifyOTP/VerifyOTPScreen';
 
 export const Screen = {
     // TAB BOTTOM
@@ -19,4 +18,5 @@ export const Screen = {
     Login,
     ForgotPassword,
     Register,
+    VerifyOTP,
 };

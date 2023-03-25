@@ -5,7 +5,7 @@ import MyTabBar from './MyTabBar';
 
 import { RootNavigatorParamList } from 'navigation/types';
 
-import { Screen } from 'screens/screens';
+import { Screen } from 'screens';
 
 const Tab = createBottomTabNavigator<RootNavigatorParamList>();
 

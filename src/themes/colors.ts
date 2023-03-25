@@ -1,6 +1,8 @@
 export const ColorLightTheme = {
     transparent: 'transparent',
     white: '#ffffff',
+    green: '#00B593',
+    red: '#D44242',
 
     shadow: 'rgba(0, 0, 0, 0.02)',
 

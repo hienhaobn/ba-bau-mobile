@@ -7,4 +7,5 @@ export type RootNavigatorParamList = {
   Login: undefined,
   ForgotPassword: undefined,
   Register: undefined,
+  VerifyOTP: undefined,
 };

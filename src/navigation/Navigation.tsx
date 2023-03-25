@@ -9,9 +9,10 @@ import { EThemeColor, GlobalVariables } from 'constants/index';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { Screen } from 'screens';
+
 import SplashScreen from 'screens/launch/LaunchScreen';
 import MainScreen from 'screens/main';
-import { Screen } from 'screens/screens';
 
 import { getThemeColor } from 'utils/getThemeColor';
 
@@ -29,6 +30,8 @@ const RootStack = () => {
             <Stack.Screen name="ForgotPassword" component={Screen.ForgotPassword} />
 
             <Stack.Screen name="Register" component={Screen.Register} />
+
+            <Stack.Screen name="VerifyOTP" component={Screen.VerifyOTP} />
         </Stack.Navigator>
     );
 };

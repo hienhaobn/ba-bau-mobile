@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useDispatch } from 'react-redux';
 
 import SvgIcons from 'assets/svgs';
 
@@ -25,7 +26,10 @@ const LoginScreen = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
-    const onLogin = () => {};
+    const dispatch = useDispatch();
+
+    const onLogin = () => {
+    };
 
     const renderHeader = useCallback(() => {
         return (

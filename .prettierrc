@@ -26,6 +26,7 @@
       "^i18n/(.*)$",
       "^modules/(.*)$",
       "^navigation/(.*)$",
+      "^screens$",
       "^screens/(.*)$",
       "^services/(.*)$",
       "^states/(.*)$",
@@ -43,10 +44,8 @@
       "^i18n$",
       "^modules$",
       "^navigation$",
-      "^screens$",
       "^services$",
       "^states$",
-      
       "^typings$",
       "^utils$",
       "^$"

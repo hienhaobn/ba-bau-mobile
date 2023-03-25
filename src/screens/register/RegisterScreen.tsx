@@ -39,6 +39,13 @@ const RegisterScreen = () => {
         </View>
     );
 
+    const renderInputPhone = () => (
+        <View style={styles.inputPasswordContainer}>
+            <Text style={styles.title}>Số điện thoại</Text>
+            <Input keyboardType="email-address" placeholder="Vui lòng nhập số điện thoại" />
+        </View>
+    );
+
     const renderInputPassword = () => {
         const Icon = SvgIcons[`IcVisibility${securePassword ? 'Off' : ''}`];
         return (
@@ -80,6 +87,7 @@ const RegisterScreen = () => {
     const renderContent = () => (
         <View style={styles.content}>
             {renderInputEmail()}
+            {renderInputPhone()}
             {renderInputPassword()}
             {renderInputConfirmPassword()}
             {renderButton()}
@@ -93,7 +101,8 @@ const RegisterScreen = () => {
                 extraHeight={scales(125)}
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
-                enableOnAndroid>
+                enableOnAndroid
+            >
                 {renderHeader()}
                 {renderContent()}
             </KeyboardAwareScrollView>
