@@ -7,6 +7,7 @@ import IcNotification from './ic_notification.svg';
 import IcScan from './ic_scan.svg';
 import IcSearch from './ic_search.svg';
 import IcShopOutline from './ic_shop_outline.svg';
+import IcStar from './ic_star.svg';
 import IcLogoLaunch from './logo_launch.svg';
 import IcStarActive from './star_active.svg';
 import IcTabAccount from './tab_account.svg';
@@ -42,6 +43,7 @@ const SvgIcons = {
     IcTabPremiumActive,
     IcVisibility,
     IcVisibilityOff,
+    IcStar,
 };
 
 export default SvgIcons;

@@ -11,10 +11,21 @@ declare namespace User {
         _id: sting;
     }
 
-    interface UserLogin {
+    interface UserLoginRequest {
+        email: string;
+        password: string;
+    }
+
+    interface UserLoginResponse {
         _id: string;
         email: string;
         role: string;
         jwt: string;
+    }
+
+    interface UserRegisterRequest {
+        email: string;
+        phone: string;
+        password: string;
     }
 }

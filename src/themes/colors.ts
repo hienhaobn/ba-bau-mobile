@@ -22,6 +22,7 @@ export const ColorLightTheme = {
     Light_3: '#EFF7FF',
 
     Color_Primary: '#F67EA4',
+    Color_Primary2: '#F9B0BF',
     Color_Bg: '#FFFFFF',
     Color_Gray: '#999999',
     Color_Gray1: '#888888',

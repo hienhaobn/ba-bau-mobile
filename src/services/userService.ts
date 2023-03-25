@@ -8,23 +8,13 @@ import { userLogin, userLogout } from 'states/user';
 const API_URL = process.env[EEvnKey.API_URL];
 const dispatch = useDispatch();
 
-export const register = (email: string, phone: string, password: string) => {
-    return axios.post(API_URL + 'accounts', {
-        email,
-        phone,
-        password,
-    });
+const register = (user: User.UserRegisterRequest) => {
+    return axios.post(API_URL + 'accounts', user);
 };
 
-export const login = async (email: string, password: string) => {
+const login = async (user: User.UserLoginRequest) => {
     try {
-        const response: User.UserLogin = await axios.post(
-            API_URL + 'login',
-            {
-                email,
-                password,
-            }
-        );
+        const response: User.UserLoginResponse = await axios.post(API_URL + 'login', user);
         if (response.jwt) {
             // save to reducer
             dispatch(userLogin(response));
@@ -36,6 +26,14 @@ export const login = async (email: string, password: string) => {
     }
 };
 
-export const logout = () => {
+const logout = () => {
     dispatch(userLogout());
 };
+
+const UserService = {
+    register,
+    login,
+    logout,
+};
+
+export default UserService;

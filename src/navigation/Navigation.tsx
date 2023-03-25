@@ -20,7 +20,7 @@ const Stack = createNativeStackNavigator<RootNavigatorParamList>();
 
 const RootStack = () => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }} initialRouteName="Login">
+        <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }} initialRouteName="Splash">
             <Stack.Screen name="Splash" component={SplashScreen} />
 
             <Stack.Screen name="Main" component={MainScreen} options={{ animation: 'fade' }} />
