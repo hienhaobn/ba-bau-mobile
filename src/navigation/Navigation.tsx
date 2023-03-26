@@ -25,7 +25,7 @@ const RootStack = () => {
 
             <Stack.Screen name="Main" component={MainScreen} options={{ animation: 'fade' }} />
 
-            <Stack.Screen name="Login" component={Screen.Login} options={{ animation: 'fade_from_bottom' }} />
+            <Stack.Screen name="Login" component={Screen.Login} options={{ animation: 'fade' }} />
 
             <Stack.Screen name="ForgotPassword" component={Screen.ForgotPassword} />
 

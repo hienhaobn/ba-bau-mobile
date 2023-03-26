@@ -5,14 +5,18 @@ import SplashScreen from 'react-native-splash-screen';
 
 import SvgIcons from 'assets/svgs';
 
+import { GlobalVariables, IToken } from 'constants/global-variables';
+
 import { useTheme } from 'hooks/useTheme';
 
 import { resetStack } from 'navigation/utils';
 
 import { getThemeColor } from 'utils/getThemeColor';
+import { scales } from 'utils/scales';
+import Storages, { KeyStorage } from 'utils/storages';
 
 import 'i18n';
-import { scales } from 'utils/scales';
+import { RootNavigatorParamList } from 'navigation/types';
 
 const LaunchScreen = () => {
     const { theme } = useTheme();
@@ -26,23 +30,33 @@ const LaunchScreen = () => {
 
     React.useEffect(() => {
         initLocale();
-      }, [initLocale]);
+    }, [initLocale]);
 
     useEffect(() => {
         SplashScreen.hide();
-        onNavigator()
+        onNavigator();
     }, []);
 
-    const onNavigator = () => {
+    const onNavigator = async () => {
+        const tokenInfo: IToken | null = await Storages.getObject(KeyStorage.Token);
+
+        let screenName: keyof RootNavigatorParamList = 'Login';
+        if (tokenInfo?.accessToken) {
+            GlobalVariables.tokenInfo = {
+                ...tokenInfo,
+            };
+            screenName = 'Main';
+        }
+
         setTimeout(() => {
-            resetStack('Main');
+            resetStack(screenName);
         }, 200);
     };
 
     return (
         <View style={styles.container}>
             <View style={styles.img}>
-                <SvgIcons.IcLogoLaunch width={scales(365)} height={scales(365)}/>
+                <SvgIcons.IcLogoLaunch width={scales(365)} height={scales(365)} />
             </View>
         </View>
     );

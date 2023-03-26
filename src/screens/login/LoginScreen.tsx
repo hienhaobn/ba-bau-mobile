@@ -1,21 +1,17 @@
 import React, { useCallback, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useDispatch } from 'react-redux';
+
+import { goToMain } from './src/utils';
 
 import SvgIcons from 'assets/svgs';
-
 import Button from 'components/Button/Button';
 import Input from 'components/Input';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { goToForgotPassword } from 'screens/forgotPassword/src/utils';
 import { goToRegister } from 'screens/register/src/utils';
-
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
@@ -26,9 +22,8 @@ const LoginScreen = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
 
-    const dispatch = useDispatch();
-
     const onLogin = () => {
+        goToMain();
     };
 
     const renderHeader = useCallback(() => {
