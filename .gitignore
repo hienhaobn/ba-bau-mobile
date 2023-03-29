@@ -35,12 +35,11 @@ local.properties
 # node.js
 #
 node_modules/
-*/node_modules/
 npm-debug.log
 yarn-error.log
 yarn.lock
 package-lock.json
-`
+
 # BUCK
 buck-out/
 \.buckd/
@@ -64,4 +63,10 @@ buck-out/
 
 # Ruby / CocoaPods
 /ios/Pods/
+/ios/Podfile.lock
 /vendor/bundle/
+
+# eslint
+.eslintcache
+
+# ENV

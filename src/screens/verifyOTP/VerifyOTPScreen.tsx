@@ -15,6 +15,8 @@ import { useTheme } from 'hooks/useTheme';
 import { RootNavigatorParamList } from 'navigation/types';
 import { goBack, resetStack } from 'navigation/utils';
 
+import { goToRegisterSuccess } from 'screens/registerSuccess/src/utils';
+
 import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
@@ -38,30 +40,32 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
         </View>
     );
 
-    const renderConfirmOTP = async () => {
-        if (code.length === 4) {
-            try {
-                const response = await axios.post(`${process.env[EEvnKey.API_URL]}/accounts/confirm`, {
-                    otp: code,
-                    email,
-                });
-                if (!response) {
-                    showCustomToast('Verify OTP error');
-                    return;
-                }
-                setCode('');
-                resetStack('Login');
-            } catch (error) {
-                showCustomToast(error.message);
-                return;
-            }
-        }
+    const onConfirmOTP = async () => {
+        // TODO: re check when open logic
+        // if (code.length === 4) {
+        //     try {
+        //         const response = await axios.post(`${process.env[EEvnKey.API_URL]}/accounts/confirm`, {
+        //             otp: code,
+        //             email,
+        //         });
+        //         if (!response) {
+        //             showCustomToast('Verify OTP error');
+        //             return;
+        //         }
+        //         setCode('');
+        //         resetStack('Login');
+        //     } catch (error) {
+        //         showCustomToast(error.message);
+        //         return;
+        //     }
+        // }
+        goToRegisterSuccess();
     };
 
     const renderButton = () => (
         <Button
             title="Xác nhận"
-            onPress={renderConfirmOTP}
+            onPress={onConfirmOTP}
             customStyles={{ marginTop: scales(30), marginBottom: scales(20) }}
         />
     );

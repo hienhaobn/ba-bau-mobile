@@ -33,31 +33,33 @@ const RegisterScreen = () => {
     const [confirmPassword, setConfirmPassword] = useState<string>('');
 
     const onRegister = async () => {
-        try {
-            if (validateInputPassword()) {
-                return;
-            }
-            const response = await axios.post(`https://68f7-2a09-bac1-7aa0-50-00-245-e.ap.ngrok.io/api/accounts`, {
-                email,
-                phone,
-                password,
-            });
-            if (!response) {
-                showCustomToast('Error create account');
-                return;
-            }
-            // success
-            setEmail('');
-            setPassword('');
-            setConfirmPassword('');
-            setPhone('');
-            goToVerifyOTP(email);
-        } catch (error) {
-            if (error?.message) {
-                showCustomToast(error.message);
-                return;
-            }
-        }
+        // TODO: re check when open logic
+        // try {
+        //     if (validateInputPassword()) {
+        //         return;
+        //     }
+        //     const response = await axios.post(`https://68f7-2a09-bac1-7aa0-50-00-245-e.ap.ngrok.io/api/accounts`, {
+        //         email,
+        //         phone,
+        //         password,
+        //     });
+        //     if (!response) {
+        //         showCustomToast('Error create account');
+        //         return;
+        //     }
+        //     // success
+        //     setEmail('');
+        //     setPassword('');
+        //     setConfirmPassword('');
+        //     setPhone('');
+        //     goToVerifyOTP(email);
+        // } catch (error) {
+        //     if (error?.message) {
+        //         showCustomToast(error.message);
+        //         return;
+        //     }
+        // }
+        goToVerifyOTP('abc@gmai.com');
     };
 
     const validateInputPassword = () => {
