@@ -8,6 +8,10 @@ import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { goToFetalMovement } from 'screens/fetalMovement/src/utils';
+import { goToPregnancyDueDateCalculator } from 'screens/pregnancyDueDateCalculator/src/utils';
+import { goToPrenatalCareCheckups } from 'screens/prenatalCareCheckups/src/utils';
+
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
@@ -36,15 +40,15 @@ const HomeScreen = () => {
     const renderContentItems = () => (
         <View style={styles.contentItemContainer}>
             <View style={styles.rowItems}>
-                <TouchableOpacity style={styles.itemContainer}>
+                <TouchableOpacity style={styles.itemContainer} onPress={goToFetalMovement}>
                     <Image source={Images.HomeMove} style={styles.imgItem} />
                     <Text style={styles.itemText}>Điểm cử động thai nhi</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContainer}>
+                <TouchableOpacity style={styles.itemContainer} onPress={goToPregnancyDueDateCalculator}>
                     <Image source={Images.HomeClock} style={styles.imgItem} />
                     <Text style={styles.itemText}>Dự tính ngày sinh</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContainer}>
+                <TouchableOpacity style={styles.itemContainer} onPress={goToPrenatalCareCheckups}>
                     <Image source={Images.HomeCalendar} style={styles.imgItem} />
                     <Text style={styles.itemText}>Lich khám</Text>
                 </TouchableOpacity>
@@ -88,10 +92,7 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container}>
-            <ScrollView
-                keyboardShouldPersistTaps="handled"
-                showsVerticalScrollIndicator={false}
-            >
+            <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
                 <View style={styles.imageHome} />
                 {renderContent()}
             </ScrollView>
@@ -166,20 +167,21 @@ const myStyles = (theme: string) => {
             marginTop: scales(60),
         },
         imgItem: {
-            width: scales(70),
-            height: scales(70),
+            width: scales(65),
+            height: scales(65),
         },
         itemContainer: {
             alignItems: 'center',
             justifyContent: 'center',
-            width: (Sizes.scrWidth - scales(35)) / 3,
+            width: (Sizes.scrWidth - scales(30)) / 3,
         },
         itemText: {
             ...Fonts.inter600,
-            fontSize: scales(14),
+            fontSize: scales(12),
             color: color.Text_Dark_1,
             marginTop: scales(15),
             textAlign: 'center',
+            width: (Sizes.scrWidth - scales(30)) / 4,
         },
         rowItems: {
             flexDirection: 'row',

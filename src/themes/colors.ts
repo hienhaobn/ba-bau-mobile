@@ -3,6 +3,7 @@ export const ColorLightTheme = {
     white: '#ffffff',
     green: '#00B593',
     red: '#D44242',
+    customToast: '#000000',
 
     shadow: 'rgba(0, 0, 0, 0.02)',
 

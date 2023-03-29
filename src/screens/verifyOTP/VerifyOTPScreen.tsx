@@ -1,21 +1,34 @@
+import { RouteProp } from '@react-navigation/native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import axios from 'axios';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import Button from 'components/Button/Button';
 import Header from 'components/Header';
+import TouchableOpacity from 'components/TouchableOpacity';
+
+import { EEvnKey } from 'constants/env.constant';
 
 import { useTheme } from 'hooks/useTheme';
+
+import { RootNavigatorParamList } from 'navigation/types';
+import { goBack, resetStack } from 'navigation/utils';
 
 import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import Button from 'components/Button/Button';
-import TouchableOpacity from 'components/TouchableOpacity';
+import { showCustomToast } from 'utils/toast';
 
-const VerifyOTPScreen = () => {
+interface VerifyOTPScreenProps {
+    route: RouteProp<RootNavigatorParamList, 'VerifyOTP'>;
+}
+
+const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const email = props.route.params.email;
     const [code, setCode] = useState<string>('');
 
     const renderHeader = () => (
@@ -25,8 +38,24 @@ const VerifyOTPScreen = () => {
         </View>
     );
 
-    const renderConfirmOTP = () => {
-
+    const renderConfirmOTP = async () => {
+        if (code.length === 4) {
+            try {
+                const response = await axios.post(`${process.env[EEvnKey.API_URL]}/accounts/confirm`, {
+                    otp: code,
+                    email,
+                });
+                if (!response) {
+                    showCustomToast('Verify OTP error');
+                    return;
+                }
+                setCode('');
+                resetStack('Login');
+            } catch (error) {
+                showCustomToast(error.message);
+                return;
+            }
+        }
     };
 
     const renderButton = () => (
@@ -42,7 +71,7 @@ const VerifyOTPScreen = () => {
             <TouchableOpacity style={{ alignSelf: 'flex-end' }} activeOpacity={1}>
                 <Text style={styles.textResend}>Gửi lại?</Text>
             </TouchableOpacity>
-        )
+        );
     };
 
     const renderContent = () => (

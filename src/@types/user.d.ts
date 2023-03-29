@@ -28,4 +28,8 @@ declare namespace User {
         phone: string;
         password: string;
     }
+
+    interface VerifyOTPRoute {
+        email: string;
+    }
 }

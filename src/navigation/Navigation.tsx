@@ -20,7 +20,9 @@ const Stack = createNativeStackNavigator<RootNavigatorParamList>();
 
 const RootStack = () => {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }} initialRouteName="Splash">
+        <Stack.Navigator
+            screenOptions={{ headerShown: false, animation: 'slide_from_right' }}
+            initialRouteName="Splash">
             <Stack.Screen name="Splash" component={SplashScreen} />
 
             <Stack.Screen name="Main" component={MainScreen} options={{ animation: 'fade' }} />
@@ -32,6 +34,12 @@ const RootStack = () => {
             <Stack.Screen name="Register" component={Screen.Register} />
 
             <Stack.Screen name="VerifyOTP" component={Screen.VerifyOTP} />
+
+            <Stack.Screen name="FetalMovement" component={Screen.FetalMovement} />
+
+            <Stack.Screen name="PregnancyDueDateCalculator" component={Screen.PregnancyDueDateCalculator} />
+
+            <Stack.Screen name="PrenatalCareCheckups" component={Screen.PrenatalCareCheckups} />
         </Stack.Navigator>
     );
 };

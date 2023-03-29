@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -8,22 +9,62 @@ import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
 
+import { EEvnKey } from 'constants/env.constant';
+
 import { useTheme } from 'hooks/useTheme';
 
 import { goBack } from 'navigation/utils';
+
+import { goToVerifyOTP } from 'screens/verifyOTP/src/utils';
 
 import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import { showCustomToast } from 'utils/toast';
 
 const RegisterScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const [securePassword, setSecurePassword] = useState<boolean>(true);
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
+    const [confirmPassword, setConfirmPassword] = useState<string>('');
 
-    const onRegister = () => {
-        goBack();
+    const onRegister = async () => {
+        try {
+            if (validateInputPassword()) {
+                return;
+            }
+            const response = await axios.post(`https://68f7-2a09-bac1-7aa0-50-00-245-e.ap.ngrok.io/api/accounts`, {
+                email,
+                phone,
+                password,
+            });
+            if (!response) {
+                showCustomToast('Error create account');
+                return;
+            }
+            // success
+            setEmail('');
+            setPassword('');
+            setConfirmPassword('');
+            setPhone('');
+            goToVerifyOTP(email);
+        } catch (error) {
+            if (error?.message) {
+                showCustomToast(error.message);
+                return;
+            }
+        }
+    };
+
+    const validateInputPassword = () => {
+        if (password !== confirmPassword) {
+            showCustomToast('Password is incorrect');
+            return true;
+        }
     };
 
     const renderHeader = () => (
@@ -35,14 +76,24 @@ const RegisterScreen = () => {
     const renderInputEmail = () => (
         <View>
             <Text style={styles.title}>Email</Text>
-            <Input keyboardType="email-address" placeholder="Vui lòng nhập email" />
+            <Input
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                placeholder="Vui lòng nhập email"
+            />
         </View>
     );
 
     const renderInputPhone = () => (
         <View style={styles.inputPasswordContainer}>
             <Text style={styles.title}>Số điện thoại</Text>
-            <Input keyboardType="email-address" placeholder="Vui lòng nhập số điện thoại" />
+            <Input
+                value={phone}
+                onChangeText={setPhone}
+                keyboardType="numeric"
+                placeholder="Vui lòng nhập số điện thoại"
+            />
         </View>
     );
 
@@ -52,6 +103,8 @@ const RegisterScreen = () => {
             <View style={styles.inputPasswordContainer}>
                 <Text style={styles.title}>Mật khẩu</Text>
                 <Input
+                    value={password}
+                    onChangeText={setPassword}
                     placeholder="Vui lòng nhập mật khẩu"
                     secureTextEntry={securePassword}
                     icon={<Icon width={scales(15)} height={scales(15)} />}
@@ -67,6 +120,8 @@ const RegisterScreen = () => {
             <View style={styles.inputPasswordContainer}>
                 <Text style={styles.title}>Nhập lại mật khẩu</Text>
                 <Input
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
                     placeholder="Vui lòng nhập lại mật khẩu"
                     secureTextEntry={securePassword}
                     icon={<Icon width={scales(15)} height={scales(15)} />}
@@ -101,8 +156,7 @@ const RegisterScreen = () => {
                 extraHeight={scales(125)}
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
-                enableOnAndroid
-            >
+                enableOnAndroid>
                 {renderHeader()}
                 {renderContent()}
             </KeyboardAwareScrollView>
