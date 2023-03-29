@@ -40,6 +40,14 @@ const RootStack = () => {
             <Stack.Screen name="PregnancyDueDateCalculator" component={Screen.PregnancyDueDateCalculator} />
 
             <Stack.Screen name="PrenatalCareCheckups" component={Screen.PrenatalCareCheckups} />
+
+            <Stack.Screen name="PregnancyWeekByWeek" component={Screen.PregnancyWeekByWeek} />
+
+            <Stack.Screen name="NutritionalRegimen" component={Screen.NutritionalRegimen} />
+
+            <Stack.Screen name="PregnancyProducts" component={Screen.PregnancyProducts} />
+
+            <Stack.Screen name="RegisterSuccess" component={Screen.RegisterSuccess} />
         </Stack.Navigator>
     );
 };

@@ -9,6 +9,23 @@ const Images = {
     Calendar1: require('./calendar_1.png'),
     PieChart: require('./pie_chart.png'),
     Stats: require('./stats.png'),
+    PregnancyWeek1: require('./pregnancy_week_1.png'),
+    PregnancyBaby: require('./pregnancy_baby.png'),
+    MacCa: require('./macca.jpeg'),
+    Cereal: require('./cereal.png'),
+    DairyProducts: require('./dairy_products.png'),
+    Drink: require('./drink.png'),
+    FastFoods: require('./fast_foods.png'),
+    Meat: require('./meat.png'),
+    OrganicFood: require('./organic_food.png'),
+    Saffron: require('./saffron.png'),
+    Seafood: require('./seafood.png'),
+    Vegetable: require('./vegetable.png'),
+    ChangePassword: require('./change_password.png'),
+    LogOut: require('./log_out.png'),
+    StartGroup: require('./start_group.png'),
+    UserInfo: require('./user_info.png'),
+    CheckCircle: require('./check_circle.png'),
 };
 
 export default Images;

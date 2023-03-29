@@ -1,8 +1,8 @@
 {
   "appName": "Ba Bau",
   "tabBar": {
-    "home": "Home",
+    "home": "Trang chủ",
     "premium": "Premium",
-    "account": "Account"
+    "account": "Tài khoản"
   }
 }

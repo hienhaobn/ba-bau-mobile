@@ -8,8 +8,13 @@ import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { navigate } from 'navigation/utils';
+
 import { goToFetalMovement } from 'screens/fetalMovement/src/utils';
+import { goToNutritionalRegimen } from 'screens/nutritionalRegimen/src/utils';
 import { goToPregnancyDueDateCalculator } from 'screens/pregnancyDueDateCalculator/src/utils';
+import { goToPregnancyProducts } from 'screens/pregnancyProducts/src/utils';
+import { goToPregnancyWeekByWeek } from 'screens/pregnancyWeekByWeek/src/utils';
 import { goToPrenatalCareCheckups } from 'screens/prenatalCareCheckups/src/utils';
 
 import { Fonts, Sizes } from 'themes';
@@ -54,15 +59,15 @@ const HomeScreen = () => {
                 </TouchableOpacity>
             </View>
             <View style={[styles.rowItems, styles.rowBottom]}>
-                <TouchableOpacity style={styles.itemContainer}>
+                <TouchableOpacity style={styles.itemContainer} onPress={goToPregnancyWeekByWeek}>
                     <Image source={Images.HomePregnantMother} style={styles.imgItem} />
                     <Text style={styles.itemText}>Thai kỳ theo tuần</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContainer}>
+                <TouchableOpacity style={styles.itemContainer} onPress={goToNutritionalRegimen}>
                     <Image source={Images.HomeCategory} style={styles.imgItem} />
                     <Text style={styles.itemText}>Chế độ dinh dưỡng</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContainer}>
+                <TouchableOpacity style={styles.itemContainer} onPress={goToPregnancyProducts}>
                     <Image source={Images.HomeLike} style={styles.imgItem} />
                     <Text style={styles.itemText}>Sản phẩm cho mẹ bầu</Text>
                 </TouchableOpacity>
@@ -74,7 +79,7 @@ const HomeScreen = () => {
         <View>
             <Text style={styles.bottomDes}>Sử dụng nhiều tiện ích hơn với dịch vụ</Text>
             <View style={styles.premiumContainer}>
-                <TouchableOpacity style={styles.premium}>
+                <TouchableOpacity style={styles.premium} onPress={() => navigate('Premium')}>
                     <SvgIcons.IcStar color={getThemeColor().white} width={scales(20)} height={scales(20)} />
                     <Text style={styles.premiumText}>Mẹ bầu Premium</Text>
                 </TouchableOpacity>
@@ -82,19 +87,17 @@ const HomeScreen = () => {
         </View>
     );
 
-    const renderContent = () => (
-        <View style={styles.content}>
-            {renderContentHeader()}
-            {renderContentItems()}
-            {renderContentBottom()}
-        </View>
-    );
-
     return (
         <View style={styles.container}>
-            <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+            <ScrollView
+                style={styles.wrapperContent}
+                contentContainerStyle={styles.contentContainer}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}>
                 <View style={styles.imageHome} />
-                {renderContent()}
+                {renderContentHeader()}
+                {renderContentItems()}
+                {renderContentBottom()}
             </ScrollView>
         </View>
     );
@@ -118,8 +121,13 @@ const myStyles = (theme: string) => {
             top: -Sizes.scrWidth / 2 - Sizes.scrWidth,
             left: -Sizes.scrWidth / 2,
         },
-        content: {
-            marginHorizontal: scales(15),
+        wrapperContent: {
+            flexGrow: 1,
+            paddingHorizontal: scales(15),
+        },
+        contentContainer: {
+            paddingBottom: scales(30),
+            paddingTop: scales(15),
         },
         girlHome: {
             top: scales(10),
