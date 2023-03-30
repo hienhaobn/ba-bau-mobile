@@ -73,6 +73,7 @@ const myStyles = (theme: string) => {
         wrapperContainer: {
             flexGrow: 1,
             marginHorizontal: scales(15),
+            marginTop: scales(20),
         },
         searchContainer: {
             marginHorizontal: scales(15),

@@ -29,10 +29,10 @@ const NutritionalRegimenScreen = () => {
     const renderInputSearch = () => <Input placeholder="Tên thực phẩm, thành phần chính" />;
 
     const renderItemSuitable = () => (
-        <View style={styles.itemSuitableContainer}>
+        <TouchableOpacity style={styles.itemSuitableContainer}>
             <Image source={Images.MacCa} style={styles.imageItemSuitable} />
             <Text style={styles.titleItemSuitable}>Hạt mắc ca</Text>
-        </View>
+        </TouchableOpacity>
     );
 
     const renderContentSuitable = () => (
@@ -156,9 +156,9 @@ const myStyles = (theme: string) => {
             borderRadius: scales(8),
         },
         itemSuitableContainer: {
-            marginHorizontal: scales(15),
             justifyContent: 'center',
             alignItems: 'center',
+            marginRight: scales(15),
         },
         titleItemSuitable: {
             ...Fonts.inter600,
@@ -192,7 +192,7 @@ const myStyles = (theme: string) => {
         itemContentFoodContainer: {
             alignItems: 'center',
             justifyContent: 'center',
-            width: (Sizes.scrWidth - scales(30)) / 3,
+            // width: (Sizes.scrWidth - scales(30)) / 3,
         },
         itemContentFoodText: {
             ...Fonts.inter600,
