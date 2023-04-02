@@ -1,6 +1,13 @@
-import React from 'react';
+import BigNumber from 'bignumber.js';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+
+import FetalMovementConfirmPopup, { IFetalMovementConfirmPopupRef } from './src/components/FetalMovementConfirmPopup';
+import FetalMovementResultPopup, { IFetalMovementResultPopupRef } from './src/components/FetalMovementResultPopup';
+import FetalMovementUserManualPopup, {
+    IFetalMovementUserManualPopupRef,
+} from './src/components/FetalMovementUserManualPopup';
 
 import SvgIcons from 'assets/svgs';
 
@@ -14,20 +21,60 @@ import { Fonts } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
+const DAY_IN_MS = 1 * 60 * 60 * 1000;
+const NOW_IN_MS = new Date().getTime();
+const DATETIME_AFTER_DAY = NOW_IN_MS + DAY_IN_MS;
 const FetalMovementScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const [isPlay, setIsPlay] = useState<boolean>(false);
+    const [movement, setMovement] = useState<number>(0);
+    const [currentTime, setCurrentTime] = useState<string>('00:00');
+    const [countdown, setCountdown] = useState<number>(0);
+    const refFetalMovementConfirmPopup = useRef<IFetalMovementConfirmPopupRef>(null);
+    const refFetalMovementResultPopup = useRef<IFetalMovementResultPopupRef>(null);
+    const refFetalMovementUserManualPopup = useRef<IFetalMovementUserManualPopupRef>(null);
 
-    const renderHeader = () => (
-        <Header
-            title="Điểm cử động thai nhi"
-            iconRight={
-                <SvgIcons.IcLineChart width={scales(25)} height={scales(25)} color={getThemeColor().Text_Dark_1} />
-            }
-        />
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCountdown(DATETIME_AFTER_DAY - new Date().getTime());
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [countdown]);
+
+    const getReturnValues = (countDownTime: number) => {
+        // calculate time left
+        const days = Math.floor(countDownTime / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((countDownTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((countDownTime % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((countDownTime % (1000 * 60)) / 1000);
+
+        return [days, hours, minutes, seconds];
+    };
+
+    const onUserManual = () => {
+        refFetalMovementUserManualPopup.current?.showModal();
+    };
+
+    const renderHeader = useCallback(
+        () => (
+            <Header
+                title="Điểm cử động thai nhi"
+                iconRight={
+                    <SvgIcons.IcLineChart width={scales(25)} height={scales(25)} color={getThemeColor().Text_Dark_1} />
+                }
+            />
+        ),
+        []
     );
 
     const renderProgressCircle = () => {
+        const [, , minutes, seconds] = getReturnValues(countdown);
+        const currentDateTime = minutes * 60 + seconds;
+        const currentFill = isPlay ? new BigNumber(currentDateTime).div(3600).times(100).toNumber() : 100;
+        const time = minutes + seconds > 0 && isPlay ? `${minutes}:${seconds}` : '00:00';
+
         return (
             <View
                 style={{
@@ -37,14 +84,14 @@ const FetalMovementScreen = () => {
                     <AnimatedCircularProgress
                         size={200}
                         width={6}
-                        fill={70}
-                        rotation={360}
+                        fill={currentFill}
+                        rotation={0}
                         tintColor={getThemeColor().white}
                         backgroundColor={getThemeColor().Text_Dark_5}>
                         {(fill) => (
                             <View style={styles.fillContainer}>
                                 <Text style={styles.textFill}>Thời gian còn lại</Text>
-                                <Text style={styles.fill}>{`00 : 00`}</Text>
+                                <Text style={styles.fill}>{!isPlay ? '60:00' : time}</Text>
                             </View>
                         )}
                     </AnimatedCircularProgress>
@@ -57,26 +104,68 @@ const FetalMovementScreen = () => {
         <View style={styles.timeAndMovementContainer}>
             <View style={styles.itemTimeAndMovement}>
                 <Text style={styles.titleTimeAndMovement}>Thời gian bắt đầu</Text>
-                <Text style={styles.valueTimeAndMovement}>00 : 00</Text>
+                <Text style={styles.valueTimeAndMovement}>{currentTime}</Text>
             </View>
             <View style={styles.itemTimeAndMovement}>
                 <Text style={styles.titleTimeAndMovement}>Số lần cử động</Text>
-                <Text style={styles.valueTimeAndMovement}>0</Text>
+                <Text style={styles.valueTimeAndMovement}>{movement}</Text>
             </View>
         </View>
     );
 
-    const renderUserManual = () => <Text style={styles.userManual}>Hướng dẫn sử dụng</Text>;
+    const renderUserManual = () => (
+        <TouchableOpacity onPress={onUserManual} activeOpacity={1}>
+            <Text style={styles.userManual}>Hướng dẫn sử dụng</Text>
+        </TouchableOpacity>
+    );
+
+    const onPause = () => {
+        refFetalMovementConfirmPopup.current?.hideModal();
+        // TODO: Handle show modal fetal movement
+        setTimeout(() => {
+            setIsPlay(false);
+            // Call api => show modal result
+            refFetalMovementResultPopup.current?.showModal();
+            // success => set state to default
+            setCountdown(0);
+        }, 500);
+    };
+
+    const onPlay = () => {
+        if (!isPlay) {
+            const currentHours = new Date().getHours();
+            const currentSeconds = new Date().getMinutes();
+            setIsPlay(true);
+            setCurrentTime(`${currentHours}:${currentSeconds}`);
+            setCountdown(DATETIME_AFTER_DAY);
+        } else {
+            refFetalMovementConfirmPopup.current?.showModal();
+        }
+    };
+
+    const onPlus = () => {
+        setMovement(movement + 1);
+    };
+
+    const onMinus = () => {
+        if (movement > 0) {
+            setMovement(movement - 1);
+        }
+    };
 
     const renderButtons = () => (
         <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.itemButton}>
+            <TouchableOpacity style={styles.itemButton} activeOpacity={0.9} onPress={onMinus}>
                 <Text style={styles.texButton}>-</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.itemButton, styles.buttonPlay]}>
-                <SvgIcons.IcPlay width={scales(20)} height={scales(20)} color={getThemeColor().white} />
+            <TouchableOpacity style={[styles.itemButton, styles.buttonPlay]} onPress={onPlay} activeOpacity={0.9}>
+                {isPlay ? (
+                    <SvgIcons.IcPause width={scales(20)} height={scales(20)} color={getThemeColor().white} />
+                ) : (
+                    <SvgIcons.IcPlay width={scales(20)} height={scales(20)} color={getThemeColor().white} />
+                )}
             </TouchableOpacity>
-            <TouchableOpacity style={styles.itemButton}>
+            <TouchableOpacity style={styles.itemButton} activeOpacity={0.9} onPress={onPlus}>
                 <Text style={styles.texButton}>+</Text>
             </TouchableOpacity>
         </View>
@@ -95,6 +184,9 @@ const FetalMovementScreen = () => {
         <View style={styles.container}>
             {renderHeader()}
             {renderContent()}
+            <FetalMovementConfirmPopup ref={refFetalMovementConfirmPopup} onConfirm={onPause} />
+            <FetalMovementResultPopup ref={refFetalMovementResultPopup} />
+            <FetalMovementUserManualPopup ref={refFetalMovementUserManualPopup} />
         </View>
     );
 };
@@ -136,18 +228,19 @@ const myStyles = (theme: string) => {
             justifyContent: 'space-between',
             alignItems: 'center',
             marginTop: scales(40),
+            marginHorizontal: scales(24),
         },
         itemTimeAndMovement: {
             alignItems: 'center',
         },
         titleTimeAndMovement: {
             ...Fonts.inter600,
-            fontSize: scales(14),
+            fontSize: scales(12),
             color: color.Text_Dark_1,
         },
         valueTimeAndMovement: {
-            ...Fonts.inter700,
-            fontSize: scales(32),
+            ...Fonts.inter600,
+            fontSize: scales(30),
             color: color.Text_Dark_1,
             marginTop: scales(12),
         },
@@ -172,8 +265,8 @@ const myStyles = (theme: string) => {
             justifyContent: 'center',
         },
         texButton: {
-            ...Fonts.inter600,
-            fontSize: scales(20),
+            ...Fonts.inter400,
+            fontSize: scales(25),
             color: color.white,
         },
         buttonPlay: {

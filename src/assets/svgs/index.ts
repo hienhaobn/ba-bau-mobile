@@ -1,3 +1,4 @@
+import IcClose from './close.svg';
 import IcDownReward from './down_reward.svg';
 import IcBack from './ic_back.svg';
 import IcDateRange from './ic_date_range.svg';
@@ -7,6 +8,7 @@ import IcLineChart from './ic_line_chart.svg';
 import IcLocation from './ic_location.svg';
 import IcMenu from './ic_menu.svg';
 import IcNotification from './ic_notification.svg';
+import IcPause from './ic_pause.svg';
 import IcPlay from './ic_play.svg';
 import IcSave from './ic_save.svg';
 import IcScan from './ic_scan.svg';
@@ -54,6 +56,8 @@ const SvgIcons = {
     IcDateRange,
     IcDownReward,
     IcSave,
+    IcPause,
+    IcClose,
 };
 
 export default SvgIcons;

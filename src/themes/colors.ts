@@ -31,6 +31,7 @@ export const ColorLightTheme = {
     Color_Gray3: '#424754',
     Color_Gray4: '#F8F8F8',
     Color_Gray5: '#BEBEBE',
+    Color_Gray6: '#F4F5F9',
     Color_Red: '#FD4F56',
     Color_Red_1: '#DE626280',
     Color_Red_2: '#F03800',
