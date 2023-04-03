@@ -26,6 +26,9 @@ const Images = {
     StartGroup: require('./start_group.png'),
     UserInfo: require('./user_info.png'),
     CheckCircle: require('./check_circle.png'),
+    HeartStar: require('./heart_star.png'),
+    BookStar: require('./book_star.png'),
+    NewspaperStar: require('./newspaper_star.png'),
 };
 
 export default Images;

@@ -1,12 +1,14 @@
 import moment from 'moment';
 import React, { useState } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import DatePicker from 'react-native-modern-datepicker';
 
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 
 import { useTheme } from 'hooks/useTheme';
+
+import { goBack } from 'navigation/utils';
 
 import { Fonts, Sizes } from 'themes';
 
@@ -18,27 +20,41 @@ const PregnancyDueDateCalculatorScreen = () => {
     const styles = myStyles(theme);
     const [date, setDate] = useState(new Date());
 
+    // TODO: get from server
+    const lastMenstrualPeriod = '2023-07-13';
+    const dueDate = moment(lastMenstrualPeriod).add(9, 'months').add(10, 'days').format('DD/MM/YYYY');
+
+    const handleUpdateLastMenstrualPeriod = () => {
+        // TODO: Call api update
+        goBack();
+    };
+
     const renderHeader = () => <Header title="Dự tính ngày sinh" />;
 
     const renderPregnancyDueDateCalculator = () => (
         <View style={styles.pregnancyDueDateCalculatorContainer}>
             <Text style={styles.titlePregnancyDueDateCalculator}>Ngày dự sinh: </Text>
-            <Text style={styles.datePregnancyDueDateCalculator}>20/08/2023</Text>
+            <Text style={styles.datePregnancyDueDateCalculator}>{dueDate}</Text>
         </View>
     );
 
     const renderSelectDate = () => (
         <View style={styles.selectDateContainer}>
             <Text style={styles.titleSelectDate}>Chọn ngày đầu tiên của kỳ kinh cuối cùng</Text>
-            <DatePicker mode="calendar" onSelectedChange={setDate} current="2023-07-13" selected="2023-07-23" />
+            <DatePicker
+                mode="calendar"
+                onSelectedChange={setDate}
+                selected={lastMenstrualPeriod}
+                current={lastMenstrualPeriod}
+            />
         </View>
     );
 
     const renderButton = () => (
         <View style={styles.buttonContainer}>
-            <Button title='Cập nhật' customStyles={styles.button}/>
+            <Button title="Cập nhật" customStyles={styles.button} onPress={handleUpdateLastMenstrualPeriod} />
         </View>
-    )
+    );
 
     const renderContent = () => (
         <View style={styles.content}>

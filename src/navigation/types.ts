@@ -15,4 +15,7 @@ export type RootNavigatorParamList = {
   NutritionalRegimen: undefined,
   PregnancyProducts: undefined,
   RegisterSuccess: undefined,
+  FetalHealth: undefined,
+  HistoryFetus: undefined,
+  TeachFetus: undefined,
 };

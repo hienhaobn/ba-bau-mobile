@@ -1,6 +1,9 @@
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import PremiumPaid from './src/components/PremiumPaid';
+import PremiumUnpaid from './src/components/PremiumUnpaid';
+
 import Images from 'assets/images';
 
 import Button from 'components/Button/Button';
@@ -16,6 +19,9 @@ const PremiumScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
 
+    // call api
+    const isPaid = true;
+
     const renderContentHeader = () => (
         <View>
             <View style={styles.contentHeaderContainer}>
@@ -24,37 +30,7 @@ const PremiumScreen = () => {
         </View>
     );
 
-    const renderContent = () => (
-        <View style={styles.content}>
-            <Text style={styles.title}>
-                Trải nghiệm những chức năng trên với gói dịch vụ <Text style={styles.txtPrimary}>Mẹ bầu Premium</Text>
-            </Text>
-            <View style={styles.descContainer}>
-                <Text style={styles.titleDesc}>Mua một lần dùng một đời trải nghiệm các chức năng:</Text>
-                <View style={styles.itemDesc}>
-                    <View style={styles.headerDesc}>
-                        <Image source={Images.CheckCircle} style={styles.checkCircle} />
-                        <Text style={styles.titleDesc}>Sức khỏe thai nhi</Text>
-                    </View>
-                    <Text style={styles.textDes}>
-                        Lấy dữ liệu của bé để kiểm tra mức độ so với tiêu chuẩn rồi từ đó đưa cho mẹ bầu lời khuyên để
-                        giúp bé yêu có sức khỏe ổn định nhất.
-                    </Text>
-                </View>
-
-                <View style={styles.itemDesc}>
-                    <View style={styles.headerDesc}>
-                        <Image source={Images.CheckCircle} style={styles.checkCircle} />
-                        <Text style={styles.titleDesc}>Thai giáo</Text>
-                    </View>
-                    <Text style={styles.textDes}>
-                        Lấy dữ liệu của bé để kiểm tra mức độ so với tiêu chuẩn rồi từ đó đưa cho mẹ bầu lời khuyên để
-                        giúp bé yêu có sức khỏe ổn định nhất.
-                    </Text>
-                </View>
-            </View>
-        </View>
-    );
+    const renderContent = () => <View style={styles.content}>{isPaid ? <PremiumPaid /> : <PremiumUnpaid />}</View>;
 
     const renderButton = () => (
         <View style={styles.buttonContainer}>
@@ -73,7 +49,7 @@ const PremiumScreen = () => {
                 {renderContentHeader()}
                 {renderContent()}
             </ScrollView>
-            {renderButton()}
+            {!isPaid && renderButton()}
         </View>
     );
 };
