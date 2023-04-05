@@ -29,6 +29,7 @@ const Images = {
     HeartStar: require('./heart_star.png'),
     BookStar: require('./book_star.png'),
     NewspaperStar: require('./newspaper_star.png'),
+    NoData: require('./no_data.png'),
 };
 
 export default Images;
