@@ -1,6 +1,8 @@
 import React from 'react';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 
+import { goToPrenatalCareCheckupsChartBaby, goToPrenatalCareCheckupsChartMom, goToRoutineCheckups } from './src/utils';
+
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
 
@@ -22,19 +24,19 @@ const PrenatalCareCheckupsScreen = () => {
 
     const renderContentHeader = () => (
         <View style={styles.contentHeaderContainer}>
-            <TouchableOpacity style={styles.itemHeaderContainer}>
+            <TouchableOpacity style={styles.itemHeaderContainer} onPress={goToRoutineCheckups}>
                 <View style={styles.imageContainer}>
                     <Image source={Images.Calendar1} style={styles.imgItem} />
                 </View>
                 <Text style={styles.itemText}>Lịch khám định kỳ</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.itemHeaderContainer}>
+            <TouchableOpacity style={styles.itemHeaderContainer} onPress={goToPrenatalCareCheckupsChartMom}>
                 <View style={styles.imageContainer}>
                     <Image source={Images.PieChart} style={styles.imgItem} />
                 </View>
                 <Text style={styles.itemText}>Biểu đồ của mẹ</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.itemHeaderContainer}>
+            <TouchableOpacity style={styles.itemHeaderContainer} onPress={goToPrenatalCareCheckupsChartBaby}>
                 <View style={styles.imageContainer}>
                     <Image source={Images.Stats} style={styles.imgItem} />
                 </View>

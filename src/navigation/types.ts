@@ -21,4 +21,7 @@ export type RootNavigatorParamList = {
   NutritionalRegimenDetail: undefined,
   RegisterUpdateInfo: undefined,
   FetalMovementChart: undefined,
+  RoutineCheckups: undefined,
+  PrenatalCareCheckupsChartMom: undefined,
+  PrenatalCareCheckupsChartBaby: undefined,
 };

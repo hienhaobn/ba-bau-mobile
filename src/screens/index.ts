@@ -13,7 +13,10 @@ import PregnancyDueDateCalculator from './pregnancyDueDateCalculator/PregnancyDu
 import PregnancyProducts from './pregnancyProducts/PregnancyProductsScreen';
 import PregnancyWeekByWeek from './pregnancyWeekByWeek/PregnancyWeekByWeekScreen';
 import Premium from './premium/PremiumScreen';
+import PrenatalCareCheckupsChartBaby from './prenatalCareCheckups/PrenatalCareCheckupsChartBabyScreen';
+import PrenatalCareCheckupsChartMom from './prenatalCareCheckups/PrenatalCareCheckupsChartMomScreen';
 import PrenatalCareCheckups from './prenatalCareCheckups/PrenatalCareCheckupsScreen';
+import RoutineCheckups from './prenatalCareCheckups/RoutineCheckupsScreen';
 import Register from './register/RegisterScreen';
 import RegisterSuccess from './registerSuccess/RegisterSuccessScreen';
 import RegisterUpdateInfo from './registerUpdateInfo/RegisterUpdateInfoScreen';
@@ -45,4 +48,7 @@ export const Screen = {
     NutritionalRegimenDetail,
     RegisterUpdateInfo,
     FetalMovementChart,
+    RoutineCheckups,
+    PrenatalCareCheckupsChartMom,
+    PrenatalCareCheckupsChartBaby,
 };
