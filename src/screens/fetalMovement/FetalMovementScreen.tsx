@@ -8,6 +8,7 @@ import FetalMovementResultPopup, { IFetalMovementResultPopupRef } from './src/co
 import FetalMovementUserManualPopup, {
     IFetalMovementUserManualPopupRef,
 } from './src/components/FetalMovementUserManualPopup';
+import { goToFetalMovementChart } from './src/utils';
 
 import SvgIcons from 'assets/svgs';
 
@@ -64,6 +65,7 @@ const FetalMovementScreen = () => {
                 iconRight={
                     <SvgIcons.IcLineChart width={scales(25)} height={scales(25)} color={getThemeColor().Text_Dark_1} />
                 }
+                onPressRight={goToFetalMovementChart}
             />
         ),
         []

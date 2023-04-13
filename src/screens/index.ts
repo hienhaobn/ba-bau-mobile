@@ -1,5 +1,6 @@
 import Account from './account/AccountScreen';
 import FetalHealth from './fetalHealth/FetalHealthScreen';
+import FetalMovementChart from './fetalMovement/FetalMovementChartScreen';
 import FetalMovement from './fetalMovement/FetalMovementScreen';
 import ForgotPassword from './forgotPassword/ForgotPasswordScreen';
 import HistoryFetus from './historyFetus/HistoryFetusScreen';
@@ -43,4 +44,5 @@ export const Screen = {
     TeachFetus,
     NutritionalRegimenDetail,
     RegisterUpdateInfo,
+    FetalMovementChart,
 };
