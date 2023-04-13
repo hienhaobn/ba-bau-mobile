@@ -18,4 +18,6 @@ export type RootNavigatorParamList = {
   FetalHealth: undefined,
   HistoryFetus: undefined,
   TeachFetus: undefined,
+  NutritionalRegimenDetail: undefined,
+  RegisterUpdateInfo: undefined,
 };

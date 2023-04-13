@@ -158,7 +158,8 @@ const RegisterScreen = () => {
                 extraHeight={scales(125)}
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
-                enableOnAndroid>
+                enableOnAndroid
+            >
                 {renderHeader()}
                 {renderContent()}
             </KeyboardAwareScrollView>

@@ -9,6 +9,7 @@ import { useTheme } from 'hooks/useTheme';
 
 import { goToLogin } from 'screens/login/src/utils';
 
+import { goToVerifyOTP } from 'screens/verifyOTP/src/utils';
 import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
@@ -21,6 +22,7 @@ const ForgotPasswordScreen = () => {
     const handlePress = () => {
         // TODO: call api
         // TODO: go to confirm OTP
+        goToVerifyOTP('abc@gmail.com', 'ForgotPassword');
     };
 
     const renderHeader = () => (

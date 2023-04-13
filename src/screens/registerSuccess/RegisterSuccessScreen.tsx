@@ -10,6 +10,7 @@ import { useTheme } from 'hooks/useTheme';
 import { resetStack } from 'navigation/utils';
 
 import { goToLogin } from 'screens/login/src/utils';
+import { goToRegisterUpdateInfo } from 'screens/registerUpdateInfo/src/utils';
 
 import { Fonts, Sizes } from 'themes';
 
@@ -30,12 +31,15 @@ const RegisterSuccessScreen = () => {
 
     const renderButton = () => (
         <View style={styles.buttonContainer}>
-            <Button title="Quay về đăng nhập" onPress={() => resetStack('Login')} />
+            <Button title="Bắt đầu" onPress={goToRegisterUpdateInfo} />
         </View>
     );
     return (
         <View style={styles.container}>
             {renderHeader()}
+            <View style={styles.contentContainer}>
+                <Text style={styles.textContent}>Hãy cùng mẹ bầu cập nhật thông tin ngay nhé!</Text>
+            </View>
             {renderButton()}
         </View>
     );
@@ -69,6 +73,14 @@ const myStyles = (theme: string) => {
             justifyContent: 'flex-end',
             paddingBottom: Sizes.bottomSpace + scales(5),
             marginHorizontal: scales(15),
+        },
+        contentContainer: {
+            alignSelf: 'center',
+        },
+        textContent: {
+            ...Fonts.inter400,
+            color: color.Text_Dark_1,
+            fontSize: scales(12),
         },
     });
 };

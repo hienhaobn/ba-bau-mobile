@@ -9,6 +9,7 @@ import { GlobalVariables, IToken } from 'constants/global-variables';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { RootNavigatorParamList } from 'navigation/types';
 import { resetStack } from 'navigation/utils';
 
 import { getThemeColor } from 'utils/getThemeColor';
@@ -16,7 +17,6 @@ import { scales } from 'utils/scales';
 import Storages, { KeyStorage } from 'utils/storages';
 
 import 'i18n';
-import { RootNavigatorParamList } from 'navigation/types';
 
 const LaunchScreen = () => {
     const { theme } = useTheme();

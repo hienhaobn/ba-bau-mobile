@@ -9,6 +9,7 @@ import IcLocation from './ic_location.svg';
 import IcMenu from './ic_menu.svg';
 import IcNotification from './ic_notification.svg';
 import IcPause from './ic_pause.svg';
+import IcPencil from './ic_pencil.svg';
 import IcPlay from './ic_play.svg';
 import IcSave from './ic_save.svg';
 import IcScan from './ic_scan.svg';
@@ -58,6 +59,7 @@ const SvgIcons = {
     IcSave,
     IcPause,
     IcClose,
+    IcPencil,
 };
 
 export default SvgIcons;

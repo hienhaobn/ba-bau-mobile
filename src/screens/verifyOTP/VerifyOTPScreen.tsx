@@ -22,6 +22,7 @@ import { Fonts } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
+import { goToLogin } from 'screens/login/src/utils';
 
 interface VerifyOTPScreenProps {
     route: RouteProp<RootNavigatorParamList, 'VerifyOTP'>;
@@ -30,7 +31,7 @@ interface VerifyOTPScreenProps {
 const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const email = props.route.params.email;
+    const { email, fromScreen } = props.route.params;
     const [code, setCode] = useState<string>('');
 
     const renderHeader = () => (
@@ -59,6 +60,10 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
         //         return;
         //     }
         // }
+        if (fromScreen === 'ForgotPassword') {
+            resetStack('Login');
+            return;
+        }
         goToRegisterSuccess();
     };
 

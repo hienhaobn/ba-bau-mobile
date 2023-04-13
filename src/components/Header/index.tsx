@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 
 import SvgIcons from 'assets/svgs';
 
@@ -23,12 +23,13 @@ interface Props {
     onPressLeft?: () => void;
     iconRight?: ReactElement;
     onPressRight?: () => void;
+    containerStyle?: StyleProp<ViewStyle>;
 }
 
 const Header = (props: Props) => {
     const { theme } = useTheme();
     const styles = getStyles(theme);
-    const { showLineBottom, title, iconLeft, hideLeft, onPressLeft, iconRight, onPressRight } = props;
+    const { showLineBottom, title, iconLeft, hideLeft, onPressLeft, iconRight, onPressRight, containerStyle } = props;
 
     const renderLeft = () =>
         !hideLeft ? (
@@ -68,7 +69,7 @@ const Header = (props: Props) => {
 
     return (
         <>
-            <View style={styles.container}>
+            <View style={[styles.container, containerStyle]}>
                 {renderLeft()}
                 {renderCenter()}
                 {renderRight()}

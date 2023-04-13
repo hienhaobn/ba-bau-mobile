@@ -31,5 +31,6 @@ declare namespace User {
 
     interface VerifyOTPRoute {
         email: string;
+        fromScreen?: 'ForgotPassword' | 'Register';
     }
 }
