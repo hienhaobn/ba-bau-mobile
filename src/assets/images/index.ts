@@ -30,6 +30,13 @@ const Images = {
     BookStar: require('./book_star.png'),
     NewspaperStar: require('./newspaper_star.png'),
     NoData: require('./no_data.png'),
+    Mom1: require('./mom_1.png'),
+    Mom2: require('./mom_2.png'),
+    MomRead: require('./mom_read.png'),
+    Babe: require('./babe.png'),
+    Babe2: require('./babe2.png'),
+    TruyenCayTre: require('./truyen_cay_tre.png'),
+    TruyenCayTre2: require('./truyen_cay_tre_2.png'),
 };
 
 export default Images;

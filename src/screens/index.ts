@@ -20,7 +20,12 @@ import RoutineCheckups from './prenatalCareCheckups/RoutineCheckupsScreen';
 import Register from './register/RegisterScreen';
 import RegisterSuccess from './registerSuccess/RegisterSuccessScreen';
 import RegisterUpdateInfo from './registerUpdateInfo/RegisterUpdateInfoScreen';
+import TeachFetusMomReadDetail from './teachFetus/TeachFetusMomReadDetailScreen';
+import TeachFetusMomRead from './teachFetus/TeachFetusMomReadScreen';
+import TeachFetusMusicForMom from './teachFetus/TeachFetusMusicForMomScreen';
+import TeachFetusPhotoBaby from './teachFetus/TeachFetusPhotoBabyScreen';
 import TeachFetus from './teachFetus/TeachFetusScreen';
+import TeachFetusVideoBaby from './teachFetus/TeachFetusVideoBabyScreen';
 import VerifyOTP from './verifyOTP/VerifyOTPScreen';
 
 export const Screen = {
@@ -51,4 +56,9 @@ export const Screen = {
     RoutineCheckups,
     PrenatalCareCheckupsChartMom,
     PrenatalCareCheckupsChartBaby,
+    TeachFetusPhotoBaby,
+    TeachFetusMusicForMom,
+    TeachFetusVideoBaby,
+    TeachFetusMomRead,
+    TeachFetusMomReadDetail,
 };
