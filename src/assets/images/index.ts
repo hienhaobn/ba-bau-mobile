@@ -35,6 +35,7 @@ const Images = {
     MomRead: require('./mom_read.png'),
     Babe: require('./babe.png'),
     Babe2: require('./babe2.png'),
+    Babe3: require('./babe3.png'),
     TruyenCayTre: require('./truyen_cay_tre.png'),
     TruyenCayTre2: require('./truyen_cay_tre_2.png'),
     Beef: require('./beef.png'),
