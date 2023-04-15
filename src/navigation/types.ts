@@ -34,4 +34,5 @@ export type RootNavigatorParamList = {
   DishDetail: undefined,
   FetalHealthAnalysis: undefined,
   FetalHealthInfo: undefined,
+  AddHistoryFetus: undefined,
 };

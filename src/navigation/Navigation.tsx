@@ -84,6 +84,8 @@ const RootStack = () => {
             <Stack.Screen name="FetalHealthAnalysis" component={Screen.FetalHealthAnalysis} />
 
             <Stack.Screen name="FetalHealthInfo" component={Screen.FetalHealthInfo} />
+
+            <Stack.Screen name="AddHistoryFetus" component={Screen.AddHistoryFetus} />
         </Stack.Navigator>
     );
 };

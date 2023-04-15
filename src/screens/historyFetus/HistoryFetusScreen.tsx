@@ -1,6 +1,8 @@
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { goToAddHistoryFetus } from './src/utils';
+
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
 
@@ -28,7 +30,10 @@ const HistoryFetusScreen = () => {
                 <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
                     <Image source={Images.Babe3} style={styles.image} />
                     <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                        <View style={styles.itemHeader}>
+                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                            <Text style={styles.week}>Tuần 39</Text>
+                        </View>
                         <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
                         <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
                     </View>
@@ -36,7 +41,10 @@ const HistoryFetusScreen = () => {
                 <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
                     <Image source={Images.Babe3} style={styles.image} />
                     <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                        <View style={styles.itemHeader}>
+                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                            <Text style={styles.week}>Tuần 39</Text>
+                        </View>
                         <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
                         <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
                     </View>
@@ -44,7 +52,10 @@ const HistoryFetusScreen = () => {
                 <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
                     <Image source={Images.Babe3} style={styles.image} />
                     <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                        <View style={styles.itemHeader}>
+                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                            <Text style={styles.week}>Tuần 39</Text>
+                        </View>
                         <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
                         <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
                     </View>
@@ -52,7 +63,10 @@ const HistoryFetusScreen = () => {
                 <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
                     <Image source={Images.Babe3} style={styles.image} />
                     <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                        <View style={styles.itemHeader}>
+                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                            <Text style={styles.week}>Tuần 39</Text>
+                        </View>
                         <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
                         <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
                     </View>
@@ -60,7 +74,10 @@ const HistoryFetusScreen = () => {
                 <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
                     <Image source={Images.Babe3} style={styles.image} />
                     <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                        <View style={styles.itemHeader}>
+                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                            <Text style={styles.week}>Tuần 39</Text>
+                        </View>
                         <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
                         <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
                     </View>
@@ -68,7 +85,10 @@ const HistoryFetusScreen = () => {
                 <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
                     <Image source={Images.Babe3} style={styles.image} />
                     <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                        <View style={styles.itemHeader}>
+                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                            <Text style={styles.week}>Tuần 39</Text>
+                        </View>
                         <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
                         <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
                     </View>
@@ -76,7 +96,10 @@ const HistoryFetusScreen = () => {
                 <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
                     <Image source={Images.Babe3} style={styles.image} />
                     <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                        <View style={styles.itemHeader}>
+                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
+                            <Text style={styles.week}>Tuần 39</Text>
+                        </View>
                         <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
                         <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
                     </View>
@@ -85,7 +108,9 @@ const HistoryFetusScreen = () => {
         </View>
     );
 
-    const renderButton = () => <Button title="Thêm nhật ký" customStyles={styles.button} />;
+    const renderButton = () => (
+        <Button title="Thêm nhật ký" customStyles={styles.button} onPress={goToAddHistoryFetus} />
+    );
 
     return (
         <View style={styles.container}>
@@ -150,7 +175,7 @@ const myStyles = (theme: string) => {
         },
         itemContentHeader: {
             ...Fonts.inter600,
-            fontSize: scales(16),
+            fontSize: scales(14),
             color: color.Text_Dark_1,
             lineHeight: scales(25),
         },
@@ -174,6 +199,17 @@ const myStyles = (theme: string) => {
         button: {
             marginBottom: Sizes.bottomSpace + scales(5),
             marginHorizontal: scales(15),
+        },
+        itemHeader: {
+            flexDirection: 'row',
+            alignItems: 'center',
+        },
+        week: {
+            ...Fonts.inter600,
+            fontSize: scales(14),
+            color: color.Color_Primary,
+            lineHeight: scales(25),
+            marginLeft: scales(5),
         },
     });
 };

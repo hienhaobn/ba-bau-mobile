@@ -8,6 +8,7 @@ import DishDetail from './foods/DishDetailScreen';
 import FoodDetail from './foods/FoodDetailScreen';
 import Foods from './foods/FoodsScreen';
 import ForgotPassword from './forgotPassword/ForgotPasswordScreen';
+import AddHistoryFetus from './historyFetus/AddHistoryFetusScreen';
 import HistoryFetus from './historyFetus/HistoryFetusScreen';
 import Home from './home/HomeScreen';
 import Launch from './launch/LaunchScreen';
@@ -71,4 +72,5 @@ export const Screen = {
     DishDetail,
     FetalHealthAnalysis,
     FetalHealthInfo,
+    AddHistoryFetus,
 };

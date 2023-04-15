@@ -7,6 +7,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
 
+import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
 import TouchableOpacity from 'components/TouchableOpacity';
@@ -19,7 +20,6 @@ import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import Button from 'components/Button/Button';
 
 const RegisterUpdateInfoScreen = () => {
     const { theme } = useTheme();
@@ -170,7 +170,7 @@ const RegisterUpdateInfoScreen = () => {
         />
     );
 
-    const renderButton = () => <Button title='Cập nhật' customStyles={styles.button} onPress={onUpdate}/>
+    const renderButton = () => <Button title="Cập nhật" customStyles={styles.button} onPress={onUpdate} />;
 
     return (
         <View style={styles.container}>
@@ -179,8 +179,7 @@ const RegisterUpdateInfoScreen = () => {
                 extraHeight={scales(125)}
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
-                enableOnAndroid
-            >
+                enableOnAndroid>
                 <View style={styles.imageHome} />
                 {renderContentHeader()}
                 {renderContent()}
