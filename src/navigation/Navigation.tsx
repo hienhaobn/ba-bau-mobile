@@ -63,6 +63,8 @@ const RootStack = () => {
 
             <Stack.Screen name="PrenatalCareCheckupsChartMom" component={Screen.PrenatalCareCheckupsChartMom} />
 
+            <Stack.Screen name="PrenatalCareCheckupsChartBaby" component={Screen.PrenatalCareCheckupsChartBaby} />
+
             <Stack.Screen name="TeachFetusPhotoBaby" component={Screen.TeachFetusPhotoBaby} />
 
             <Stack.Screen name="TeachFetusMusicForMom" component={Screen.TeachFetusMusicForMom} />
@@ -73,6 +75,13 @@ const RootStack = () => {
 
             <Stack.Screen name="TeachFetusMomReadDetail" component={Screen.TeachFetusMomReadDetail} />
 
+            <Stack.Screen name="Foods" component={Screen.Foods} />
+
+            <Stack.Screen name="FoodDetail" component={Screen.FoodDetail} />
+
+            <Stack.Screen name="DishDetail" component={Screen.DishDetail} />
+
+            <Stack.Screen name="FetalHealthAnalysis" component={Screen.FetalHealthAnalysis} />
         </Stack.Navigator>
     );
 };

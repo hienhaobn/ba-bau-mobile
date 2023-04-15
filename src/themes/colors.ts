@@ -36,6 +36,7 @@ export const ColorLightTheme = {
     Color_Red_1: '#DE626280',
     Color_Red_2: '#F03800',
     Color_Yellow_1: '#FFB88C80',
+    Color_Blue: '#005DDB',
     Color_Transparent: 'transparent',
 };
 

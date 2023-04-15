@@ -10,6 +10,8 @@ import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { goToFoods } from 'screens/foods/src/utils';
+
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
@@ -28,43 +30,23 @@ const NutritionalRegimenScreen = () => {
 
     const renderInputSearch = () => <Input placeholder="Tên thực phẩm, thành phần chính" />;
 
-    const renderItemSuitable = () => (
-        <TouchableOpacity style={styles.itemSuitableContainer}>
-            <Image source={Images.MacCa} style={styles.imageItemSuitable} />
-            <Text style={styles.titleItemSuitable}>Hạt mắc ca</Text>
-        </TouchableOpacity>
-    );
-
-    const renderContentSuitable = () => (
-        <View>
-            <Text style={styles.titleContent}>Phù hợp với mẹ</Text>
-            <FlatList
-                data={[1, 2, 3, 4, 5, 6]}
-                renderItem={renderItemSuitable}
-                keyExtractor={(item) => item.toString()}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-            />
-        </View>
-    );
-
     const renderContentFoods = () => (
         <View style={styles.contentFoodContainer}>
             <Text style={styles.titleContent}>Nhóm thực phẩm</Text>
             <View style={styles.rowItems}>
-                <TouchableOpacity style={styles.itemContentFoodContainer}>
+                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
                     <View style={styles.imgContentFoodItemContainer}>
                         <Image source={Images.Meat} style={styles.imgContentFoodItem} resizeMode="contain" />
                     </View>
                     <Text style={styles.itemContentFoodText}>Thịt</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentFoodContainer}>
+                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
                     <View style={styles.imgContentFoodItemContainer}>
                         <Image source={Images.Seafood} style={styles.imgContentFoodItem} resizeMode="contain" />
                     </View>
                     <Text style={styles.itemContentFoodText}>Thủy hải sản</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentFoodContainer}>
+                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
                     <View style={styles.imgContentFoodItemContainer}>
                         <Image source={Images.OrganicFood} style={styles.imgContentFoodItem} resizeMode="contain" />
                     </View>
@@ -72,19 +54,19 @@ const NutritionalRegimenScreen = () => {
                 </TouchableOpacity>
             </View>
             <View style={[styles.rowItems, styles.rowBottom]}>
-                <TouchableOpacity style={styles.itemContentFoodContainer}>
+                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
                     <View style={styles.imgContentFoodItemContainer}>
                         <Image source={Images.Vegetable} style={styles.imgContentFoodItem} resizeMode="contain" />
                     </View>
                     <Text style={styles.itemContentFoodText}>Trái cây</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentFoodContainer}>
+                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
                     <View style={styles.imgContentFoodItemContainer}>
                         <Image source={Images.FastFoods} style={styles.imgContentFoodItem} resizeMode="contain" />
                     </View>
                     <Text style={styles.itemContentFoodText}>Ăn vặt</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentFoodContainer}>
+                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
                     <View style={styles.imgContentFoodItemContainer}>
                         <Image source={Images.Drink} style={styles.imgContentFoodItem} resizeMode="contain" />
                     </View>
@@ -92,19 +74,19 @@ const NutritionalRegimenScreen = () => {
                 </TouchableOpacity>
             </View>
             <View style={[styles.rowItems, styles.rowBottom]}>
-                <TouchableOpacity style={styles.itemContentFoodContainer}>
+                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
                     <View style={styles.imgContentFoodItemContainer}>
                         <Image source={Images.Vegetable} style={styles.imgContentFoodItem} resizeMode="contain" />
                     </View>
                     <Text style={styles.itemContentFoodText}>Thực phẩm bổ sung</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentFoodContainer}>
+                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
                     <View style={styles.imgContentFoodItemContainer}>
                         <Image source={Images.FastFoods} style={styles.imgContentFoodItem} resizeMode="contain" />
                     </View>
                     <Text style={styles.itemContentFoodText}>Hạt, Ngũ cốc</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentFoodContainer}>
+                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
                     <View style={styles.imgContentFoodItemContainer}>
                         <Image source={Images.Drink} style={styles.imgContentFoodItem} resizeMode="contain" />
                     </View>
@@ -120,7 +102,6 @@ const NutritionalRegimenScreen = () => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.contentContainer}>
             {renderInputSearch()}
-            {renderContentSuitable()}
             {renderContentFoods()}
         </ScrollView>
     );

@@ -1,6 +1,8 @@
 import IcClose from './close.svg';
 import IcDownReward from './down_reward.svg';
 import IcBack from './ic_back.svg';
+import IcClock from './ic_clock.svg';
+import IcCloseRed from './ic_close_red.svg';
 import IcDateRange from './ic_date_range.svg';
 import IcForward from './ic_forward.svg';
 import IcHeartOutline from './ic_heart_outline.svg';
@@ -10,12 +12,15 @@ import IcMenu from './ic_menu.svg';
 import IcNotification from './ic_notification.svg';
 import IcPause from './ic_pause.svg';
 import IcPencil from './ic_pencil.svg';
+import IcPeople from './ic_people.svg';
 import IcPlay from './ic_play.svg';
 import IcSave from './ic_save.svg';
 import IcScan from './ic_scan.svg';
 import IcSearch from './ic_search.svg';
 import IcShopOutline from './ic_shop_outline.svg';
 import IcStar from './ic_star.svg';
+import IcTickGreen from './ic_tick_green.svg';
+import IcWarning from './ic_warning.svg';
 import IcLogoLaunch from './logo_launch.svg';
 import IcStarActive from './star_active.svg';
 import IcTabAccount from './tab_account.svg';
@@ -31,6 +36,8 @@ import IcVisibilityOff from './visibility_off.svg';
 
 const SvgIcons = {
     IcBack,
+    IcClock,
+    IcPeople,
     IcLogoLaunch,
     IcTabAccount,
     IcTabHome,
@@ -60,6 +67,9 @@ const SvgIcons = {
     IcPause,
     IcClose,
     IcPencil,
+    IcWarning,
+    IcTickGreen,
+    IcCloseRed,
 };
 
 export default SvgIcons;

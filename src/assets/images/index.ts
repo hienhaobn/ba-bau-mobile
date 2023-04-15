@@ -37,6 +37,8 @@ const Images = {
     Babe2: require('./babe2.png'),
     TruyenCayTre: require('./truyen_cay_tre.png'),
     TruyenCayTre2: require('./truyen_cay_tre_2.png'),
+    Beef: require('./beef.png'),
+    Beef2: require('./beef2.png'),
 };
 
 export default Images;

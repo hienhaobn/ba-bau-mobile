@@ -1,7 +1,11 @@
 import Account from './account/AccountScreen';
+import FetalHealthAnalysis from './fetalHealth/FetalHealthAnalysisScreen';
 import FetalHealth from './fetalHealth/FetalHealthScreen';
 import FetalMovementChart from './fetalMovement/FetalMovementChartScreen';
 import FetalMovement from './fetalMovement/FetalMovementScreen';
+import DishDetail from './foods/DishDetailScreen';
+import FoodDetail from './foods/FoodDetailScreen';
+import Foods from './foods/FoodsScreen';
 import ForgotPassword from './forgotPassword/ForgotPasswordScreen';
 import HistoryFetus from './historyFetus/HistoryFetusScreen';
 import Home from './home/HomeScreen';
@@ -61,4 +65,8 @@ export const Screen = {
     TeachFetusVideoBaby,
     TeachFetusMomRead,
     TeachFetusMomReadDetail,
+    FoodDetail,
+    Foods,
+    DishDetail,
+    FetalHealthAnalysis,
 };

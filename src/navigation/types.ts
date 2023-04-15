@@ -29,4 +29,8 @@ export type RootNavigatorParamList = {
   TeachFetusVideoBaby: undefined,
   TeachFetusMomRead: undefined,
   TeachFetusMomReadDetail: undefined,
+  Foods: undefined,
+  FoodDetail: undefined,
+  DishDetail: undefined,
+  FetalHealthAnalysis: undefined,
 };
