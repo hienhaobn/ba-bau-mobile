@@ -33,4 +33,5 @@ export type RootNavigatorParamList = {
   FoodDetail: undefined,
   DishDetail: undefined,
   FetalHealthAnalysis: undefined,
+  FetalHealthInfo: undefined,
 };

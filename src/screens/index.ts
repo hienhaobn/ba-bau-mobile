@@ -1,5 +1,6 @@
 import Account from './account/AccountScreen';
 import FetalHealthAnalysis from './fetalHealth/FetalHealthAnalysisScreen';
+import FetalHealthInfo from './fetalHealth/FetalHealthInfoScreen';
 import FetalHealth from './fetalHealth/FetalHealthScreen';
 import FetalMovementChart from './fetalMovement/FetalMovementChartScreen';
 import FetalMovement from './fetalMovement/FetalMovementScreen';
@@ -69,4 +70,5 @@ export const Screen = {
     Foods,
     DishDetail,
     FetalHealthAnalysis,
+    FetalHealthInfo,
 };
