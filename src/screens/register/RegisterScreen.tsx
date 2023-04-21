@@ -22,6 +22,7 @@ import { Fonts } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
+import { useFetchRegister } from 'states/user/hooks';
 
 const RegisterScreen = () => {
     const { theme } = useTheme();
@@ -29,11 +30,13 @@ const RegisterScreen = () => {
     const [securePassword, setSecurePassword] = useState<boolean>(true);
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [phone, setPhone] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-
-    const onRegister = async () => {
+    useFetchRegister({email: 'ádasd@gmail.com', password:'123123'})
+    const onRegister = () => {
         // TODO: re check when open logic
+
+        // const response = useFetchRegister();
+        // console.log('data', response);
         // try {
         //     if (validateInputPassword()) {
         //         return;
@@ -87,18 +90,6 @@ const RegisterScreen = () => {
         </View>
     );
 
-    const renderInputPhone = () => (
-        <View style={styles.inputPasswordContainer}>
-            <Text style={styles.title}>Số điện thoại</Text>
-            <Input
-                value={phone}
-                onChangeText={setPhone}
-                keyboardType="numeric"
-                placeholder="Vui lòng nhập số điện thoại"
-            />
-        </View>
-    );
-
     const renderInputPassword = () => {
         const Icon = SvgIcons[`IcVisibility${securePassword ? 'Off' : ''}`];
         return (
@@ -144,7 +135,6 @@ const RegisterScreen = () => {
     const renderContent = () => (
         <View style={styles.content}>
             {renderInputEmail()}
-            {renderInputPhone()}
             {renderInputPassword()}
             {renderInputConfirmPassword()}
             {renderButton()}

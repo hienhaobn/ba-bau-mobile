@@ -29,6 +29,7 @@ const RegisterUpdateInfoScreen = () => {
     const [babyName, setBabyName] = useState<string>('');
     const [momDOB, setMomDOB] = useState<Date>(moment().toDate());
     const [dueDate, setDueDate] = useState<Date>(moment().toDate());
+    const [phone, setPhone] = useState<string>('');
     const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<Date>(moment().toDate());
     const [selectDateVisible, setSelectDateVisible] = useState<boolean>(false);
     const [selectDateType, setSelectDateType] = useState<'momDOB' | 'lastMenstrualPeriod' | 'dueDate'>('momDOB');
@@ -129,10 +130,24 @@ const RegisterUpdateInfoScreen = () => {
         </View>
     );
 
+    const renderInputPhone = () => (
+        <View style={styles.inputContainer}>
+            <Text style={styles.title}>Số điện thoại</Text>
+            <Input
+                value={phone}
+                onChangeText={setPhone}
+                keyboardType="numeric"
+                placeholder="Vui lòng nhập số điện thoại"
+            />
+        </View>
+    );
+
+
     const renderMomInfo = () => (
         <View>
             <Text style={styles.titleInfo}>Thông tin của mẹ</Text>
             {renderInputMomName()}
+            {renderInputPhone()}
             {renderInputMomDOB()}
             {renderInputMomAddress()}
         </View>
@@ -179,7 +194,8 @@ const RegisterUpdateInfoScreen = () => {
                 extraHeight={scales(125)}
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
-                enableOnAndroid>
+                enableOnAndroid
+            >
                 <View style={styles.imageHome} />
                 {renderContentHeader()}
                 {renderContent()}

@@ -17,6 +17,12 @@ import NutritionalRegimen from './nutritionalRegimen/NutritionalRegimenScreen';
 import NutritionalRegimenDetail from './nutritionalRegimenDetail/NutritionalRegimenDetailScreen';
 import PregnancyDueDateCalculator from './pregnancyDueDateCalculator/PregnancyDueDateCalculatorScreen';
 import PregnancyProducts from './pregnancyProducts/PregnancyProductsScreen';
+import PregnancyProductsDetail1 from './pregnancyProducts/src/PregnancyProductsDetailScreen1';
+import PregnancyProductsDetail2 from './pregnancyProducts/src/PregnancyProductsDetailScreen2';
+import PregnancyProductsDetail3 from './pregnancyProducts/src/PregnancyProductsDetailScreen3';
+import PregnancyProductsDetail4 from './pregnancyProducts/src/PregnancyProductsDetailScreen4';
+import PregnancyProductsDetail5 from './pregnancyProducts/src/PregnancyProductsDetailScreen5';
+import PregnancyProductsDetail6 from './pregnancyProducts/src/PregnancyProductsDetailScreen6';
 import PregnancyWeekByWeek from './pregnancyWeekByWeek/PregnancyWeekByWeekScreen';
 import Premium from './premium/PremiumScreen';
 import PrenatalCareCheckupsChartBaby from './prenatalCareCheckups/PrenatalCareCheckupsChartBabyScreen';
@@ -73,4 +79,10 @@ export const Screen = {
     FetalHealthAnalysis,
     FetalHealthInfo,
     AddHistoryFetus,
+    PregnancyProductsDetail1,
+    PregnancyProductsDetail2,
+    PregnancyProductsDetail3,
+    PregnancyProductsDetail4,
+    PregnancyProductsDetail5,
+    PregnancyProductsDetail6,
 };

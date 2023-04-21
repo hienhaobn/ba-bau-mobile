@@ -2,6 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { UserService } from 'services';
 
+import axiosInstance from 'services/api-requests';
+
 import { setMessage } from 'states/message';
 
 const initialState = {
@@ -13,37 +15,33 @@ const initialState = {
     success: false,
 };
 
-export const registerAsync = createAsyncThunk('user/registerAsync', async () => {});
-export type TodoId = string;
-export type Todo = {
-    id: TodoId;
-    title: string;
-    completed: boolean;
-};
+// export const fetchRegister = createAsyncThunk('user/register', async (user: User.UserRegisterRequest, thunkAPI) => {
+//     try {
+//         console.log('fetchRegister')
+//         const response = await UserService.register(user);
+//         thunkAPI.dispatch(setMessage(response));
+//         return response;
+//     } catch (error) {
+//         const message =
+//             (error.message && error.response.data && error.response.data.message) || error.message || error.toString();
+//         thunkAPI.dispatch(setMessage(message));
+//         return thunkAPI.rejectWithValue(message);
+//     }
+// });
 
-export const fetchUsersAsync = createAsyncThunk<Todo[]>('user/fetchUsersAsync', async () => {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/todos`);
-    // Get the JSON from the response:
-    const data = await response.json();
-
-    // Return result:
-    return data;
+export const fetchRegister = createAsyncThunk('user/fetchRegister', async (user: User.UserRegisterRequest) => {
+    console.log('vao day roi')
+    const res = axiosInstance
+        .post('/accounts', user)
+        .catch((err) => {
+            console.log('error:: ', err);
+            throw err;
+        })
+        .then((data) => data);
+    return res;
 });
 
-export const register = createAsyncThunk('user/register', async (user: User.UserRegisterRequest, thunkAPI) => {
-    try {
-        const response = await UserService.register(user);
-        thunkAPI.dispatch(setMessage(response));
-        return response;
-    } catch (error) {
-        const message =
-            (error.message && error.response.data && error.response.data.message) || error.message || error.toString();
-        thunkAPI.dispatch(setMessage(message));
-        return thunkAPI.rejectWithValue(message);
-    }
-});
-
-export const login = createAsyncThunk('user/login', async (user: User.UserLoginRequest, thunkAPI) => {
+export const fetchLogin = createAsyncThunk('user/login', async (user: User.UserLoginRequest, thunkAPI) => {
     try {
         const data = await UserService.login(user);
         return { user: data };
@@ -73,26 +71,17 @@ export const userSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchUsersAsync.pending, (state, { payload }) => {
-            console.log('Pending::');
-        });
-        builder.addCase(fetchUsersAsync.fulfilled, (state, { payload }) => {
-            state.data.push(...payload);
-        });
-        builder.addCase(fetchUsersAsync.rejected, (state, { payload }) => {
-            console.log('payload', payload);
-        });
-        builder.addCase(register.fulfilled, (state, action) => {
+        builder.addCase(fetchRegister.fulfilled, (state, action) => {
             state.isLoggedIn = false;
         });
-        builder.addCase(register.rejected, (state, action) => {
+        builder.addCase(fetchRegister.rejected, (state, action) => {
             state.isLoggedIn = false;
         });
-        builder.addCase(login.fulfilled, (state, action) => {
+        builder.addCase(fetchLogin.fulfilled, (state, action) => {
             state.isLoggedIn = true;
             state.userInfo = action.payload;
         });
-        builder.addCase(login.rejected, (state, action) => {
+        builder.addCase(fetchLogin.rejected, (state, action) => {
             state.isLoggedIn = false;
             state.userInfo = null;
         });

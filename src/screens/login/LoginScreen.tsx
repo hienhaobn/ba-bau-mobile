@@ -5,13 +5,20 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { goToMain } from './src/utils';
 
 import SvgIcons from 'assets/svgs';
+
 import Button from 'components/Button/Button';
 import Input from 'components/Input';
 import TouchableOpacity from 'components/TouchableOpacity';
+
 import { useTheme } from 'hooks/useTheme';
+
 import { goToForgotPassword } from 'screens/forgotPassword/src/utils';
 import { goToRegister } from 'screens/register/src/utils';
+
+import { useFetchLogin } from 'states/user/hooks';
+
 import { Fonts, Sizes } from 'themes';
+
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
@@ -24,6 +31,7 @@ const LoginScreen = () => {
 
     const onLogin = () => {
         goToMain();
+        // useFetchLogin({ email, password});
     };
 
     const renderHeader = useCallback(() => {
@@ -86,7 +94,8 @@ const LoginScreen = () => {
             extraHeight={scales(125)}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
-            enableOnAndroid>
+            enableOnAndroid
+        >
             {renderHeader()}
             {renderInputEmail()}
             {renderInputPassword()}

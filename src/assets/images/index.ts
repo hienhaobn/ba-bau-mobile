@@ -40,6 +40,13 @@ const Images = {
     TruyenCayTre2: require('./truyen_cay_tre_2.png'),
     Beef: require('./beef.png'),
     Beef2: require('./beef2.png'),
+    Product1: require('./product_1.png'),
+    Product2: require('./product_2.png'),
+    Product3: require('./product_3.png'),
+    Product4: require('./product_4.png'),
+    Product5: require('./product_5.png'),
+    Product6: require('./product_6.png'),
+    Product7: require('./product_7.png'),
 };
 
 export default Images;

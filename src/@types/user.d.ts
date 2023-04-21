@@ -25,7 +25,6 @@ declare namespace User {
 
     interface UserRegisterRequest {
         email: string;
-        phone: string;
         password: string;
     }
 

@@ -35,4 +35,10 @@ export type RootNavigatorParamList = {
   FetalHealthAnalysis: undefined,
   FetalHealthInfo: undefined,
   AddHistoryFetus: undefined,
+  PregnancyProductsDetail1: undefined,
+  PregnancyProductsDetail2: undefined,
+  PregnancyProductsDetail3: undefined,
+  PregnancyProductsDetail4: undefined,
+  PregnancyProductsDetail5: undefined,
+  PregnancyProductsDetail6: undefined,
 };
