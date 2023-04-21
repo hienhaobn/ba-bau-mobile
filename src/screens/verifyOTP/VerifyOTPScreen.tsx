@@ -4,9 +4,14 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import SvgIcons from 'assets/svgs';
+
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
+import Input from 'components/Input';
 import TouchableOpacity from 'components/TouchableOpacity';
+
+import { BASE_URL } from 'configs/api';
 
 import { EEvnKey } from 'constants/env.constant';
 
@@ -15,6 +20,7 @@ import { useTheme } from 'hooks/useTheme';
 import { RootNavigatorParamList } from 'navigation/types';
 import { goBack, resetStack } from 'navigation/utils';
 
+import { goToLogin } from 'screens/login/src/utils';
 import { goToRegisterSuccess } from 'screens/registerSuccess/src/utils';
 
 import { Fonts } from 'themes';
@@ -22,7 +28,7 @@ import { Fonts } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
-import { goToLogin } from 'screens/login/src/utils';
+import { hideLoading, showLoading } from 'components/Loading';
 
 interface VerifyOTPScreenProps {
     route: RouteProp<RootNavigatorParamList, 'VerifyOTP'>;
@@ -33,6 +39,8 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
     const styles = myStyles(theme);
     const { email, fromScreen } = props.route.params;
     const [code, setCode] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [securePassword, setSecurePassword] = useState<boolean>(true);
 
     const renderHeader = () => (
         <View style={styles.tileContainer}>
@@ -44,12 +52,34 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
     const onConfirmOTP = async () => {
         // TODO: re check when open logic
         if (fromScreen === 'ForgotPassword') {
-            resetStack('Login');
+            if (code.length === 4) {
+                try {
+                    showLoading()
+                    const response = await axios.post(`${BASE_URL}/accounts/password`, {
+                        otp: code,
+                        email,
+                        password,
+                    });
+                    hideLoading();
+                    if (!response) {
+                        showCustomToast('Verify OTP error');
+                        return;
+                    }
+                    setCode('');
+                    setPassword('');
+                    resetStack('Login');
+                    setSecurePassword(true);
+                    showCustomToast('Change password successful');
+                } catch (error) {
+                    showCustomToast(error.message);
+                    return;
+                }
+            }
             return;
         }
         if (code.length === 4) {
             try {
-                const response = await axios.post(`${process.env[EEvnKey.API_URL]}/accounts/confirm`, {
+                const response = await axios.post(`${BASE_URL}/accounts/confirm`, {
                     otp: code,
                     email,
                 });
@@ -64,6 +94,23 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
                 return;
             }
         }
+    };
+
+    const renderInputPassword = () => {
+        const Icon = SvgIcons[`IcVisibility${securePassword ? 'Off' : ''}`];
+        return (
+            <View style={styles.inputPasswordContainer}>
+                <Text style={styles.title}>Mật khẩu</Text>
+                <Input
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholder="Vui lòng nhập mật khẩu"
+                    secureTextEntry={securePassword}
+                    icon={<Icon width={scales(15)} height={scales(15)} />}
+                    onPressIcon={() => setSecurePassword(!securePassword)}
+                />
+            </View>
+        );
     };
 
     const renderButton = () => (
@@ -95,6 +142,7 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
                     onCodeChanged={setCode}
                 />
             </View>
+            {fromScreen === 'ForgotPassword' && renderInputPassword()}
             {renderButton()}
             {renderButtonResend()}
         </View>
@@ -151,6 +199,15 @@ const myStyles = (theme: string) => {
             ...Fonts.inter600,
             fontSize: scales(14),
             color: color.Color_Primary,
+        },
+        title: {
+            ...Fonts.inter400,
+            fontSize: scales(14),
+            color: color.Text_Dark_1,
+            marginBottom: scales(8),
+        },
+        inputPasswordContainer: {
+            marginTop: scales(20),
         },
     });
 };

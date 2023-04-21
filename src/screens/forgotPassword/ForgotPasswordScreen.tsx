@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import Button from 'components/Button/Button';
@@ -14,15 +14,24 @@ import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import { hideLoading, showLoading } from 'components/Loading';
+import { BASE_URL } from 'configs/api';
+import axios from 'axios';
 
 const ForgotPasswordScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const [email, setEmail] = useState<string>('');
 
-    const handlePress = () => {
+    const handlePress = async () => {
         // TODO: call api
+        showLoading();
+        const response = await axios.post(`${BASE_URL}/accounts/otp`, { email });
+        hideLoading();
         // TODO: go to confirm OTP
-        goToVerifyOTP('abc@gmail.com', 'ForgotPassword');
+        if (response.status === 200) {
+            goToVerifyOTP(email, 'ForgotPassword');
+        }
     };
 
     const renderHeader = () => (
@@ -35,7 +44,7 @@ const ForgotPasswordScreen = () => {
         <View>
             <View>
                 <Text style={styles.titleInput}>Email</Text>
-                <Input placeholder="Vui lòng nhập email để lấy lại mật khẩu" />
+                <Input value={email} onChangeText={setEmail} placeholder="Vui lòng nhập email để lấy lại mật khẩu" />
             </View>
         </View>
     );
