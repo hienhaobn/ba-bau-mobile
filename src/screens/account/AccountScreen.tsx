@@ -8,16 +8,22 @@ import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
 
-import { navigate } from 'navigation/utils';
+import { navigate, resetStack } from 'navigation/utils';
 
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import Storages, { KeyStorage } from 'utils/storages';
 
 const AccountScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+
+    const onLogOut = () => {
+        Storages.remove(KeyStorage.Token);
+        resetStack('Login');
+    };
 
     const renderContentHeader = () => (
         <View style={styles.contentHeaderContainer}>
@@ -53,7 +59,7 @@ const AccountScreen = () => {
                 <SvgIcons.IcForward width={scales(15)} height={scales(15)} color={getThemeColor().Text_Dark_1} />
             </TouchableOpacity>
             <View style={styles.line} />
-            <TouchableOpacity style={styles.itemContainer} onPress={() => navigate('Login')}>
+            <TouchableOpacity style={styles.itemContainer} onPress={onLogOut}>
                 <View style={styles.itemLeftContainer}>
                     <Image source={Images.LogOut} style={styles.itemIconLeft} resizeMode="contain" />
                     <Text style={styles.title}>Đăng xuất</Text>
