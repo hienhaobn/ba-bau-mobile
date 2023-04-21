@@ -43,28 +43,27 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
 
     const onConfirmOTP = async () => {
         // TODO: re check when open logic
-        // if (code.length === 4) {
-        //     try {
-        //         const response = await axios.post(`${process.env[EEvnKey.API_URL]}/accounts/confirm`, {
-        //             otp: code,
-        //             email,
-        //         });
-        //         if (!response) {
-        //             showCustomToast('Verify OTP error');
-        //             return;
-        //         }
-        //         setCode('');
-        //         resetStack('Login');
-        //     } catch (error) {
-        //         showCustomToast(error.message);
-        //         return;
-        //     }
-        // }
         if (fromScreen === 'ForgotPassword') {
             resetStack('Login');
             return;
         }
-        goToRegisterSuccess();
+        if (code.length === 4) {
+            try {
+                const response = await axios.post(`${process.env[EEvnKey.API_URL]}/accounts/confirm`, {
+                    otp: code,
+                    email,
+                });
+                if (!response) {
+                    showCustomToast('Verify OTP error');
+                    return;
+                }
+                setCode('');
+                resetStack('Login');
+            } catch (error) {
+                showCustomToast(error.message);
+                return;
+            }
+        }
     };
 
     const renderButton = () => (

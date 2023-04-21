@@ -8,6 +8,9 @@ import SvgIcons from 'assets/svgs';
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
+import { hideLoading, showLoading } from 'components/Loading';
+
+import { BASE_URL } from 'configs/api';
 
 import { EEvnKey } from 'constants/env.constant';
 
@@ -17,12 +20,13 @@ import { goBack } from 'navigation/utils';
 
 import { goToVerifyOTP } from 'screens/verifyOTP/src/utils';
 
+import { useFetchRegister } from 'states/user/hooks';
+
 import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
-import { useFetchRegister } from 'states/user/hooks';
 
 const RegisterScreen = () => {
     const { theme } = useTheme();
@@ -31,37 +35,33 @@ const RegisterScreen = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
-    useFetchRegister({email: 'ádasd@gmail.com', password:'123123'})
-    const onRegister = () => {
-        // TODO: re check when open logic
-
-        // const response = useFetchRegister();
-        // console.log('data', response);
-        // try {
-        //     if (validateInputPassword()) {
-        //         return;
-        //     }
-        //     const response = await axios.post(`https://68f7-2a09-bac1-7aa0-50-00-245-e.ap.ngrok.io/api/accounts`, {
-        //         email,
-        //         phone,
-        //         password,
-        //     });
-        //     if (!response) {
-        //         showCustomToast('Error create account');
-        //         return;
-        //     }
-        //     // success
-        //     setEmail('');
-        //     setPassword('');
-        //     setConfirmPassword('');
-        //     setPhone('');
-        //     goToVerifyOTP(email);
-        // } catch (error) {
-        //     if (error?.message) {
-        //         showCustomToast(error.message);
-        //         return;
-        //     }
-        // }
+    const onRegister = async () => {
+        try {
+            if (validateInputPassword()) {
+                return;
+            }
+            showLoading();
+            const response = await axios.post(`${BASE_URL}/accounts`, {
+                email,
+                password,
+            });
+            if (!response) {
+                showCustomToast('Error create account');
+                return;
+            }
+            hideLoading();
+            // success
+            setEmail('');
+            setPassword('');
+            setConfirmPassword('');
+            goToVerifyOTP(email);
+        } catch (error) {
+            hideLoading();
+            if (error?.message) {
+                showCustomToast(error.message);
+                return;
+            }
+        }
         goToVerifyOTP('abc@gmai.com');
     };
 
@@ -148,8 +148,7 @@ const RegisterScreen = () => {
                 extraHeight={scales(125)}
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
-                enableOnAndroid
-            >
+                enableOnAndroid>
                 {renderHeader()}
                 {renderContent()}
             </KeyboardAwareScrollView>
