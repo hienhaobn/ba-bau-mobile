@@ -26,6 +26,7 @@ declare namespace User {
     interface UserRegisterRequest {
         email: string;
         password: string;
+        phone: string;
     }
 
     interface VerifyOTPRoute {

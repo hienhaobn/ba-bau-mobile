@@ -4,7 +4,6 @@ import axios from 'axios';
 import { BASE_URL } from 'configs/api';
 import { GlobalVariables } from 'constants/index';
 import { resetStack } from 'navigation/utils';
-import axiosInstance from 'services/api-requests';
 import { setMessage } from 'states/message';
 import Storages, { KeyStorage } from 'utils/storages';
 import { showCustomToast } from 'utils/toast';
@@ -17,17 +16,6 @@ const initialState = {
     error: '',
     success: false,
 };
-
-export const fetchRegister = createAsyncThunk('user/fetchRegister', async (user: User.UserRegisterRequest) => {
-    const res = axiosInstance
-        .post('/accounts', user)
-        .catch((err) => {
-            console.log('error:: ', err);
-            throw err;
-        })
-        .then((data) => data);
-    return res;
-});
 
 export const fetchLogin = createAsyncThunk('user/login', async (user: User.UserLoginRequest, thunkAPI) => {
     try {
@@ -61,12 +49,6 @@ export const userSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchRegister.fulfilled, (state, action) => {
-            state.isLoggedIn = false;
-        });
-        builder.addCase(fetchRegister.rejected, (state, action) => {
-            state.isLoggedIn = false;
-        });
         builder.addCase(fetchLogin.fulfilled, (state, action) => {
             state.isLoggedIn = true;
             state.userInfo = action.payload;

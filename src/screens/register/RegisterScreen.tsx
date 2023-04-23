@@ -4,14 +4,22 @@ import { StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import SvgIcons from 'assets/svgs';
+
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
 import { hideLoading, showLoading } from 'components/Loading';
+
 import { BASE_URL } from 'configs/api';
+
 import { useTheme } from 'hooks/useTheme';
+
 import { goToVerifyOTP } from 'screens/verifyOTP/src/utils';
+
+import fetchRegister from 'states/user/fetchRegister';
+
 import { Fonts } from 'themes';
+
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
@@ -31,22 +39,17 @@ const RegisterScreen = () => {
                 return;
             }
             showLoading();
-            const response = await axios.post(`${BASE_URL}/accounts`, {
-                email,
-                password,
-            });
-            if (!response) {
-                showCustomToast('Error create account');
-                return;
-            }
+            await fetchRegister({ email, password, phone });
             hideLoading();
             // success
             setEmail('');
             setPassword('');
             setConfirmPassword('');
+            setPhone('');
             goToVerifyOTP(email);
         } catch (error) {
             hideLoading();
+            console.log('error: ', error);
             if (error?.message) {
                 showCustomToast(error.message);
                 return;
