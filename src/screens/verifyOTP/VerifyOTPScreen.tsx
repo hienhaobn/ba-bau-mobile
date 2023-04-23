@@ -5,29 +5,16 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import SvgIcons from 'assets/svgs';
-
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
 import { hideLoading, showLoading } from 'components/Loading';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { BASE_URL } from 'configs/api';
-
-import { EEvnKey } from 'constants/env.constant';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { RootNavigatorParamList } from 'navigation/types';
-import { goBack, resetStack } from 'navigation/utils';
-
-import { goToLogin } from 'screens/login/src/utils';
-import { goToRegisterSuccess } from 'screens/registerSuccess/src/utils';
-
-import fetchForgotPassword from 'states/user/fetchForgotPassword';
-
+import { resetStack } from 'navigation/utils';
 import { Fonts } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';

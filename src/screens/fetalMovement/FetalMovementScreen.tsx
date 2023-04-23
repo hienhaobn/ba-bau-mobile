@@ -1,10 +1,10 @@
-import BigNumber from 'bignumber.js';
 import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import FetalMovementConfirmPopup, { IFetalMovementConfirmPopupRef } from './src/components/FetalMovementConfirmPopup';
+import FetalMovementCountdown, { FetalMovementCountdownRef } from './src/components/FetalMovementCountdown';
 import FetalMovementResultPopup, { IFetalMovementResultPopupRef } from './src/components/FetalMovementResultPopup';
 import FetalMovementUserManualPopup, {
     IFetalMovementUserManualPopupRef,
@@ -12,20 +12,14 @@ import FetalMovementUserManualPopup, {
 import { goToFetalMovementChart } from './src/utils';
 
 import SvgIcons from 'assets/svgs';
-
 import Header from 'components/Header';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { createFetalMovement } from 'states/fetal';
 import { useAppDispatch } from 'states/index';
-
 import { Fonts } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import FetalMovementCountdown from './src/components/FetalMovementCountdown';
 
 const DAY_IN_MS = 1 * 60 * 60 * 1000;
 const NOW_IN_MS = new Date().getTime();
@@ -41,27 +35,9 @@ const FetalMovementScreen = () => {
     const refFetalMovementConfirmPopup = useRef<IFetalMovementConfirmPopupRef>(null);
     const refFetalMovementResultPopup = useRef<IFetalMovementResultPopupRef>(null);
     const refFetalMovementUserManualPopup = useRef<IFetalMovementUserManualPopupRef>(null);
+    const refFetalMovementCountdown = useRef<FetalMovementCountdownRef>(null);
     const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCountdown(DATETIME_AFTER_DAY - new Date().getTime());
-        }, 1000);
-
-        return () => clearInterval(interval);
-    }, [countdown]);
-
-    const getReturnValues = (countDownTime: number) => {
-        // calculate time left
-        const days = Math.floor(countDownTime / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((countDownTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((countDownTime % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((countDownTime % (1000 * 60)) / 1000);
-
-        return [days, hours, minutes, seconds];
-    };
-
-    const [, , minutes, seconds] = getReturnValues(countdown);
     const onUserManual = () => {
         refFetalMovementUserManualPopup.current?.showModal();
     };
@@ -79,35 +55,29 @@ const FetalMovementScreen = () => {
         []
     );
 
-    const renderProgressCircle = () => {
-        const currentDateTime = minutes * 60 + seconds;
-        const currentFill = isPlay ? new BigNumber(currentDateTime).div(3600).times(100).toNumber() : 100;
-        const time = minutes + seconds > 0 && isPlay ? `${minutes}:${seconds}` : '00:00';
-
-        return (
-            <View
-                style={{
-                    alignItems: 'center',
-                }}>
-                <View style={styles.progressCircleContainer}>
-                    <AnimatedCircularProgress
-                        size={200}
-                        width={6}
-                        fill={currentFill}
-                        rotation={0}
-                        tintColor={getThemeColor().white}
-                        backgroundColor={getThemeColor().Text_Dark_5}>
-                        {(fill) => (
-                            <View style={styles.fillContainer}>
-                                <Text style={styles.textFill}>Thời gian còn lại</Text>
-                                <Text style={styles.fill}>{!isPlay ? '60:00' : time}</Text>
-                            </View>
-                        )}
-                    </AnimatedCircularProgress>
-                </View>
+    const renderProgressCircle = () => (
+        <View
+            style={{
+                alignItems: 'center',
+            }}>
+            <View style={styles.progressCircleContainer}>
+                <AnimatedCircularProgress
+                    size={200}
+                    width={6}
+                    fill={100}
+                    rotation={0}
+                    tintColor={getThemeColor().white}
+                    backgroundColor={getThemeColor().Text_Dark_5}>
+                    {(fill) => (
+                        <View style={styles.fillContainer}>
+                            <Text style={styles.textFill}>Thời gian còn lại</Text>
+                            <Text style={styles.fill}>{'60:00'}</Text>
+                        </View>
+                    )}
+                </AnimatedCircularProgress>
             </View>
-        );
-    };
+        </View>
+    );
 
     const renderTimeAndMovement = () => (
         <View style={styles.timeAndMovementContainer}>
@@ -130,7 +100,8 @@ const FetalMovementScreen = () => {
 
     const onPause = useCallback(() => {
         refFetalMovementConfirmPopup.current?.hideModal();
-        setTimeCount(`${minutes}:${seconds}`);
+        const timeCountdown = refFetalMovementCountdown.current?.getTimeCountdown?.();
+        setTimeCount(`${timeCountdown?.minutes}:${timeCountdown?.seconds}`);
         setTimeout(() => {
             setIsPlay(false);
             // Call api => show modal result
@@ -194,7 +165,7 @@ const FetalMovementScreen = () => {
 
     const renderContent = () => (
         <View style={styles.content}>
-            {renderProgressCircle()}
+            {isPlay ? <FetalMovementCountdown ref={refFetalMovementCountdown} isPlay={isPlay}/> : renderProgressCircle()}
             {renderTimeAndMovement()}
             {renderUserManual()}
             {renderButtons()}
@@ -211,7 +182,7 @@ const FetalMovementScreen = () => {
                 onConfirm={onHandleComplete}
                 count={movement}
                 timeStart={currentTime.toString()}
-                timeCount={`${minutes}:${seconds}`}
+                timeCount={timeCount}
             />
             <FetalMovementUserManualPopup ref={refFetalMovementUserManualPopup} />
         </View>

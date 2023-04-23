@@ -1,5 +1,7 @@
-import React, { forwardRef, memo, Ref, useEffect, useImperativeHandle, useState } from 'react';
+import BigNumber from 'bignumber.js';
+import React, { forwardRef, Ref, useEffect, useImperativeHandle, useState } from 'react';
 import { StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import { useTheme } from 'hooks/useTheme';
 import { Fonts } from 'themes';
@@ -17,7 +19,7 @@ interface TimeCountdown {
     seconds: number;
 }
 
-interface FetalMovementCountdownRef {
+export interface FetalMovementCountdownRef {
     callback?: () => void;
     getTimeCountdown?: () => TimeCountdown;
 }
@@ -25,21 +27,24 @@ interface FetalMovementCountdownRef {
 interface FetalMovementCountdownProps {
     containerStyle?: StyleProp<ViewStyle>;
     countdownStyle?: StyleProp<TextStyle>;
+    isPlay: boolean;
 }
 
 const FetalMovementCountdown = (props: FetalMovementCountdownProps, ref: Ref<FetalMovementCountdownRef>) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const { containerStyle, countdownStyle } = props;
+    const { containerStyle, countdownStyle, isPlay } = props;
     const [countdown, setCountdown] = useState<number>(0);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setCountdown(DATETIME_AFTER_DAY - new Date().getTime());
-        }, 1000);
-
+        let interval;
+        if (isPlay) {
+            interval = setInterval(() => {
+                setCountdown(DATETIME_AFTER_DAY - new Date().getTime());
+            }, 1000);
+        }
         return () => clearInterval(interval);
-    }, [countdown]);
+    }, [countdown, isPlay]);
 
     useImperativeHandle(ref, () => ({ getTimeCountdown }));
 
@@ -55,10 +60,30 @@ const FetalMovementCountdown = (props: FetalMovementCountdownProps, ref: Ref<Fet
 
     const { minutes, seconds } = getTimeCountdown();
     const time = minutes + seconds > 0 ? `${minutes}:${seconds}` : '00:00';
+    const currentDateTime = minutes * 60 + seconds;
+    const currentFill = new BigNumber(currentDateTime).div(3600).times(100).toNumber();
 
     return (
         <View style={[styles.container, containerStyle]}>
-            <Text style={[styles.countdown, countdownStyle]}>{time}</Text>
+            {/* <Text style={[styles.countdown, countdownStyle]}>{time}</Text> */}
+            <View style={styles.container}>
+                <View style={styles.progressCircleContainer}>
+                    <AnimatedCircularProgress
+                        size={200}
+                        width={6}
+                        fill={currentFill}
+                        rotation={0}
+                        tintColor={getThemeColor().white}
+                        backgroundColor={getThemeColor().Text_Dark_5}>
+                        {(fill) => (
+                            <View style={styles.fillContainer}>
+                                <Text style={styles.textFill}>Thời gian còn lại</Text>
+                                <Text style={styles.fill}>{time}</Text>
+                            </View>
+                        )}
+                    </AnimatedCircularProgress>
+                </View>
+            </View>
         </View>
     );
 };
@@ -69,14 +94,35 @@ const myStyles = (theme: string) => {
     const color = getThemeColor();
     return StyleSheet.create({
         container: {
-            flex: 1,
-            backgroundColor: color.Color_Bg,
+            // flex: 1,
+            // backgroundColor: color.Color_Bg,
+            alignItems: 'center',
         },
         countdown: {
             ...Fonts.inter600,
             fontSize: scales(24),
             color: color.Text_Dark_1,
             marginTop: scales(12),
+        },
+        progressCircleContainer: {
+            backgroundColor: getThemeColor().Color_Primary,
+            padding: scales(10),
+            borderRadius: scales(9999),
+            marginTop: scales(40),
+        },
+        fillContainer: {
+            alignItems: 'center',
+        },
+        fill: {
+            ...Fonts.inter600,
+            fontSize: scales(24),
+            color: color.Text_Dark_1,
+            marginTop: scales(12),
+        },
+        textFill: {
+            ...Fonts.inter400,
+            fontSize: scales(12),
+            color: color.Text_Dark_1,
         },
     });
 };
