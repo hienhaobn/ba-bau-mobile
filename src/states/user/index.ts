@@ -1,10 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-import { UserService } from 'services';
-
+import { BASE_URL } from 'configs/api';
+import { GlobalVariables } from 'constants/index';
+import { resetStack } from 'navigation/utils';
 import axiosInstance from 'services/api-requests';
-
 import { setMessage } from 'states/message';
+import Storages, { KeyStorage } from 'utils/storages';
+import { showCustomToast } from 'utils/toast';
 
 const initialState = {
     data: [],
@@ -15,22 +18,7 @@ const initialState = {
     success: false,
 };
 
-// export const fetchRegister = createAsyncThunk('user/register', async (user: User.UserRegisterRequest, thunkAPI) => {
-//     try {
-//         console.log('fetchRegister')
-//         const response = await UserService.register(user);
-//         thunkAPI.dispatch(setMessage(response));
-//         return response;
-//     } catch (error) {
-//         const message =
-//             (error.message && error.response.data && error.response.data.message) || error.message || error.toString();
-//         thunkAPI.dispatch(setMessage(message));
-//         return thunkAPI.rejectWithValue(message);
-//     }
-// });
-
 export const fetchRegister = createAsyncThunk('user/fetchRegister', async (user: User.UserRegisterRequest) => {
-    console.log('vao day roi')
     const res = axiosInstance
         .post('/accounts', user)
         .catch((err) => {
@@ -43,9 +31,17 @@ export const fetchRegister = createAsyncThunk('user/fetchRegister', async (user:
 
 export const fetchLogin = createAsyncThunk('user/login', async (user: User.UserLoginRequest, thunkAPI) => {
     try {
-        const data = await UserService.login(user);
-        return { user: data };
+        const response = await axios.post(`${BASE_URL}/accounts/login`, user);
+        if (response?.data?.jwt) {
+            GlobalVariables.tokenInfo = {
+                accessToken: response?.data?.jwt,
+            };
+            Storages.saveObject(KeyStorage.Token, GlobalVariables.tokenInfo);
+            resetStack('Main');
+            showCustomToast('Đăng nhập thành công');
+        }
     } catch (error) {
+        showCustomToast('Đăng nhập thất bại');
         const message =
             (error.message && error.response.data && error.response.data.message) || error.message || error.toString();
         thunkAPI.dispatch(setMessage(message));
@@ -53,20 +49,14 @@ export const fetchLogin = createAsyncThunk('user/login', async (user: User.UserL
     }
 });
 
-export const logout = createAsyncThunk('user/logout', async () => {
-    await UserService.logout();
-});
-
 export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
         userLogin: (state, action) => {
-            console.log('userLogin', action);
             state.data = action.payload;
         },
         userLogout: (state) => {
-            console.log('userLogout', state);
             state = initialState;
         },
     },
@@ -82,10 +72,6 @@ export const userSlice = createSlice({
             state.userInfo = action.payload;
         });
         builder.addCase(fetchLogin.rejected, (state, action) => {
-            state.isLoggedIn = false;
-            state.userInfo = null;
-        });
-        builder.addCase(logout.fulfilled, (state, action) => {
             state.isLoggedIn = false;
             state.userInfo = null;
         });

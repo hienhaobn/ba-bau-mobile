@@ -11,7 +11,7 @@
     "compile": "ts-node scripts/compile.ts",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "clean": "rm -rf node_modules && rm -rf yarn.lock && cd ios && rm -rf build && rm -rf Pods && rm -rf Podfile.lock && cd ..",
-    "postinstall": "cd ios && pod install &&  cd ..",
+    "postinstall": "cd scripts && sh ./fix-lib.sh &&  cd .. && cd ios && pod install &&  cd ..",
     "prepare": "husky install",
     "precommit": "lint-staged"
   },

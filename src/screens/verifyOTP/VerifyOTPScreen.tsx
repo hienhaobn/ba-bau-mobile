@@ -89,6 +89,7 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
                 }
                 setCode('');
                 resetStack('Login');
+                showCustomToast('Đăng ký thành công');
             } catch (error) {
                 showCustomToast(error.message);
                 return;

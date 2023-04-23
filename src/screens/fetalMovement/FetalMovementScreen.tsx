@@ -17,6 +17,9 @@ import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { createFetalMovement } from 'states/fetal';
+import { useAppDispatch } from 'states/index';
+
 import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
@@ -35,6 +38,7 @@ const FetalMovementScreen = () => {
     const refFetalMovementConfirmPopup = useRef<IFetalMovementConfirmPopupRef>(null);
     const refFetalMovementResultPopup = useRef<IFetalMovementResultPopupRef>(null);
     const refFetalMovementUserManualPopup = useRef<IFetalMovementUserManualPopupRef>(null);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -122,15 +126,25 @@ const FetalMovementScreen = () => {
     );
 
     const onPause = () => {
-        refFetalMovementConfirmPopup.current?.hideModal();
-        // TODO: Handle show modal fetal movement
-        setTimeout(() => {
-            setIsPlay(false);
-            // Call api => show modal result
-            refFetalMovementResultPopup.current?.showModal();
-            // success => set state to default
-            setCountdown(0);
-        }, 500);
+        dispatch(
+            createFetalMovement({
+                count: movement,
+                timeStart: currentTime.toString(),
+                date: new Date().toDateString(),
+                timeCount: countdown.toString(),
+            })
+        );
+        // if (!loadingCreated) {
+            refFetalMovementConfirmPopup.current?.hideModal();
+            // TODO: Handle show modal fetal movement
+            setTimeout(() => {
+                setIsPlay(false);
+                // Call api => show modal result
+                refFetalMovementResultPopup.current?.showModal();
+                // success => set state to default
+                setCountdown(0);
+            }, 500);
+        // }
     };
 
     const onPlay = () => {

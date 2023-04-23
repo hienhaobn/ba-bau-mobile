@@ -4,26 +4,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import SvgIcons from 'assets/svgs';
-
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
 import { hideLoading, showLoading } from 'components/Loading';
-
 import { BASE_URL } from 'configs/api';
-
-import { EEvnKey } from 'constants/env.constant';
-
 import { useTheme } from 'hooks/useTheme';
-
-import { goBack } from 'navigation/utils';
-
 import { goToVerifyOTP } from 'screens/verifyOTP/src/utils';
-
-import { useFetchRegister } from 'states/user/hooks';
-
 import { Fonts } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
@@ -35,6 +23,8 @@ const RegisterScreen = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
+
     const onRegister = async () => {
         try {
             if (validateInputPassword()) {
@@ -62,7 +52,7 @@ const RegisterScreen = () => {
                 return;
             }
         }
-        goToVerifyOTP('abc@gmai.com');
+        goToVerifyOTP(email);
     };
 
     const validateInputPassword = () => {
@@ -124,6 +114,18 @@ const RegisterScreen = () => {
         );
     };
 
+    const renderInputPhone = () => (
+        <View style={styles.inputPasswordContainer}>
+            <Text style={styles.title}>Số điện thoại</Text>
+            <Input
+                value={phone}
+                onChangeText={setPhone}
+                keyboardType="numeric"
+                placeholder="Vui lòng nhập số điện thoại"
+            />
+        </View>
+    );
+
     const renderButton = () => (
         <Button
             title="Đăng ký"
@@ -137,6 +139,7 @@ const RegisterScreen = () => {
             {renderInputEmail()}
             {renderInputPassword()}
             {renderInputConfirmPassword()}
+            {renderInputPhone()}
             {renderButton()}
         </View>
     );

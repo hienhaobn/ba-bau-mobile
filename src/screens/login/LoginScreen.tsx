@@ -1,35 +1,21 @@
-import axios from 'axios';
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { goToMain } from './src/utils';
 
 import SvgIcons from 'assets/svgs';
-
 import Button from 'components/Button/Button';
 import Input from 'components/Input';
 import { hideLoading, showLoading } from 'components/Loading';
 import TouchableOpacity from 'components/TouchableOpacity';
-
-import { BASE_URL } from 'configs/api';
-
-import { GlobalVariables } from 'constants/index';
-
 import { useTheme } from 'hooks/useTheme';
-
-import { resetStack } from 'navigation/utils';
-
 import { goToForgotPassword } from 'screens/forgotPassword/src/utils';
 import { goToRegister } from 'screens/register/src/utils';
-
-import { useFetchLogin } from 'states/user/hooks';
-
+import { useAppDispatch } from 'states';
+import { fetchLogin } from 'states/user';
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import Storages, { KeyStorage } from 'utils/storages';
 
 const LoginScreen = () => {
     const { theme } = useTheme();
@@ -37,18 +23,12 @@ const LoginScreen = () => {
     const [securePassword, setSecurePassword] = useState<boolean>(true);
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const dispatch = useAppDispatch();
 
     const onLogin = async () => {
         showLoading();
-        const response = await axios.post(`${BASE_URL}/accounts/login`, { email, password });
+        dispatch(fetchLogin({ email, password }));
         hideLoading();
-        if (response?.data?.jwt) {
-            GlobalVariables.tokenInfo = {
-                accessToken: response?.data?.jwt,
-            };
-            Storages.saveObject(KeyStorage.Token, GlobalVariables.tokenInfo);
-            resetStack('Main');
-        }
     };
 
     const renderHeader = useCallback(() => {

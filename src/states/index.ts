@@ -4,6 +4,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
 
 import CounterReducer from './counter';
+import FoodsReducer from './foods';
 import UserReducer from './user';
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions'];
@@ -16,14 +17,11 @@ const persistConfig = {
     version: 1,
 };
 
-// const logger = createLogger();
-
 const persistedReducer = persistReducer(
     persistConfig,
     combineReducers({
-        // add something
-        counter: CounterReducer,
         user: UserReducer,
+        foods: FoodsReducer,
     })
 );
 

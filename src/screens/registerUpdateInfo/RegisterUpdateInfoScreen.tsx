@@ -6,18 +6,13 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
-
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
-import { goBack, resetStack } from 'navigation/utils';
-
+import { resetStack } from 'navigation/utils';
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
@@ -29,7 +24,6 @@ const RegisterUpdateInfoScreen = () => {
     const [babyName, setBabyName] = useState<string>('');
     const [momDOB, setMomDOB] = useState<Date>(moment().toDate());
     const [dueDate, setDueDate] = useState<Date>(moment().toDate());
-    const [phone, setPhone] = useState<string>('');
     const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<Date>(moment().toDate());
     const [selectDateVisible, setSelectDateVisible] = useState<boolean>(false);
     const [selectDateType, setSelectDateType] = useState<'momDOB' | 'lastMenstrualPeriod' | 'dueDate'>('momDOB');
@@ -130,24 +124,10 @@ const RegisterUpdateInfoScreen = () => {
         </View>
     );
 
-    const renderInputPhone = () => (
-        <View style={styles.inputContainer}>
-            <Text style={styles.title}>Số điện thoại</Text>
-            <Input
-                value={phone}
-                onChangeText={setPhone}
-                keyboardType="numeric"
-                placeholder="Vui lòng nhập số điện thoại"
-            />
-        </View>
-    );
-
-
     const renderMomInfo = () => (
         <View>
             <Text style={styles.titleInfo}>Thông tin của mẹ</Text>
             {renderInputMomName()}
-            {renderInputPhone()}
             {renderInputMomDOB()}
             {renderInputMomAddress()}
         </View>

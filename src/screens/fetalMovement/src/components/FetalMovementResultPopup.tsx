@@ -10,7 +10,6 @@ import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-
 interface IFetalMovementResultPopupProps {
     onConfirm?: () => void;
 }
@@ -77,7 +76,7 @@ const FetalMovementResultPopup = (
                         <Text style={styles.text}>Số lần cử động</Text>
                     </View>
                 </View>
-                <Button title="Hoàn thành" customStyles={styles.buttonConfirm} onPress={hideModal} />
+                <Button title="Hoàn thành" customStyles={styles.buttonConfirm} onPress={onConfirm} />
             </View>
         </RNModal>
     );
