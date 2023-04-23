@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -24,6 +25,7 @@ import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import FetalMovementCountdown from './src/components/FetalMovementCountdown';
 
 const DAY_IN_MS = 1 * 60 * 60 * 1000;
 const NOW_IN_MS = new Date().getTime();
@@ -35,6 +37,7 @@ const FetalMovementScreen = () => {
     const [movement, setMovement] = useState<number>(0);
     const [currentTime, setCurrentTime] = useState<string>('00:00');
     const [countdown, setCountdown] = useState<number>(0);
+    const [timeCount, setTimeCount] = useState<string>('');
     const refFetalMovementConfirmPopup = useRef<IFetalMovementConfirmPopupRef>(null);
     const refFetalMovementResultPopup = useRef<IFetalMovementResultPopupRef>(null);
     const refFetalMovementUserManualPopup = useRef<IFetalMovementUserManualPopupRef>(null);
@@ -58,6 +61,7 @@ const FetalMovementScreen = () => {
         return [days, hours, minutes, seconds];
     };
 
+    const [, , minutes, seconds] = getReturnValues(countdown);
     const onUserManual = () => {
         refFetalMovementUserManualPopup.current?.showModal();
     };
@@ -76,7 +80,6 @@ const FetalMovementScreen = () => {
     );
 
     const renderProgressCircle = () => {
-        const [, , minutes, seconds] = getReturnValues(countdown);
         const currentDateTime = minutes * 60 + seconds;
         const currentFill = isPlay ? new BigNumber(currentDateTime).div(3600).times(100).toNumber() : 100;
         const time = minutes + seconds > 0 && isPlay ? `${minutes}:${seconds}` : '00:00';
@@ -125,26 +128,28 @@ const FetalMovementScreen = () => {
         </TouchableOpacity>
     );
 
-    const onPause = () => {
+    const onPause = useCallback(() => {
+        refFetalMovementConfirmPopup.current?.hideModal();
+        setTimeCount(`${minutes}:${seconds}`);
+        setTimeout(() => {
+            setIsPlay(false);
+            // Call api => show modal result
+            refFetalMovementResultPopup.current?.showModal();
+            // success => set state to default
+            setCountdown(0);
+        }, 500);
+    }, [countdown]);
+
+    const onHandleComplete = () => {
+        refFetalMovementResultPopup.current?.hideModal();
         dispatch(
             createFetalMovement({
                 count: movement,
+                date: moment().format('DD/MM/YYYY'),
                 timeStart: currentTime.toString(),
-                date: new Date().toDateString(),
-                timeCount: countdown.toString(),
+                timeCount,
             })
         );
-        // if (!loadingCreated) {
-            refFetalMovementConfirmPopup.current?.hideModal();
-            // TODO: Handle show modal fetal movement
-            setTimeout(() => {
-                setIsPlay(false);
-                // Call api => show modal result
-                refFetalMovementResultPopup.current?.showModal();
-                // success => set state to default
-                setCountdown(0);
-            }, 500);
-        // }
     };
 
     const onPlay = () => {
@@ -201,7 +206,13 @@ const FetalMovementScreen = () => {
             {renderHeader()}
             {renderContent()}
             <FetalMovementConfirmPopup ref={refFetalMovementConfirmPopup} onConfirm={onPause} />
-            <FetalMovementResultPopup ref={refFetalMovementResultPopup} />
+            <FetalMovementResultPopup
+                ref={refFetalMovementResultPopup}
+                onConfirm={onHandleComplete}
+                count={movement}
+                timeStart={currentTime.toString()}
+                timeCount={`${minutes}:${seconds}`}
+            />
             <FetalMovementUserManualPopup ref={refFetalMovementUserManualPopup} />
         </View>
     );

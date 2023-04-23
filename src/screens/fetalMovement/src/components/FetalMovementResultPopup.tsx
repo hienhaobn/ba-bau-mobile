@@ -10,8 +10,12 @@ import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+
 interface IFetalMovementResultPopupProps {
     onConfirm?: () => void;
+    count: number;
+    timeStart: string;
+    timeCount: string;
 }
 
 export interface IFetalMovementResultPopupRef {
@@ -25,7 +29,7 @@ const FetalMovementResultPopup = (
 ) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const { onConfirm } = props;
+    const { onConfirm, count, timeStart, timeCount } = props;
     const [isVisible, setIsVisible] = useState<boolean>(false);
 
     React.useImperativeHandle(ref, () => ({
@@ -59,19 +63,19 @@ const FetalMovementResultPopup = (
                 <View style={styles.content}>
                     <View style={styles.itemContainer}>
                         <View style={styles.valueContainer}>
-                            <Text style={styles.value}>09:41</Text>
+                            <Text style={styles.value}>{timeStart}</Text>
                         </View>
                         <Text style={styles.text}>Thời gian bắt đầu</Text>
                     </View>
                     <View style={styles.itemContainer}>
                         <View style={styles.valueContainer}>
-                            <Text style={styles.value}>19:59</Text>
+                            <Text style={styles.value}>{timeCount}</Text>
                         </View>
                         <Text style={styles.text}>Thời gian đếm</Text>
                     </View>
                     <View style={styles.itemContainer}>
                         <View style={styles.valueContainer}>
-                            <Text style={styles.value}>1</Text>
+                            <Text style={styles.value}>{count}</Text>
                         </View>
                         <Text style={styles.text}>Số lần cử động</Text>
                     </View>
