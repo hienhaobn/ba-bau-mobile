@@ -1,5 +1,5 @@
 export interface GlobalState {
-  user: User.State;
+  user: user.State;
   fetal: fetal.State;
 }
 

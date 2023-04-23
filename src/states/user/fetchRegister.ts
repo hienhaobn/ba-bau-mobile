@@ -1,7 +1,7 @@
 import axiosInstance from 'services/api-requests';
 import { showCustomToast } from 'utils/toast';
 
-const fetchRegister = async (user: User.UserRegisterRequest) => {
+const fetchRegister = async (user: user.UserRegisterRequest) => {
     try {
         const res = await axiosInstance.post('/accounts', user);
         showCustomToast('Đăng ký thành công');

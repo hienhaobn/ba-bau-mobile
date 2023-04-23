@@ -9,6 +9,7 @@ import SvgIcons from 'assets/svgs';
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
+import { hideLoading, showLoading } from 'components/Loading';
 import TouchableOpacity from 'components/TouchableOpacity';
 
 import { BASE_URL } from 'configs/api';
@@ -23,12 +24,13 @@ import { goBack, resetStack } from 'navigation/utils';
 import { goToLogin } from 'screens/login/src/utils';
 import { goToRegisterSuccess } from 'screens/registerSuccess/src/utils';
 
+import fetchForgotPassword from 'states/user/fetchForgotPassword';
+
 import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
-import { hideLoading, showLoading } from 'components/Loading';
 
 interface VerifyOTPScreenProps {
     route: RouteProp<RootNavigatorParamList, 'VerifyOTP'>;
@@ -54,7 +56,7 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
         if (fromScreen === 'ForgotPassword') {
             if (code.length === 4) {
                 try {
-                    showLoading()
+                    showLoading();
                     const response = await axios.post(`${BASE_URL}/accounts/password`, {
                         otp: code,
                         email,

@@ -4,7 +4,7 @@ import { fetchLogin } from '.';
 
 import { useAppDispatch } from 'states';
 
-export const useFetchLogin = (user: User.UserLoginRequest) => {
+export const useFetchLogin = (user: user.UserLoginRequest) => {
     const dispatch = useAppDispatch();
     useEffect(() => {
         dispatch(fetchLogin(user));

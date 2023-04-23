@@ -1,22 +1,26 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
+import { hideLoading, showLoading } from 'components/Loading';
+
+import { BASE_URL } from 'configs/api';
 
 import { useTheme } from 'hooks/useTheme';
 
 import { goToLogin } from 'screens/login/src/utils';
-
 import { goToVerifyOTP } from 'screens/verifyOTP/src/utils';
+
+import { fetchSendOtpForgotPassword } from 'states/user/fetchForgotPassword';
+
 import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import { hideLoading, showLoading } from 'components/Loading';
-import { BASE_URL } from 'configs/api';
-import axios from 'axios';
+import { showCustomToast } from 'utils/toast';
 
 const ForgotPasswordScreen = () => {
     const { theme } = useTheme();
@@ -26,10 +30,11 @@ const ForgotPasswordScreen = () => {
     const handlePress = async () => {
         // TODO: call api
         showLoading();
-        const response = await axios.post(`${BASE_URL}/accounts/otp`, { email });
+        const { statusCode, message } = await fetchSendOtpForgotPassword(email);
         hideLoading();
         // TODO: go to confirm OTP
-        if (response.status === 200) {
+        if (statusCode === 200) {
+            showCustomToast(message);
             goToVerifyOTP(email, 'ForgotPassword');
         }
     };

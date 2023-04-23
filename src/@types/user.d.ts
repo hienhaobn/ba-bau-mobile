@@ -1,4 +1,4 @@
-declare namespace User {
+declare namespace user {
     type State = Readonly<Info>;
 
     interface Info {
@@ -32,5 +32,11 @@ declare namespace User {
     interface VerifyOTPRoute {
         email: string;
         fromScreen?: 'ForgotPassword' | 'Register';
+    }
+
+    interface UserForgotPasswordRequest {
+        email: string;
+        otp: string;
+        password: string;
     }
 }

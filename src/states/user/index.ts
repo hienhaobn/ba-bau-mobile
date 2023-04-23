@@ -17,7 +17,7 @@ const initialState = {
     success: false,
 };
 
-export const fetchLogin = createAsyncThunk('user/login', async (user: User.UserLoginRequest, thunkAPI) => {
+export const fetchLogin = createAsyncThunk('user/login', async (user: user.UserLoginRequest, thunkAPI) => {
     try {
         const response = await axios.post(`${BASE_URL}/accounts/login`, user);
         if (response?.data?.jwt) {

@@ -7,7 +7,7 @@ export type RootNavigatorParamList = {
   Login: undefined,
   ForgotPassword: undefined,
   Register: undefined,
-  VerifyOTP: User.VerifyOTPRoute,
+  VerifyOTP: user.VerifyOTPRoute,
   FetalMovement: undefined,
   PregnancyDueDateCalculator: undefined,
   PrenatalCareCheckups: undefined,
