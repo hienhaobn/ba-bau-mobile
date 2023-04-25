@@ -37,16 +37,18 @@ const FetalMovementCountdown = (props: FetalMovementCountdownProps, ref: Ref<Fet
     const [countdown, setCountdown] = useState<number>(0);
 
     useEffect(() => {
-        let interval;
-        if (isPlay) {
-            interval = setInterval(() => {
-                setCountdown(DATETIME_AFTER_DAY - new Date().getTime());
-            }, 1000);
-        }
+        const interval = setInterval(() => {
+            setCountdown(DATETIME_AFTER_DAY - new Date().getTime());
+        }, 1000);
         return () => clearInterval(interval);
-    }, [countdown, isPlay]);
+    }, []);
 
-    useImperativeHandle(ref, () => ({ getTimeCountdown }));
+    useEffect(() => {
+        return () => console.log('un mount')
+    }, [countdown]);
+
+
+    useImperativeHandle(ref, () => ({ getTimeCountdown, callback }));
 
     const getTimeCountdown = () => {
         // calculate time left
@@ -58,6 +60,13 @@ const FetalMovementCountdown = (props: FetalMovementCountdownProps, ref: Ref<Fet
         return { days, hours, minutes, seconds };
     };
 
+    const callback = () => {
+        console.log('callback')
+        setCountdown(0);
+    };
+
+    console.log('first')
+
     const { minutes, seconds } = getTimeCountdown();
     const time = minutes + seconds > 0 ? `${minutes}:${seconds}` : '00:00';
     const currentDateTime = minutes * 60 + seconds;
@@ -65,7 +74,6 @@ const FetalMovementCountdown = (props: FetalMovementCountdownProps, ref: Ref<Fet
 
     return (
         <View style={[styles.container, containerStyle]}>
-            {/* <Text style={[styles.countdown, countdownStyle]}>{time}</Text> */}
             <View style={styles.container}>
                 <View style={styles.progressCircleContainer}>
                     <AnimatedCircularProgress
@@ -94,8 +102,6 @@ const myStyles = (theme: string) => {
     const color = getThemeColor();
     return StyleSheet.create({
         container: {
-            // flex: 1,
-            // backgroundColor: color.Color_Bg,
             alignItems: 'center',
         },
         countdown: {

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
@@ -14,6 +15,10 @@ import { scales } from 'utils/scales';
 const FetalMovementChartHourScene = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+
+    const currentDate = new Date().getDate();
+
+    console.log(currentDate);
     const barData = [
         {
             value: 250,

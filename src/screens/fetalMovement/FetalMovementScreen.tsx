@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
@@ -21,16 +21,12 @@ import { Fonts } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
-const DAY_IN_MS = 1 * 60 * 60 * 1000;
-const NOW_IN_MS = new Date().getTime();
-const DATETIME_AFTER_DAY = NOW_IN_MS + DAY_IN_MS;
 const FetalMovementScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const [isPlay, setIsPlay] = useState<boolean>(false);
     const [movement, setMovement] = useState<number>(0);
     const [currentTime, setCurrentTime] = useState<string>('00:00');
-    const [countdown, setCountdown] = useState<number>(0);
     const [timeCount, setTimeCount] = useState<string>('');
     const refFetalMovementConfirmPopup = useRef<IFetalMovementConfirmPopupRef>(null);
     const refFetalMovementResultPopup = useRef<IFetalMovementResultPopupRef>(null);
@@ -98,18 +94,18 @@ const FetalMovementScreen = () => {
         </TouchableOpacity>
     );
 
-    const onPause = useCallback(() => {
+    const onPause = () => {
         refFetalMovementConfirmPopup.current?.hideModal();
         const timeCountdown = refFetalMovementCountdown.current?.getTimeCountdown?.();
         setTimeCount(`${timeCountdown?.minutes}:${timeCountdown?.seconds}`);
+        refFetalMovementCountdown.current?.callback?.();
         setTimeout(() => {
             setIsPlay(false);
             // Call api => show modal result
             refFetalMovementResultPopup.current?.showModal();
             // success => set state to default
-            setCountdown(0);
         }, 500);
-    }, [countdown]);
+    };
 
     const onHandleComplete = () => {
         refFetalMovementResultPopup.current?.hideModal();
@@ -129,7 +125,6 @@ const FetalMovementScreen = () => {
             const currentSeconds = new Date().getMinutes();
             setIsPlay(true);
             setCurrentTime(`${currentHours}:${currentSeconds}`);
-            setCountdown(DATETIME_AFTER_DAY);
         } else {
             refFetalMovementConfirmPopup.current?.showModal();
         }
@@ -163,14 +158,16 @@ const FetalMovementScreen = () => {
         </View>
     );
 
-    const renderContent = () => (
+    const renderFetalMovementCountdown = useCallback(() => (<FetalMovementCountdown ref={refFetalMovementCountdown} isPlay={isPlay}/>), [isPlay])
+
+    const renderContent = useCallback(() => (
         <View style={styles.content}>
-            {isPlay ? <FetalMovementCountdown ref={refFetalMovementCountdown} isPlay={isPlay}/> : renderProgressCircle()}
+            {isPlay ? renderFetalMovementCountdown() : renderProgressCircle()}
             {renderTimeAndMovement()}
             {renderUserManual()}
             {renderButtons()}
         </View>
-    );
+    ), [isPlay]);
 
     return (
         <View style={styles.container}>

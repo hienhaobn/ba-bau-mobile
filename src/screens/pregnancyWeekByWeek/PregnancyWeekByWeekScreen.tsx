@@ -3,14 +3,10 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
-
 import Header from 'components/Header';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 

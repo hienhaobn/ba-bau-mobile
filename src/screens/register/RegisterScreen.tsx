@@ -30,14 +30,16 @@ const RegisterScreen = () => {
                 return;
             }
             showLoading();
-            await fetchRegister({ email, password, phone });
+            const response = await fetchRegister({ email, password, phone });
             hideLoading();
             // success
-            setEmail('');
-            setPassword('');
-            setConfirmPassword('');
-            setPhone('');
-            goToVerifyOTP(email);
+            if (response.statusCode === 201) {
+                setEmail('');
+                setPassword('');
+                setConfirmPassword('');
+                setPhone('');
+                goToVerifyOTP(email);
+            }
         } catch (error) {
             hideLoading();
             console.log('error: ', error);
@@ -46,7 +48,6 @@ const RegisterScreen = () => {
                 return;
             }
         }
-        goToVerifyOTP(email);
     };
 
     const validateInputPassword = () => {
