@@ -4,7 +4,7 @@ import { showCustomToast } from 'utils/toast';
 const fetchRegister = async (user: user.UserRegisterRequest) => {
     try {
         const res: { statusCode: number, message: string } = await axiosInstance.post('/accounts', user);
-        if (res.statusCode === 201) {
+        if (res && res?.statusCode === 201) {
             showCustomToast('Đăng ký thành công');
         }
         return res;

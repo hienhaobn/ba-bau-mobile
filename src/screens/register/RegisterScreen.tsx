@@ -33,7 +33,7 @@ const RegisterScreen = () => {
             const response = await fetchRegister({ email, password, phone });
             hideLoading();
             // success
-            if (response.statusCode === 201) {
+            if (response && response?.statusCode === 201) {
                 setEmail('');
                 setPassword('');
                 setConfirmPassword('');
