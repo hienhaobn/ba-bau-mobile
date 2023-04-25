@@ -167,7 +167,7 @@ const FetalMovementScreen = () => {
             {renderUserManual()}
             {renderButtons()}
         </View>
-    ), [isPlay]);
+    ), [isPlay, movement]);
 
     return (
         <View style={styles.container}>
