@@ -1,7 +1,7 @@
 declare namespace fetal {
     type State = Readonly<Info>;
 
-    interface IMovement {
+    interface FetalMovement {
         date: string;
         timeStart: string;
         timeCount: string;
@@ -10,9 +10,16 @@ declare namespace fetal {
         _id: string;
     }
 
+    interface FetalResponse {
+        count: number;
+        current_page: number;
+        fetalMove: FetalMovement[];
+        total_page: number;
+    }
+
     interface Info {
-        movements: IMovement[];
-        loadingCreated: boolean;
+        data: FetalResponse;
+        isLoading: boolean;
     }
 
 }

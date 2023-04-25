@@ -1,5 +1,6 @@
 export interface GlobalState {
   user: user.State;
+  foods: food.State;
   fetal: fetal.State;
 }
 

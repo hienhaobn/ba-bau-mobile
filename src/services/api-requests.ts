@@ -30,7 +30,6 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
     async (response) => {
-        console.log('response11', response)
         if (response && response.data) {
             return response.data;
         }

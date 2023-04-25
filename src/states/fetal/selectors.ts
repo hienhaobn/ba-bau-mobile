@@ -1,12 +1,10 @@
-import { createSelector } from '@reduxjs/toolkit';
-
 import { GlobalState } from 'states/types';
 
-const selectLoadingMovementCreated = (state: GlobalState) => {
-    return state.fetal.loadingCreated;
+export const selectIsLoading = (state: GlobalState) => {
+    return state.fetal.isLoading;
 };
 
-export const useLoadingMovementCreatedSelector = createSelector(
-    [selectLoadingMovementCreated],
-    (loadingCreated) => loadingCreated
-);
+export const selectFetalMovements = (state: GlobalState) => {
+    return state.fetal?.data?.fetalMove;
+};
+

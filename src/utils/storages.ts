@@ -4,7 +4,7 @@ export enum KeyStorage {
     Language = 'babau_language',
     Theme = 'babau_theme',
     Token = 'Token',
-    TimeAutoLock = 'babau_time_auto_lock',
+    DueDate = 'DueDate',
 }
 
 type StorageValue = string;

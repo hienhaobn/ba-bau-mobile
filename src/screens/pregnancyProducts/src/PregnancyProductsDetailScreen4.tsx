@@ -20,7 +20,7 @@ const PregnancyProductsDetailScreen4 = () => {
 
     const renderContent = () => (
         <View>
-            <Image source={Images.Product6} style={styles.headerImg} resizeMode="contain" />
+            <Image source={Images.GoiBaBau} style={styles.headerImg} resizeMode="contain" />
             <View style={styles.itemContentContainer}>
                 <Text style={styles.contentHeader}>9 gối bà bầu giảm đau lưng, cho mẹ bầu tư thế thoải mái</Text>
                 <Text style={styles.contentDesc}>

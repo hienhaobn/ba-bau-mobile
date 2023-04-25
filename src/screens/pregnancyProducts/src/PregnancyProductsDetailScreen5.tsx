@@ -20,7 +20,7 @@ const PregnancyProductsDetailScreen5 = () => {
 
     const renderContent = () => (
         <View>
-            <Image source={Images.Product7} style={styles.headerImg} resizeMode="contain" />
+            <Image source={Images.BeNgu} style={styles.headerImg} />
             <View style={styles.itemContentContainer}>
                 <Text style={styles.contentHeader}>Đồ dùng chuẩn bị cho mẹ và bé</Text>
                 <Text style={styles.contentDesc}>

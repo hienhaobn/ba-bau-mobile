@@ -47,6 +47,9 @@ const Images = {
     Product5: require('./product_5.png'),
     Product6: require('./product_6.png'),
     Product7: require('./product_7.png'),
+    MeBauNgu: require('./me_bau_ngu.jpeg'),
+    GoiBaBau: require('./goi_ba_bau.jpeg'),
+    BeNgu: require('./be_ngu.png'),
 };
 
 export default Images;

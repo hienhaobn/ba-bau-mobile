@@ -1,32 +1,47 @@
-import moment from 'moment';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import DatePicker from 'react-native-modern-datepicker';
-
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
-
 import { useTheme } from 'hooks/useTheme';
-
-import { goBack } from 'navigation/utils';
-
+import moment from 'moment';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import DatePicker from 'react-native-modern-datepicker';
+import PregnancyDueDateCalculatorConfirmPopup, { IPregnancyDueDateCalculatorConfirmPopupRef } from 'screens/pregnancyDueDateCalculator/src/PregnancyDueDateCalculatorConfirmPopup';
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import Storages, { KeyStorage } from 'utils/storages';
 
 const PregnancyDueDateCalculatorScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const [date, setDate] = useState(new Date());
+    const refPregnancyDueDateCalculatorConfirmPopup = useRef<IPregnancyDueDateCalculatorConfirmPopupRef>()
+    const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<string>(moment().format('YYYY-MM-DD'));
 
-    // TODO: get from server
-    const lastMenstrualPeriod = '2023-07-13';
+    console.log(lastMenstrualPeriod);
+
+    const getDueDateFromStore = async () => {
+        const dueDate = await Storages.get(KeyStorage.DueDate);
+        setLastMenstrualPeriod(dueDate);
+    };
+
+    useEffect(() => {
+        getDueDateFromStore();
+    }, [lastMenstrualPeriod]);
+
+
     const dueDate = moment(lastMenstrualPeriod).add(9, 'months').add(10, 'days').format('DD/MM/YYYY');
 
-    const handleUpdateLastMenstrualPeriod = () => {
-        // TODO: Call api update
-        goBack();
+    const handleOpenPopup = () => {
+        refPregnancyDueDateCalculatorConfirmPopup?.current?.showModal();
+    };
+
+    const handleConfirm = () => {
+        // save to async storage
+        const dueDate = moment(date).format('YYYY-MM-DD');
+        setLastMenstrualPeriod(dueDate);
+        Storages.set(KeyStorage.DueDate, dueDate);
+        refPregnancyDueDateCalculatorConfirmPopup?.current?.hideModal();
     };
 
     const renderHeader = () => <Header title="Dự tính ngày sinh" />;
@@ -52,7 +67,7 @@ const PregnancyDueDateCalculatorScreen = () => {
 
     const renderButton = () => (
         <View style={styles.buttonContainer}>
-            <Button title="Cập nhật" customStyles={styles.button} onPress={handleUpdateLastMenstrualPeriod} />
+            <Button title="Cập nhật" customStyles={styles.button} onPress={handleOpenPopup} />
         </View>
     );
 
@@ -62,6 +77,7 @@ const PregnancyDueDateCalculatorScreen = () => {
             {renderPregnancyDueDateCalculator()}
             {renderSelectDate()}
             {renderButton()}
+            <PregnancyDueDateCalculatorConfirmPopup ref={refPregnancyDueDateCalculatorConfirmPopup} onConfirm={handleConfirm} dueDate={moment(date).format('DD/MM/YYYY')}/>
         </View>
     );
 
@@ -84,7 +100,7 @@ const myStyles = (theme: string) => {
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: color.Color_Gray4,
+            backgroundColor: color.Color_Primary2,
             paddingVertical: scales(25),
         },
         titlePregnancyDueDateCalculator: {

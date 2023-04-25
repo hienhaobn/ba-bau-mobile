@@ -1,11 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
 
-import CounterReducer from './counter';
 import FoodsReducer from './foods';
 import UserReducer from './user';
+import FetalReducer from './fetal';
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions'];
 
@@ -22,6 +22,7 @@ const persistedReducer = persistReducer(
     combineReducers({
         user: UserReducer,
         foods: FoodsReducer,
+        fetal: FetalReducer,
     })
 );
 

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
@@ -5,6 +6,7 @@ import { BarChart } from 'react-native-gifted-charts';
 import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
+import { useFetchMovementFromDateToDate, useMovementSelector } from 'states/fetal/hooks';
 
 import { Fonts, Sizes } from 'themes';
 
@@ -14,6 +16,13 @@ import { scales } from 'utils/scales';
 const FetalMovementChartDayScene = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const fromDate = moment().toDate();
+    const toDate = moment().subtract(7, 'days').toDate();
+    useFetchMovementFromDateToDate({from: fromDate, to: toDate});
+    const movements = useMovementSelector();
+
+    // console.log(movements);
+
     const barData = [
         {
             value: 250,

@@ -49,7 +49,7 @@ const PregnancyProductsScreen = () => {
                     style={styles.itemContentContainer}
                     activeOpacity={0.9}
                     onPress={goToPregnancyProductsDetail2}>
-                    <Image source={Images.Product2} style={styles.image} />
+                    <Image source={Images.Product4} style={styles.image} />
                     <View style={styles.itemContent}>
                         <Text style={styles.itemContentHeader}>Bí quyết làm trắng da hiệu quả cho mẹ mang thai</Text>
                         <Text style={styles.itemContentDesc}>Để quá trình làm sáng da, trắng da an ...</Text>
@@ -59,7 +59,7 @@ const PregnancyProductsScreen = () => {
                     style={styles.itemContentContainer}
                     activeOpacity={0.9}
                     onPress={goToPregnancyProductsDetail3}>
-                    <Image source={Images.Product2} style={styles.image} />
+                    <Image source={Images.Product5} style={styles.image} />
                     <View style={styles.itemContent}>
                         <Text style={styles.itemContentHeader}>
                             Mẹo giúp mẹ bầu ngủ ngon hơn (Sức khỏe y tế - Giấc ngủ)
@@ -72,7 +72,7 @@ const PregnancyProductsScreen = () => {
                     activeOpacity={0.9}
                     onPress={goToPregnancyProductsDetail4}
                 >
-                    <Image source={Images.Product2} style={styles.image} />
+                    <Image source={Images.Product6} style={styles.image} />
                     <View style={styles.itemContent}>
                         <Text style={styles.itemContentHeader}>
                             9 gối bà bầu giảm đau lưng, cho mẹ bầu tư thế thoải mái
@@ -84,7 +84,7 @@ const PregnancyProductsScreen = () => {
                     style={styles.itemContentContainer}
                     activeOpacity={0.9}
                     onPress={goToPregnancyProductsDetail5}>
-                    <Image source={Images.Product2} style={styles.image} />
+                    <Image source={Images.Product7} style={styles.image} />
                     <View style={styles.itemContent}>
                         <Text style={styles.itemContentHeader}>Đồ dùng chuẩn bị cho mẹ và bé</Text>
                         <Text style={styles.itemContentDesc}>
@@ -102,16 +102,6 @@ const PregnancyProductsScreen = () => {
                         <Text style={styles.itemContentDesc}>Trong quá trình mang thai , mẹ bầu cần ...</Text>
                     </View>
                 </TouchableOpacity>
-                {/* <TouchableOpacity
-                    style={styles.itemContentContainer}
-                    activeOpacity={0.9}
-                    onPress={goToPregnancyProductsDetail6}>
-                    <Image source={Images.Product2} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Đồ dùng chuẩn bị cho mẹ và bé</Text>
-                        <Text style={styles.itemContentDesc}>Chuẩn bị cho mẹ và bé luôn là ...</Text>
-                    </View>
-                </TouchableOpacity> */}
             </View>
         </View>
     );
