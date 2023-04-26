@@ -18,8 +18,6 @@ const PregnancyDueDateCalculatorScreen = () => {
     const refPregnancyDueDateCalculatorConfirmPopup = useRef<IPregnancyDueDateCalculatorConfirmPopupRef>()
     const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<string>(moment().format('YYYY-MM-DD'));
 
-    console.log(lastMenstrualPeriod);
-
     const getDueDateFromStore = async () => {
         const dueDate = await Storages.get(KeyStorage.DueDate);
         setLastMenstrualPeriod(dueDate);
@@ -77,7 +75,7 @@ const PregnancyDueDateCalculatorScreen = () => {
             {renderPregnancyDueDateCalculator()}
             {renderSelectDate()}
             {renderButton()}
-            <PregnancyDueDateCalculatorConfirmPopup ref={refPregnancyDueDateCalculatorConfirmPopup} onConfirm={handleConfirm} dueDate={moment(date).format('DD/MM/YYYY')}/>
+            <PregnancyDueDateCalculatorConfirmPopup ref={refPregnancyDueDateCalculatorConfirmPopup} onConfirm={handleConfirm} dueDate={moment(dueDate).format('DD/MM/YYYY')}/>
         </View>
     );
 
