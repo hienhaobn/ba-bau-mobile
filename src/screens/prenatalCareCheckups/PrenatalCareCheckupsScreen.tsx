@@ -1,7 +1,7 @@
 import React from 'react';
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { goToPrenatalCareCheckupsChartBaby, goToPrenatalCareCheckupsChartMom, goToRoutineCheckups } from './src/utils';
+import { goToAddPrenatalCareCheckups, goToPrenatalCareCheckupsChartBaby, goToPrenatalCareCheckupsChartMom, goToRoutineCheckups } from './src/utils';
 
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
@@ -48,7 +48,7 @@ const PrenatalCareCheckupsScreen = () => {
     const renderHeaderPrenatalCareHistory = () => (
         <View style={styles.headerHistoryContainer}>
             <Text style={styles.titleHistory}>Lịch sử khám thai</Text>
-            <TouchableOpacity style={styles.iconPlusContainer}>
+            <TouchableOpacity style={styles.iconPlusContainer} onPress={goToAddPrenatalCareCheckups}>
                 <Text style={styles.iconPlus}>+</Text>
             </TouchableOpacity>
         </View>

@@ -36,9 +36,9 @@ const PregnancyDueDateCalculatorScreen = () => {
 
     const handleConfirm = () => {
         // save to async storage
-        const dueDate = moment(date).format('YYYY-MM-DD');
-        setLastMenstrualPeriod(dueDate);
-        Storages.set(KeyStorage.DueDate, dueDate);
+        const currentDate = moment(date).format('YYYY-MM-DD');
+        setLastMenstrualPeriod(currentDate);
+        Storages.set(KeyStorage.DueDate, currentDate);
         refPregnancyDueDateCalculatorConfirmPopup?.current?.hideModal();
     };
 

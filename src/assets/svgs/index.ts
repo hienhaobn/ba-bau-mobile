@@ -1,3 +1,4 @@
+import IcCheck from './check.svg';
 import IcClose from './close.svg';
 import IcDownReward from './down_reward.svg';
 import IcBack from './ic_back.svg';
@@ -70,6 +71,7 @@ const SvgIcons = {
     IcWarning,
     IcTickGreen,
     IcCloseRed,
+    IcCheck,
 };
 
 export default SvgIcons;
