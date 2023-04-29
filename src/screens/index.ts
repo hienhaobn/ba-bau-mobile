@@ -26,7 +26,6 @@ import PregnancyProductsDetail6 from './pregnancyProducts/src/PregnancyProductsD
 import PregnancyWeekByWeek from './pregnancyWeekByWeek/PregnancyWeekByWeekScreen';
 import Premium from './premium/PremiumScreen';
 import AddPrenatalCareCheckups from './prenatalCareCheckups/AddPrenatalCareCheckupsScreen';
-import PrenatalCareCheckupsChartBaby from './prenatalCareCheckups/PrenatalCareCheckupsChartBabyScreen';
 import PrenatalCareCheckupsChartMom from './prenatalCareCheckups/PrenatalCareCheckupsChartMomScreen';
 import PrenatalCareCheckups from './prenatalCareCheckups/PrenatalCareCheckupsScreen';
 import RoutineCheckups from './prenatalCareCheckups/RoutineCheckupsScreen';
@@ -68,7 +67,6 @@ export const Screen = {
     FetalMovementChart,
     RoutineCheckups,
     PrenatalCareCheckupsChartMom,
-    PrenatalCareCheckupsChartBaby,
     TeachFetusPhotoBaby,
     TeachFetusMusicForMom,
     TeachFetusVideoBaby,

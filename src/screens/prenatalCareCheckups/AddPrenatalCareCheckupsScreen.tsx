@@ -30,7 +30,11 @@ const AddPrenatalCareCheckupsScreen = () => {
     const [momBloodPressureHungry, setMomBloodPressureHungry] = useState<string>('');
     const [momBloodPressureAfter1Hour, setMomBloodPressureAfter1Hour] = useState<string>('');
     const [momBloodPressureAfter2Hour, setMomBloodPressureAfter2Hour] = useState<string>('');
-    const [babyName, setBabyName] = useState<string>('');
+    const [babyFL, setBabyFL] = useState<string>('');
+    const [babyHC, setBabyHC] = useState<string>('');
+    const [babyWeight, setBabyWeight] = useState<string>('');
+    const [babyNote, setBabyNote] = useState<string>('');
+    const [babyLength, setBabyLength] = useState<string>('');
     const [momDOB, setMomDOB] = useState<Date>(moment().toDate());
     const [dueDate, setDueDate] = useState<Date>(moment().toDate());
     const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<Date>(moment().toDate());
@@ -112,37 +116,59 @@ const AddPrenatalCareCheckupsScreen = () => {
         </View>
     );
 
-    const renderInputBabyName = () => (
+    const renderInputBabyCRL = () => (
         <View style={styles.inputContainer}>
-            <Text style={styles.title}>Họ và tên của bé</Text>
-            <Input value={babyName} onChangeText={setBabyName} placeholder="Vui lòng nhập họ và tên của bé" />
+            <Text style={styles.title}>Chiều dài (CRL)</Text>
+            <Input value={babyLength} onChangeText={setBabyLength} placeholder="Kg" />
         </View>
     );
 
-    const renderInputDueDate = () => (
+    const renderInputBabyBPD = () => (
         <View style={styles.inputContainer}>
-            <Text style={styles.title}>Ngày dự sinh</Text>
-            <TouchableOpacity style={styles.dobContainer} onPress={() => onShowSelectDate('dueDate')}>
-                <Text style={styles.dobTxt}>{moment(dueDate).format('DD-MM-YYYY')}</Text>
-            </TouchableOpacity>
+            <Text style={styles.title}>Đường kính lưỡng đỉnh (BPD)</Text>
+            <Input value={babyLength} onChangeText={setBabyLength} placeholder="mmHg" />
         </View>
     );
 
-    const renderInputLastMenstrualPeriod = () => (
+    const renderInputBabyHL = () => (
         <View style={styles.inputContainer}>
-            <Text style={styles.title}>Ngày đầu tiên của kỳ kinh nguyệt cuối cùng</Text>
-            <TouchableOpacity style={styles.dobContainer} onPress={() => onShowSelectDate('lastMenstrualPeriod')}>
-                <Text style={styles.dobTxt}>{moment(lastMenstrualPeriod).format('DD-MM-YYYY')}</Text>
-            </TouchableOpacity>
+            <Text style={styles.title}>Chiều dài xương đùi (FL)</Text>
+            <Input value={babyFL} onChangeText={setBabyFL} placeholder="mmol/L" />
+        </View>
+    );
+
+    const renderInputBabyHC = () => (
+        <View style={styles.inputContainer}>
+            <Text style={styles.title}>Chu vi đầu (HC)</Text>
+            <Input value={babyHC} onChangeText={setBabyHC} placeholder="mmol/L" />
+        </View>
+    );
+
+    const renderInputBabyWeight = () => (
+        <View style={styles.inputContainer}>
+            <Text style={styles.title}>
+                Cân nặng ước tính <Text style={styles.txtBold}>*</Text>
+            </Text>
+            <Input value={babyWeight} onChangeText={setBabyWeight} placeholder="mmol/L" />
+        </View>
+    );
+
+    const renderBabyNote = () => (
+        <View style={styles.inputContainer}>
+            <Text style={styles.subTitleInfo}>Ghi chú</Text>
+            <Input value={babyNote} onChangeText={setBabyNote} placeholder="Nhập ghi chú thai nhi" multiline />
         </View>
     );
 
     const renderBabyInfo = () => (
         <View>
             <Text style={styles.titleInfo}>Thông tin của bé</Text>
-            {renderInputBabyName()}
-            {renderInputDueDate()}
-            {renderInputLastMenstrualPeriod()}
+            {renderInputBabyCRL()}
+            {renderInputBabyBPD()}
+            {renderInputBabyHL()}
+            {renderInputBabyHC()}
+            {renderInputBabyWeight()}
+            {renderBabyNote()}
         </View>
     );
 
@@ -176,7 +202,7 @@ const AddPrenatalCareCheckupsScreen = () => {
                 title="Phù chân, tay"
             />
             <Text style={styles.subTitleInfo}>Kết quả khám</Text>
-            <Input value={result} onChangeText={setResult} placeholder="Kết quả" />
+            <Input value={result} onChangeText={setResult} placeholder="Kết quả" multiline />
         </View>
     );
 
@@ -337,6 +363,9 @@ const myStyles = (theme: string) => {
         checkBox: {
             marginRight: scales(8),
             marginBottom: scales(12),
+        },
+        txtBold: {
+            ...Fonts.inter700,
         },
     });
 };

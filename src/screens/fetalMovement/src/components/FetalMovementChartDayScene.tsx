@@ -3,9 +3,8 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 
-import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
+
 import { useFetchMovementFromDateToDate, useMovementSelector } from 'states/fetal/hooks';
 
 import { Fonts, Sizes } from 'themes';
@@ -16,60 +15,88 @@ import { scales } from 'utils/scales';
 const FetalMovementChartDayScene = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const fromDate = moment().toDate();
-    const toDate = moment().subtract(7, 'days').toDate();
-    useFetchMovementFromDateToDate({from: fromDate, to: toDate});
+    const first = moment().subtract(5, 'days').toDate();
+    const second = moment().subtract(4, 'days').toDate();
+    const third = moment().subtract(3, 'days').toDate();
+    const fourth = moment().subtract(2, 'days').toDate();
+    const fifth = moment().subtract(1, 'days').toDate();
+    const sixth = moment().toDate();
+
+    useFetchMovementFromDateToDate({ from: first, to: sixth });
     const movements = useMovementSelector();
 
-    // console.log(movements);
+    const getData = (currentDate: number) => {
+        let count = 0;
+        if (movements?.length) {
+            movements?.map((element) => {
+                const date = parseInt(element.date.split(':')[0]);
+                if (currentDate === date) {
+                    count += element.count;
+                }
+            });
+        }
+        return count;
+    };
 
     const barData = [
         {
-            value: 250,
-            label: '21/8',
+            value: getData(first.getDate()),
+            label: `${first.getDate()}/${first.getMonth()}`,
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>50</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
+                    {getData(first.getDate())}
+                </Text>
             ),
         },
         {
-            value: 500,
-            label: '22/8',
+            value: getData(second.getDate()),
+            label: `${second.getDate()}/${second.getMonth()}`,
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>50</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
+                    {getData(second.getDate())}
+                </Text>
             ),
         },
         {
-            value: 745,
-            label: '23/8',
+            value: getData(third.getDate()),
+            label: `${third.getDate()}/${third.getMonth()}`,
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>50</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
+                    {getData(third.getDate())}
+                </Text>
             ),
         },
         {
-            value: 320,
-            label: '24/8',
+            value: getData(fourth.getDate()),
+            label: `${fourth.getDate()}/${fourth.getMonth()}`,
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>50</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
+                    {getData(fourth.getDate())}
+                </Text>
             ),
         },
         {
-            value: 600,
-            label: '25/8',
+            value: getData(fifth.getDate()),
+            label: `${fifth.getDate()}/${fifth.getMonth()}`,
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>50</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
+                    {getData(fifth.getDate())}
+                </Text>
             ),
         },
         {
-            value: 256,
-            label: '26/8',
+            value: getData(sixth.getDate()),
+            label: `${sixth.getDate()}/${sixth.getMonth()}`,
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>50</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
+                    {getData(sixth.getDate())}
+                </Text>
             ),
         },
     ];
@@ -96,46 +123,70 @@ const FetalMovementChartDayScene = () => {
         />
     );
 
-    const renderMovementHistory = () => (
-        <View style={styles.movementHistoryContainer}>
-            <View style={styles.itemMovementHistoryContainer}>
-                <Text style={styles.movementHistoryTitle}>Ngày</Text>
-                <Text style={styles.movementHistoryValue}>26/8</Text>
-                <Text style={styles.movementHistoryValue}>26/8</Text>
-                <Text style={styles.movementHistoryValue}>26/8</Text>
-                <Text style={styles.movementHistoryValue}>26/8</Text>
-                <Text style={styles.movementHistoryValue}>26/8</Text>
-                <Text style={styles.movementHistoryValue}>26/8</Text>
+    const renderMovementHistory = () => {
+        const historyData = movements?.length > 6 ? movements?.slice(0, 6) : movements;
+        if (!historyData?.length) {
+            return (
+                <View style={styles.movementHistoryContainer}>
+                    <View style={styles.itemMovementHistoryContainer}>
+                        <Text style={styles.movementHistoryTitle}>Ngày</Text>
+                        <Text style={styles.movementHistoryValue}>0</Text>
+                    </View>
+                    <View style={styles.itemMovementHistoryContainer}>
+                        <Text style={styles.movementHistoryTitle}>Giờ bắt đầu</Text>
+                        <Text style={styles.movementHistoryValue}>0</Text>
+                    </View>
+                    <View style={styles.itemMovementHistoryContainer}>
+                        <Text style={styles.movementHistoryTitle}>Thời gian đếm</Text>
+                        <Text style={styles.movementHistoryValue}>0</Text>
+                    </View>
+                    <View style={styles.itemMovementHistoryContainer}>
+                        <Text style={styles.movementHistoryTitle}>Số cử động</Text>
+                        <Text style={styles.movementHistoryValue}>0</Text>
+                    </View>
+                </View>
+            );
+        }
+        return (
+            <View style={styles.movementHistoryContainer}>
+                <View style={styles.itemMovementHistoryContainer}>
+                    <Text style={styles.movementHistoryTitle}>Ngày</Text>
+                    {historyData?.map((element) => {
+                        const value = element.date.split('/');
+                        return (
+                            <Text
+                                style={styles.movementHistoryValue}
+                                key={element._id}>{`${value[0]}/${value[1]}`}</Text>
+                        );
+                    })}
+                </View>
+                <View style={styles.itemMovementHistoryContainer}>
+                    <Text style={styles.movementHistoryTitle}>Giờ bắt đầu</Text>
+                    {historyData?.map((element) => (
+                        <Text style={styles.movementHistoryValue} key={element._id}>
+                            {element.timeStart}
+                        </Text>
+                    ))}
+                </View>
+                <View style={styles.itemMovementHistoryContainer}>
+                    <Text style={styles.movementHistoryTitle}>Thời gian đếm</Text>
+                    {historyData?.map((element) => (
+                        <Text style={styles.movementHistoryValue} key={element._id}>
+                            {element.timeCount}
+                        </Text>
+                    ))}
+                </View>
+                <View style={styles.itemMovementHistoryContainer}>
+                    <Text style={styles.movementHistoryTitle}>Số cử động</Text>
+                    {historyData?.map((element) => (
+                        <Text style={styles.movementHistoryValue} key={element._id}>
+                            {element.count}
+                        </Text>
+                    ))}
+                </View>
             </View>
-            <View style={styles.itemMovementHistoryContainer}>
-                <Text style={styles.movementHistoryTitle}>Giờ bắt đầu</Text>
-                <Text style={styles.movementHistoryValue}>09:41</Text>
-                <Text style={styles.movementHistoryValue}>09:41</Text>
-                <Text style={styles.movementHistoryValue}>09:41</Text>
-                <Text style={styles.movementHistoryValue}>09:41</Text>
-                <Text style={styles.movementHistoryValue}>09:41</Text>
-                <Text style={styles.movementHistoryValue}>09:41</Text>
-            </View>
-            <View style={styles.itemMovementHistoryContainer}>
-                <Text style={styles.movementHistoryTitle}>Thời gian đếm</Text>
-                <Text style={styles.movementHistoryValue}>19’59</Text>
-                <Text style={styles.movementHistoryValue}>19’59</Text>
-                <Text style={styles.movementHistoryValue}>19’59</Text>
-                <Text style={styles.movementHistoryValue}>19’59</Text>
-                <Text style={styles.movementHistoryValue}>19’59</Text>
-                <Text style={styles.movementHistoryValue}>19’59</Text>
-            </View>
-            <View style={styles.itemMovementHistoryContainer}>
-                <Text style={styles.movementHistoryTitle}>Số cử động</Text>
-                <Text style={styles.movementHistoryValue}>12</Text>
-                <Text style={styles.movementHistoryValue}>12</Text>
-                <Text style={styles.movementHistoryValue}>12</Text>
-                <Text style={styles.movementHistoryValue}>12</Text>
-                <Text style={styles.movementHistoryValue}>12</Text>
-                <Text style={styles.movementHistoryValue}>12</Text>
-            </View>
-        </View>
-    );
+        );
+    };
     return (
         <View style={styles.container}>
             {renderChartView()}
@@ -189,7 +240,7 @@ const myStyles = (theme: string) => {
         itemFilterDayContainer: {
             borderRadius: scales(15),
             paddingVertical: scales(10),
-            backgroundColor: color.Color_Primary,
+            backgroundColor: color.Color_Primary2,
             paddingHorizontal: scales(10),
         },
     });

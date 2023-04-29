@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import moment from 'moment';
 
 import { BASE_URL } from 'configs/api';
-import moment from 'moment';
 import axiosInstance from 'services/api-requests';
 import { ICreateFetalMovementRequest } from 'states/types';
 import { showCustomToast } from 'utils/toast';
@@ -41,7 +41,7 @@ export const fetchMovementFromDateToDate = createAsyncThunk<fetal.FetalResponse>
     try {
         const fromDate = moment(params.from).format('DD/MM/YYYY');
         const toDate = moment(params.to).format('DD/MM/YYYY')
-        const response = await axiosInstance.get(`${BASE_URL}/fetal-movements?startDate=${fromDate}&${toDate}`);
+        const response = await axiosInstance.get(`${BASE_URL}/fetal-movements?startDate=${fromDate}&endDate=${toDate}`);
         return response;
     } catch (error) {
         showCustomToast('Lấy dữ liệu thất bại')

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { goToAddPrenatalCareCheckups, goToPrenatalCareCheckupsChartBaby, goToPrenatalCareCheckupsChartMom, goToRoutineCheckups } from './src/utils';
+import PrenatalCareCheckupsConfirmPremium, { IPrenatalCareCheckupsConfirmPremiumRef } from './src/components/PrenatalCareCheckupsConfirmPremium';
+import { goToAddPrenatalCareCheckups, goToPrenatalCareCheckupsChartMom, goToRoutineCheckups } from './src/utils';
 
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
@@ -19,6 +20,11 @@ import { scales } from 'utils/scales';
 const PrenatalCareCheckupsScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const refPrenatalCareCheckupsConfirmPremium = useRef<IPrenatalCareCheckupsConfirmPremiumRef>(null);
+
+    const onOpenConfirm = () => {
+        refPrenatalCareCheckupsConfirmPremium.current.showModal();
+    }
 
     const renderHeader = () => <Header title="Lịch khám thai" />;
 
@@ -36,7 +42,7 @@ const PrenatalCareCheckupsScreen = () => {
                 </View>
                 <Text style={styles.itemText}>Biểu đồ của mẹ</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.itemHeaderContainer} onPress={goToPrenatalCareCheckupsChartBaby}>
+            <TouchableOpacity style={styles.itemHeaderContainer} onPress={onOpenConfirm}>
                 <View style={styles.imageContainer}>
                     <Image source={Images.Stats} style={styles.imgItem} />
                 </View>
@@ -99,6 +105,7 @@ const PrenatalCareCheckupsScreen = () => {
             {renderContentHeader()}
             {renderHeaderPrenatalCareHistory()}
             {renderContent()}
+            <PrenatalCareCheckupsConfirmPremium ref={refPrenatalCareCheckupsConfirmPremium} />
         </View>
     );
 };

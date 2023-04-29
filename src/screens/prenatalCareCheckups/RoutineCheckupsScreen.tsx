@@ -14,19 +14,6 @@ const RoutineCheckupsScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
 
-    const renderItem = () => (
-        <View style={styles.itemContainer}>
-            <Text style={styles.itemHeader}>5 - 6 tuần</Text>
-            <Text style={styles.itemTxt}>Xem tình trạng vào tử cung của phôi thai, xác định tuổi thai</Text>
-            <Text style={styles.itemTitle}>Kiểm tra bắt buộc:</Text>
-            <Text style={styles.itemTxt}>Siêu âm đầu dò hoặc siêu âm ổ bụng, tính chỉ số BMI, đo huyết áp</Text>
-            <Text style={styles.itemTitle}>Có thể kiểm tra thêm:</Text>
-            <Text style={styles.itemTxt}>Xét nghiệm máu để phát hiện một số bệnh truyền nhiễm</Text>
-            <Text style={styles.itemTitle}>Có thể kiểm tra thêm:</Text>
-            <Text style={styles.itemTxt}>Bổ sung Acid Folic</Text>
-        </View>
-    );
-
     const renderContent = () => (
         <ScrollView
             style={styles.wrapperContent}

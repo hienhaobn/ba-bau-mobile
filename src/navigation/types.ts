@@ -23,7 +23,6 @@ export type RootNavigatorParamList = {
   FetalMovementChart: undefined,
   RoutineCheckups: undefined,
   PrenatalCareCheckupsChartMom: undefined,
-  PrenatalCareCheckupsChartBaby: undefined,
   TeachFetusPhotoBaby: undefined,
   TeachFetusMusicForMom: undefined,
   TeachFetusVideoBaby: undefined,

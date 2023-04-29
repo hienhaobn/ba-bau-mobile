@@ -55,7 +55,7 @@ const FetalMovementChartHourScene = () => {
             ),
         },
         {
-            value: getData(4, 8),
+            value: getData(8, 12),
             label: '8-12h',
             labelWidth: 50,
             topLabelComponent: () => (
@@ -63,7 +63,7 @@ const FetalMovementChartHourScene = () => {
             ),
         },
         {
-            value: getData(4, 8),
+            value: getData(12, 16),
             label: '12-16h',
             labelWidth: 50,
             topLabelComponent: () => (
@@ -71,7 +71,7 @@ const FetalMovementChartHourScene = () => {
             ),
         },
         {
-            value: getData(4, 8),
+            value: getData(16, 20),
             label: '16-20h',
             labelWidth: 50,
             topLabelComponent: () => (
@@ -79,7 +79,7 @@ const FetalMovementChartHourScene = () => {
             ),
         },
         {
-            value: getData(4, 8),
+            value: getData(20, 0),
             label: '20-24h',
             labelWidth: 50,
             topLabelComponent: () => (

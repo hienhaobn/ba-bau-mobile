@@ -67,8 +67,6 @@ const RootStack = () => {
 
             <Stack.Screen name="PrenatalCareCheckupsChartMom" component={Screen.PrenatalCareCheckupsChartMom} />
 
-            <Stack.Screen name="PrenatalCareCheckupsChartBaby" component={Screen.PrenatalCareCheckupsChartBaby} />
-
             <Stack.Screen name="TeachFetusPhotoBaby" component={Screen.TeachFetusPhotoBaby} />
 
             <Stack.Screen name="TeachFetusMusicForMom" component={Screen.TeachFetusMusicForMom} />
