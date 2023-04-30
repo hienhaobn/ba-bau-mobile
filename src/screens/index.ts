@@ -28,6 +28,7 @@ import Premium from './premium/PremiumScreen';
 import AddPrenatalCareCheckupsStep1 from './prenatalCareCheckups/AddPrenatalCareCheckupsScreenStep1';
 import AddPrenatalCareCheckupsStep2 from './prenatalCareCheckups/AddPrenatalCareCheckupsScreenStep2';
 import PrenatalCareCheckupsChartMom from './prenatalCareCheckups/PrenatalCareCheckupsChartMomScreen';
+import PrenatalCareCheckupsItemHistory from './prenatalCareCheckups/PrenatalCareCheckupsItemHistoryScreen';
 import PrenatalCareCheckups from './prenatalCareCheckups/PrenatalCareCheckupsScreen';
 import RoutineCheckups from './prenatalCareCheckups/RoutineCheckupsScreen';
 import Register from './register/RegisterScreen';
@@ -87,4 +88,5 @@ export const Screen = {
     PregnancyProductsDetail6,
     AddPrenatalCareCheckupsStep1,
     AddPrenatalCareCheckupsStep2,
+    PrenatalCareCheckupsItemHistory,
 };

@@ -50,6 +50,10 @@ const Images = {
     MeBauNgu: require('./me_bau_ngu.jpeg'),
     GoiBaBau: require('./goi_ba_bau.jpeg'),
     BeNgu: require('./be_ngu.png'),
+    Woman: require('./woman.png'),
+    Pregnancy: require('./pregnancy.png'),
+    Consulting: require('./consulting.png'),
+    Pregnant: require('./pregnant.png'),
 };
 
 export default Images;

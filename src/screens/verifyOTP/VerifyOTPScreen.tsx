@@ -45,7 +45,7 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
                 try {
                     showLoading();
                     const response = await axios.post(`${BASE_URL}/accounts/password`, {
-                        otp: code,
+                        code,
                         email,
                         password,
                     });
@@ -69,7 +69,7 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
         if (code.length === 4) {
             try {
                 const response = await axios.post(`${BASE_URL}/accounts/confirm`, {
-                    otp: code,
+                    code,
                     email,
                 });
                 if (!response) {

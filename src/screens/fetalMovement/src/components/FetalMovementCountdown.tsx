@@ -43,11 +43,6 @@ const FetalMovementCountdown = (props: FetalMovementCountdownProps, ref: Ref<Fet
         return () => clearInterval(interval);
     }, []);
 
-    useEffect(() => {
-        return () => console.log('un mount')
-    }, [countdown]);
-
-
     useImperativeHandle(ref, () => ({ getTimeCountdown, callback }));
 
     const getTimeCountdown = () => {
@@ -61,11 +56,8 @@ const FetalMovementCountdown = (props: FetalMovementCountdownProps, ref: Ref<Fet
     };
 
     const callback = () => {
-        console.log('callback')
         setCountdown(0);
     };
-
-    console.log('first')
 
     const { minutes, seconds } = getTimeCountdown();
     const time = minutes + seconds > 0 ? `${minutes}:${seconds}` : '00:00';

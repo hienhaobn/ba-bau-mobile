@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import PrenatalCareCheckupsConfirmPremium, { IPrenatalCareCheckupsConfirmPremiumRef } from './src/components/PrenatalCareCheckupsConfirmPremium';
-import { goToAddPrenatalCareCheckupsStep1, goToPrenatalCareCheckupsChartMom, goToRoutineCheckups } from './src/utils';
+import { goToAddPrenatalCareCheckupsStep1, goToPrenatalCareCheckupsChartMom, goToPrenatalCareCheckupsItemHistory, goToRoutineCheckups } from './src/utils';
 
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
@@ -61,7 +61,7 @@ const PrenatalCareCheckupsScreen = () => {
     );
 
     const renderItem = () => (
-        <TouchableOpacity style={styles.itemContainer}>
+        <TouchableOpacity style={styles.itemContainer} onPress={goToPrenatalCareCheckupsItemHistory}>
             <Text style={styles.titleItem}>Lần khám thai thứ 1</Text>
             <View style={styles.row}>
                 <Text style={styles.titleLeft}>
