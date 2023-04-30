@@ -129,7 +129,7 @@ const FetalMovementChartHourScene = () => {
                         styles.itemFilterDayContainer,
                         dateActive.getDay() === fourth.getDay()
                             ? {backgroundColor: getThemeColor().Color_Primary}
-                            : {}
+                            : {},
                     ]}
                     onPress={() => onSelectDate(fourth)}
                 >

@@ -1,75 +1,93 @@
 import moment from 'moment';
 import React, { useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import Images from 'assets/images';
-import SvgIcons from 'assets/svgs';
+import { goToAddPrenatalCareCheckupsStep2 } from './src/utils';
 
 import Button from 'components/Button/Button';
 import CheckBox from 'components/CheckBox';
 import Header from 'components/Header';
 import Input from 'components/Input';
+import { showLoading } from 'components/Loading';
 import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
 
-import { resetStack } from 'navigation/utils';
+import { createMomCheckups } from 'states/user/fetchCheckups';
 
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import { showCustomToast } from 'utils/toast';
 
-const AddPrenatalCareCheckupsScreen = () => {
+const AddPrenatalCareCheckupsScreenStep1 = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const [momWeight, setMomWeight] = useState<string>('');
+    const [weeksOfPregnancy, setWeeksOfPregnancy] = useState<string>('');
     const [momBloodPressure, setMomBloodPressure] = useState<string>('');
     const [momBloodPressureHungry, setMomBloodPressureHungry] = useState<string>('');
     const [momBloodPressureAfter1Hour, setMomBloodPressureAfter1Hour] = useState<string>('');
     const [momBloodPressureAfter2Hour, setMomBloodPressureAfter2Hour] = useState<string>('');
-    const [babyFL, setBabyFL] = useState<string>('');
-    const [babyHC, setBabyHC] = useState<string>('');
-    const [babyWeight, setBabyWeight] = useState<string>('');
-    const [babyNote, setBabyNote] = useState<string>('');
-    const [babyLength, setBabyLength] = useState<string>('');
-    const [momDOB, setMomDOB] = useState<Date>(moment().toDate());
-    const [dueDate, setDueDate] = useState<Date>(moment().toDate());
-    const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<Date>(moment().toDate());
+    const [dateCheckups, setDateCheckups] = useState<Date>(moment().toDate());
     const [selectDateVisible, setSelectDateVisible] = useState<boolean>(false);
-    const [selectDateType, setSelectDateType] = useState<'momDOB' | 'lastMenstrualPeriod' | 'dueDate'>('momDOB');
     const [checkBox1, setCheckBox1] = useState<boolean>(false);
     const [checkBox2, setCheckBox2] = useState<boolean>(false);
     const [checkBox3, setCheckBox3] = useState<boolean>(false);
     const [result, setResult] = useState<string>('');
 
-    const onShowSelectDate = (dateType: 'momDOB' | 'lastMenstrualPeriod' | 'dueDate') => {
-        setSelectDateType(dateType);
-        setSelectDateVisible(true);
-    };
-
     const onConfirmDate = (value: Date) => {
-        if (selectDateType === 'momDOB') {
-            setMomDOB(value);
-        } else if (selectDateType === 'dueDate') {
-            setDueDate(value);
-        } else {
-            setLastMenstrualPeriod(value);
-        }
-
         setSelectDateVisible(false);
-        setSelectDateType('momDOB');
+        setDateCheckups(value);
     };
 
     const onCancel = () => {
         setSelectDateVisible(false);
-        setSelectDateType('momDOB');
     };
 
-    const onUpdate = () => {
-        resetStack('Login');
+    const getCommonDiseases = () => {
+        if (checkBox1) {
+            return 'Có vấn đề về nhau thai';
+        } else if (checkBox2) {
+            return 'Có vấn đề đề nước ối';
+        } else if (checkBox3) {
+            return 'Phù chân, tay';
+        } else {
+            return 'Không có bệnh lý';
+        }
+    };
+
+    const validate = () => {
+        if (!weeksOfPregnancy) {
+            showCustomToast('Vui lòng nhập số tuần');
+            return true;
+        }
+        return false;
+    };
+    const onUpdate = async () => {
+        // call api
+        const body = {
+            weight: parseFloat(momWeight),
+            bloodPressure: parseFloat(momBloodPressure),
+            commonDiseases: getCommonDiseases(),
+            fastingGlycemicIndex: parseFloat(momBloodPressureHungry),
+            eating1hGlycemicIndex: parseFloat(momBloodPressureAfter1Hour),
+            eating2hGlycemicIndex: parseFloat(momBloodPressureAfter2Hour),
+            note: result,
+            weeksOfPregnacy: weeksOfPregnancy,
+        } as user.MomCheckupsRequest;
+
+        if (validate()) {
+            return;
+        }
+        const response = await createMomCheckups(body);
+        if (response) {
+            // go to step 2
+            goToAddPrenatalCareCheckupsStep2(weeksOfPregnancy);
+        }
     };
 
     const renderInputMomWeight = () => (
@@ -83,6 +101,17 @@ const AddPrenatalCareCheckupsScreen = () => {
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Huyết áp</Text>
             <Input value={momBloodPressure} onChangeText={setMomBloodPressure} placeholder="mmHg" />
+        </View>
+    );
+
+    const renderInputMomWeeksOfPregnancy = () => (
+        <View style={styles.inputContainer}>
+            <Text style={styles.title}>Tuần</Text>
+            <Input
+                value={weeksOfPregnancy}
+                onChangeText={setWeeksOfPregnancy}
+                placeholder="Vui lòng nhập tuần của thai nhi"
+            />
         </View>
     );
 
@@ -110,73 +139,18 @@ const AddPrenatalCareCheckupsScreen = () => {
     const renderInputDateCheckups = () => (
         <View style={styles.dateCheckupContainer}>
             <Text style={styles.title}>Ngày khám</Text>
-            <TouchableOpacity style={styles.dobContainer} onPress={() => onShowSelectDate('momDOB')}>
-                <Text style={styles.dobTxt}>{moment(momDOB).format('DD-MM-YYYY')}</Text>
+            <TouchableOpacity style={styles.dobContainer} onPress={() => setSelectDateVisible(true)}>
+                <Text style={styles.dobTxt}>{moment(dateCheckups).format('DD-MM-YYYY')}</Text>
             </TouchableOpacity>
         </View>
     );
 
-    const renderInputBabyCRL = () => (
-        <View style={styles.inputContainer}>
-            <Text style={styles.title}>Chiều dài (CRL)</Text>
-            <Input value={babyLength} onChangeText={setBabyLength} placeholder="Kg" />
-        </View>
-    );
-
-    const renderInputBabyBPD = () => (
-        <View style={styles.inputContainer}>
-            <Text style={styles.title}>Đường kính lưỡng đỉnh (BPD)</Text>
-            <Input value={babyLength} onChangeText={setBabyLength} placeholder="mmHg" />
-        </View>
-    );
-
-    const renderInputBabyHL = () => (
-        <View style={styles.inputContainer}>
-            <Text style={styles.title}>Chiều dài xương đùi (FL)</Text>
-            <Input value={babyFL} onChangeText={setBabyFL} placeholder="mmol/L" />
-        </View>
-    );
-
-    const renderInputBabyHC = () => (
-        <View style={styles.inputContainer}>
-            <Text style={styles.title}>Chu vi đầu (HC)</Text>
-            <Input value={babyHC} onChangeText={setBabyHC} placeholder="mmol/L" />
-        </View>
-    );
-
-    const renderInputBabyWeight = () => (
-        <View style={styles.inputContainer}>
-            <Text style={styles.title}>
-                Cân nặng ước tính <Text style={styles.txtBold}>*</Text>
-            </Text>
-            <Input value={babyWeight} onChangeText={setBabyWeight} placeholder="mmol/L" />
-        </View>
-    );
-
-    const renderBabyNote = () => (
-        <View style={styles.inputContainer}>
-            <Text style={styles.subTitleInfo}>Ghi chú</Text>
-            <Input value={babyNote} onChangeText={setBabyNote} placeholder="Nhập ghi chú thai nhi" multiline />
-        </View>
-    );
-
-    const renderBabyInfo = () => (
-        <View>
-            <Text style={styles.titleInfo}>Thông tin của bé</Text>
-            {renderInputBabyCRL()}
-            {renderInputBabyBPD()}
-            {renderInputBabyHL()}
-            {renderInputBabyHC()}
-            {renderInputBabyWeight()}
-            {renderBabyNote()}
-        </View>
-    );
-
-    const renderMomInfo = () => (
-        <View>
+    const renderContent = () => (
+        <View style={styles.content}>
             {renderInputDateCheckups()}
             <Text style={styles.titleInfo}>Thông tin của mẹ</Text>
             {renderInputMomWeight()}
+            {renderInputMomWeeksOfPregnancy()}
             {renderInputMomBloodPressure()}
             <Text style={styles.subTitleInfo}>Chỉ số đường huyết (mmol/L)</Text>
             {renderInputMomBloodPressureHungry()}
@@ -206,30 +180,13 @@ const AddPrenatalCareCheckupsScreen = () => {
         </View>
     );
 
-    const renderContent = () => (
-        <View style={styles.content}>
-            {renderMomInfo()}
-            {renderBabyInfo()}
-        </View>
-    );
-
-    const setDateDatePicker = () => {
-        if (selectDateType === 'momDOB') {
-            return momDOB;
-        } else if (selectDateType === 'dueDate') {
-            return dueDate;
-        } else {
-            return lastMenstrualPeriod;
-        }
-    };
-
     const renderDatePicker = () => (
         <DatePicker
             modal
             mode="date"
             open={selectDateVisible}
             theme={'light'}
-            date={setDateDatePicker()}
+            date={dateCheckups}
             onConfirm={onConfirmDate}
             onCancel={onCancel}
             title={null}
@@ -238,7 +195,7 @@ const AddPrenatalCareCheckupsScreen = () => {
         />
     );
 
-    const renderButton = () => <Button title="Cập nhật" customStyles={styles.button} onPress={onUpdate} />;
+    const renderButton = () => <Button title="Tiếp" customStyles={styles.button} onPress={onUpdate} />;
 
     return (
         <View style={styles.container}>
@@ -256,7 +213,7 @@ const AddPrenatalCareCheckupsScreen = () => {
     );
 };
 
-export default AddPrenatalCareCheckupsScreen;
+export default AddPrenatalCareCheckupsScreenStep1;
 
 const myStyles = (theme: string) => {
     const color = getThemeColor();
@@ -266,52 +223,8 @@ const myStyles = (theme: string) => {
             backgroundColor: color.Color_Bg,
             paddingBottom: scales(30),
         },
-        imageHome: {
-            backgroundColor: color.Color_Primary2,
-            width: Sizes.scrWidth * 2,
-            borderRadius: Sizes.scrWidth,
-            height: Sizes.scrWidth * 2,
-            position: 'absolute',
-            top: -Sizes.scrWidth / 2 - Sizes.scrWidth,
-            left: -Sizes.scrWidth / 2,
-        },
         content: {
             paddingHorizontal: scales(15),
-        },
-        contentContainer: {
-            paddingBottom: scales(30),
-            paddingTop: scales(15),
-        },
-        contentHeaderContainer: {
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: Sizes.scrWidth / 4,
-        },
-        girlHome: {
-            marginTop: scales(10),
-            width: scales(120),
-            height: scales(120),
-            backgroundColor: color.Color_Primary,
-            borderRadius: scales(120),
-            borderWidth: 1.5,
-            borderColor: color.white,
-        },
-        icBack: {
-            justifyContent: 'center',
-            position: 'absolute',
-            top: Sizes.statusBarHeight,
-            backgroundColor: color.Color_Gray6,
-            paddingVertical: scales(12),
-            paddingHorizontal: scales(10),
-            borderRadius: scales(100),
-        },
-        icPencil: {
-            position: 'absolute',
-            top: scales(100),
-            right: scales(120),
-            backgroundColor: color.Color_Gray6,
-            padding: scales(5),
-            borderRadius: scales(100),
         },
         title: {
             ...Fonts.inter400,

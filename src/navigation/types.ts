@@ -40,5 +40,6 @@ export type RootNavigatorParamList = {
   PregnancyProductsDetail4: undefined,
   PregnancyProductsDetail5: undefined,
   PregnancyProductsDetail6: undefined,
-  AddPrenatalCareCheckups: undefined,
+  AddPrenatalCareCheckupsStep1: undefined,
+  AddPrenatalCareCheckupsStep2: { weeksOfPregnacy: string },
 };

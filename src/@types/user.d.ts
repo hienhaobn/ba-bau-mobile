@@ -39,4 +39,39 @@ declare namespace user {
         otp: string;
         password: string;
     }
+
+    interface MomCheckupsRequest {
+        weight: number;
+        weeksOfPregnacy: string;
+        bloodPressure: number;
+        fastingGlycemicIndex: number;
+        eating1hGlycemicIndex: number;
+        eating2hGlycemicIndex: number;
+        note: string;
+        commonDiseases: string;
+    }
+
+    interface MomCheckupsResponse {
+        _id: string;
+        weight: number;
+        weeksOfPregnacy: string;
+        bloodPressure: number;
+        fastingGlycemicIndex: number;
+        eating1hGlycemicIndex: number;
+        eating2hGlycemicIndex: number;
+        note: string;
+        commonDiseases: string;
+        idAccount: string;
+        createdAt: string;
+        updatedAt: string;
+    }
+
+    interface BabyCheckupsRequest {
+        weight: number;
+        weeksOfPregnacy: string;
+        dualTopDiameter: number;
+        femurLength: number;
+        headPerimeter: number;
+        note: string;
+    }
 }

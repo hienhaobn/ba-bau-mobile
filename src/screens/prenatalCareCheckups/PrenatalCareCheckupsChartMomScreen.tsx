@@ -1,10 +1,13 @@
-import React from 'react';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 
 import Header from 'components/Header';
 
 import { useTheme } from 'hooks/useTheme';
+
+import { fetchMomCheckupsHistory } from 'states/user/fetchCheckups';
 
 import { Fonts, Sizes } from 'themes';
 
@@ -14,54 +17,101 @@ import { scales } from 'utils/scales';
 const PrenatalCareCheckupsChartMomScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const [data, setData] = useState<user.MomCheckupsResponse[]>([]);
+    const first = moment().subtract(5, 'days').toDate();
+    const second = moment().subtract(4, 'days').toDate();
+    const third = moment().subtract(3, 'days').toDate();
+    const fourth = moment().subtract(2, 'days').toDate();
+    const fifth = moment().subtract(1, 'days').toDate();
+    const sixth = moment().toDate();
+
+    const getData = async () => {
+        const res = await fetchMomCheckupsHistory();
+        if (res) {
+            setData(res);
+        }
+    };
+
+    const getDataChart = (currentDate: number) => {
+        let count = 0;
+        if (data?.length) {
+            data?.map((element) => {
+                const date = parseInt(element.createdAt.split('-')[2]);
+                if (currentDate === date) {
+                    count += element.weight;
+                }
+            });
+        }
+        return count;
+    };
+
+    useEffect(() => {
+        console.log('response', data);
+    }, [data]);
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     const barData = [
         {
-            value: 250,
-            label: '21/8',
+            value: getDataChart(first.getDate()),
+            label: `${first.getDate()}/${first.getMonth()}`,
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>50</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
+                    {getDataChart(first.getDate())}
+                </Text>
             ),
         },
         {
-            value: 500,
-            label: '22/8',
+            value: getDataChart(second.getDate()),
+            label: `${second.getDate()}/${second.getMonth()}`,
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>50</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
+                    {getDataChart(second.getDate())}
+                </Text>
             ),
         },
         {
-            value: 745,
-            label: '23/8',
+            value: getDataChart(third.getDate()),
+            label: `${third.getDate()}/${third.getMonth()}`,
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>50</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
+                    {getDataChart(third.getDate())}
+                </Text>
             ),
         },
         {
-            value: 320,
-            label: '24/8',
+            value: getDataChart(fourth.getDate()),
+            label: `${fourth.getDate()}/${fourth.getMonth()}`,
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>50</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
+                    {getDataChart(fourth.getDate())}
+                </Text>
             ),
         },
         {
-            value: 600,
-            label: '25/8',
+            value: getDataChart(fifth.getDate()),
+            label: `${fifth.getDate()}/${fifth.getMonth()}`,
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>50</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
+                    {getDataChart(fifth.getDate())}
+                </Text>
             ),
         },
         {
-            value: 256,
-            label: '26/8',
+            value: getDataChart(sixth.getDate()),
+            label: `${sixth.getDate()}/${sixth.getMonth()}`,
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>50</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
+                    {getDataChart(sixth.getDate())}
+                </Text>
             ),
         },
     ];
