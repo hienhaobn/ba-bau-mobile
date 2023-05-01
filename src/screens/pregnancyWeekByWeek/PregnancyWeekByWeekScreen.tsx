@@ -1,10 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import PregnancyWeekByWeekPopup1, { IPregnancyWeekByWeekPopup1Ref } from './src/components/PregnancyWeekByWeekPopup1';
-import PregnancyWeekByWeekPopup2, { IPregnancyWeekByWeekPopup2Ref } from './src/components/PregnancyWeekByWeekPopup2';
-import PregnancyWeekByWeekPopup3, { IPregnancyWeekByWeekPopup3Ref } from './src/components/PregnancyWeekByWeekPopup3';
-
 import Images from 'assets/images';
 import DropdownComponent from 'components/Dropdown';
 import Header from 'components/Header';
@@ -57,13 +53,18 @@ const dataDropdown = [
     { label: 'Tuần 40', value: '40' },
 ];
 
+enum ELoadMoreType {
+    baby = 'baby',
+    momChange = 'momChange',
+    support = 'support',
+}
+
 const PregnancyWeekByWeekScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    // const [showMore, setShowMore] = useState<''>();
-    const refPregnancyWeekByWeekPopup1 = useRef<IPregnancyWeekByWeekPopup1Ref>(null);
-    const refPregnancyWeekByWeekPopup2 = useRef<IPregnancyWeekByWeekPopup2Ref>(null);
-    const refPregnancyWeekByWeekPopup3 = useRef<IPregnancyWeekByWeekPopup3Ref>(null);
+    const [showMoreBaby, setShowMoreBaby] = useState<boolean>(false);
+    const [showMoreMomChange, setShowMoreMomChange] = useState<boolean>(false);
+    const [showMoreSupport, setShowMoreSupport] = useState<boolean>(false);
 
     const renderHeader = () => <Header title="Thai kỳ theo tuần" />;
 
@@ -86,35 +87,46 @@ const PregnancyWeekByWeekScreen = () => {
                     <Text style={styles.titleItemHeader}>Bé yêu</Text>
                 </View>
                 <View style={styles.descContainer}>
-                    <Text style={styles.desc}>
-                        Chào mẹ, vậy là mẹ đã chính thức vào tuần đầu tiên của hành trình 40 tuần ấp ủ “mầm sống yêu
-                        thương” rồi đấy! Trong tuần đầu...
-                    </Text>
-                    <Text style={styles.desc}>
-                        Chào mẹ, vậy là mẹ đã chính thức bước vào tuần đầu tiên của hành trình 40 tuần ấp ủ “ mầm sống
-                        yêu thương ” rồi đấy ! Trong tuần đầu tiên này , thậm chí bé yêu còn chưa hình thành , tuy nhiên
-                        bác sĩ vẫn tính đây là một phần quá trình phát triển của thai nhi . Ở tuần thai đầu tiên , hãy
-                        lưu ý những thông tin sau để bé yêu phát triển khỏe mạnh mẹ nhé !
-                    </Text>
-                    <Text style={styles.desc}>
-                        Hành trình mang thai đã bắt đầu khởi động từ ngày đầu tiên của kỳ kinh nguyệt cuối cùng . Bác sĩ
-                        sẽ tính tuổi thai dựa theo khung thời gian này thay vì tuổi thực của em bé . Bởi vì ngay cả các
-                        chuyên gia nhiều kinh nghiệm nhất cũng khó có thể xác định được thời điểm rụng trứng và thụ tinh
-                        thành công của mẹ để đo tuổi thực của thai một cách chính xác . Vậy nên , có những mẹ bầu sinh
-                        em bé vào tuần thứ 40 ( tuổi thai thật khoảng 38 , 39 ) , và cũng có những mẹ bầu sinh con vào
-                        tuần thứ 42 ( tuổi thai thật khoảng 40 ).
-                    </Text>
-                    <Text style={styles.desc}>
-                        Trong tuần thai 01 , em bé có thể chưa được hình thành vì sự rụng trứng của người mẹ thường diễn
-                        ra từ ngày 12 - 18 nếu mẹ có chu kỳ kinh nguyệt đều đặn và kéo dài khoảng 30 ngày . Do vậy ,
-                        thường thì thai nhi sẽ được hình thành trong tuần thứ 3 nếu trứng được thụ tinh thành công .
-                    </Text>
+                    {showMoreBaby ? (
+                        <>
+                            <Text style={styles.desc}>
+                                Chào mẹ, vậy là mẹ đã chính thức bước vào tuần đầu tiên của hành trình 40 tuần ấp ủ “
+                                mầm sống yêu thương ” rồi đấy ! Trong tuần đầu tiên này , thậm chí bé yêu còn chưa hình
+                                thành , tuy nhiên bác sĩ vẫn tính đây là một phần quá trình phát triển của thai nhi . Ở
+                                tuần thai đầu tiên , hãy lưu ý những thông tin sau để bé yêu phát triển khỏe mạnh mẹ nhé
+                                !
+                            </Text>
+                            <Text style={styles.desc}>
+                                Hành trình mang thai đã bắt đầu khởi động từ ngày đầu tiên của kỳ kinh nguyệt cuối cùng
+                                . Bác sĩ sẽ tính tuổi thai dựa theo khung thời gian này thay vì tuổi thực của em bé .
+                                Bởi vì ngay cả các chuyên gia nhiều kinh nghiệm nhất cũng khó có thể xác định được thời
+                                điểm rụng trứng và thụ tinh thành công của mẹ để đo tuổi thực của thai một cách chính
+                                xác . Vậy nên , có những mẹ bầu sinh em bé vào tuần thứ 40 ( tuổi thai thật khoảng 38 ,
+                                39 ) , và cũng có những mẹ bầu sinh con vào tuần thứ 42 ( tuổi thai thật khoảng 40 ).
+                            </Text>
+                            <Text style={styles.desc}>
+                                Trong tuần thai 01 , em bé có thể chưa được hình thành vì sự rụng trứng của người mẹ
+                                thường diễn ra từ ngày 12 - 18 nếu mẹ có chu kỳ kinh nguyệt đều đặn và kéo dài khoảng 30
+                                ngày . Do vậy , thường thì thai nhi sẽ được hình thành trong tuần thứ 3 nếu trứng được
+                                thụ tinh thành công .
+                            </Text>
+                        </>
+                    ) : (
+                        <Text style={styles.desc}>
+                            Chào mẹ, vậy là mẹ đã chính thức vào tuần đầu tiên của hành trình 40 tuần ấp ủ “mầm sống yêu
+                            thương” rồi đấy! Trong tuần đầu...
+                        </Text>
+                    )}
                 </View>
-                <TouchableOpacity
-                    style={styles.moreContainer}
-                    onPress={() => refPregnancyWeekByWeekPopup1.current.showModal()}>
-                    <Text style={styles.more}>Xem thêm</Text>
-                </TouchableOpacity>
+                {!showMoreBaby ? (
+                    <TouchableOpacity style={styles.moreContainer} onPress={() => setShowMoreBaby(true)}>
+                        <Text style={styles.more}>Xem thêm</Text>
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity style={styles.moreContainer} onPress={() => setShowMoreBaby(false)}>
+                        <Text style={styles.more}>Thu gọn</Text>
+                    </TouchableOpacity>
+                )}
             </View>
 
             <View style={styles.line} />
@@ -125,16 +137,37 @@ const PregnancyWeekByWeekScreen = () => {
                     <Text style={styles.titleItemHeader}>Thay đổi của mẹ</Text>
                 </View>
                 <View style={styles.descContainer}>
-                    <Text style={styles.desc}>
-                        Trong tuần thai đầu, sự rụng trứng của người mẹ vẫn chưa diễn ra nên cơ thể sẽ không có nhiều sự
-                        thay đổi. Thường thì ...
-                    </Text>
+                    {showMoreMomChange ? (
+                        <>
+                            <Text style={styles.desc}>
+                                Trong tuần thai 01 , sự rụng trứng của người mẹ vẫn chưa diễn ra nên cơ thể sẽ không có
+                                nhiều thay đổi . Thường thì quá trình rụng trứng sẽ diễn ra từ ngày 12 - 18 nếu mẹ có
+                                chu kỳ kinh nguyệt đều đặn và kéo dài khoảng 30 ngày . Do vậy , thai nhi sẽ được hình
+                                thành trong tuần thứ 3 nếu trứng được thụ tinh thành công và lúc đó thì cơ thể mẹ sẽ có
+                                những dấu hiệu thai kỳ đầu tiên .
+                            </Text>
+                            <Text style={styles.desc}>
+                                Tuần thứ 01 được nhiều bác sĩ gọi là tuần chuẩn bị . Mẹ cần trang bị đầy đủ các kiến
+                                thức về sức khỏe và thể chất để sẵn sàng đón tin vui và bắt đầu thai kỳ một cách mạnh
+                                khỏe nhất .
+                            </Text>
+                        </>
+                    ) : (
+                        <Text style={styles.desc}>
+                            Trong tuần thai đầu, sự rụng trứng của người mẹ vẫn chưa diễn ra nên cơ thể sẽ không có
+                            nhiều sự thay đổi. Thường thì ...
+                        </Text>
+                    )}
                 </View>
-                <TouchableOpacity
-                    style={styles.moreContainer}
-                    onPress={() => refPregnancyWeekByWeekPopup2.current.showModal()}>
-                    <Text style={styles.more}>Xem thêm</Text>
-                </TouchableOpacity>
+                {!showMoreMomChange ? (
+                    <TouchableOpacity style={styles.moreContainer} onPress={() => setShowMoreMomChange(true)}>
+                        <Text style={styles.more}>Xem thêm</Text>
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity style={styles.moreContainer} onPress={() => setShowMoreMomChange(false)}>
+                        <Text style={styles.more}>Thu gọn</Text>
+                    </TouchableOpacity>
+                )}
             </View>
 
             <View style={styles.line} />
@@ -145,16 +178,52 @@ const PregnancyWeekByWeekScreen = () => {
                     <Text style={styles.titleItemHeader}>Lời khuyên</Text>
                 </View>
                 <View style={styles.descContainer}>
-                    <Text style={styles.desc}>
-                        Hãy rèn cho mình các thói quen lành mạnh: Ăn uống đủ chất đủ bữa, ngủ đúng giờ, tránh làm việc
-                        quá căng...
-                    </Text>
+                    {showMoreSupport ? (
+                        <>
+                            <Text style={styles.desc}>
+                                <Text style={styles.txtBold}>Hãy rèn cho mình các thói quen lành mạnh :</Text> Ăn uống
+                                đủ chất đủ bữa , ngủ đúng giờ , tránh làm việc quá căng thẳng , tránh xa rượu bia , các
+                                chất kích thích caffeine , đồ uống có ga , đóng lon sẵn , không sử dụng thuốc lá ....
+                            </Text>
+                            <Text style={styles.desc}>
+                                <Text style={styles.txtBold}>Bổ sung vitamin , khoáng chất :</Text> Việc bổ sung vitamin
+                                trước khi mang thai , đặc biệt là axit folic , DHA , nhóm khoáng chất như Canxi , sắt có
+                                ý nghĩa rất lớn trong việc tạo tiền đề thể chất khỏe mạnh cho con yêu . Theo các chuyên
+                                gia , mẹ cần bổ sung khoảng 400mg axit folic trước và trong khi mang thai để ngăn ngừa
+                                tối đa tình trạng dị tật ống thần kinh , hở hàm ếch ...
+                            </Text>
+                            <Text style={styles.desc}>
+                                <Text style={styles.txtBold}>Lưu ý về các loại thuốc đang sử dụng :</Text> Hãy cân nhắc
+                                lượng thuốc được nạp vào cơ thể vì nhiều loại thuốc gây những tác động xấu tới quá trình
+                                phát triển của thai nhi .
+                            </Text>
+                            <Text style={styles.desc}>
+                                <Text style={styles.txtBold}>Khám sức khỏe định kỳ :</Text> Hãy kiểm tra sức khỏe một
+                                cách đều đặn để có thể phát hiện sớm những bệnh lý tiềm tàng ảnh hưởng đến thai kỳ của
+                                mẹ .
+                            </Text>
+                            <Text style={styles.desc}>
+                                <Text style={styles.txtBold}>Quan hệ tình dục :</Text> Nhiều nghiên cứu chứng minh những
+                                khoái cảm sẽ kích thích sự rụng trứng của người mẹ , giúp mẹ sớm mang thai và khiến quá
+                                trình làm tổ của thai nhi thuận lợi hơn .
+                            </Text>
+                        </>
+                    ) : (
+                        <Text style={styles.desc}>
+                            Hãy rèn cho mình các thói quen lành mạnh: Ăn uống đủ chất đủ bữa, ngủ đúng giờ, tránh làm
+                            việc quá căng...
+                        </Text>
+                    )}
                 </View>
-                <TouchableOpacity
-                    style={styles.moreContainer}
-                    onPress={() => refPregnancyWeekByWeekPopup3.current.showModal()}>
-                    <Text style={styles.more}>Xem thêm</Text>
-                </TouchableOpacity>
+                {!showMoreSupport ? (
+                    <TouchableOpacity style={styles.moreContainer} onPress={() => setShowMoreSupport(true)}>
+                        <Text style={styles.more}>Xem thêm</Text>
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity style={styles.moreContainer} onPress={() => setShowMoreSupport(false)}>
+                        <Text style={styles.more}>Thu gọn</Text>
+                    </TouchableOpacity>
+                )}
             </View>
         </View>
     );
@@ -173,9 +242,6 @@ const PregnancyWeekByWeekScreen = () => {
         <View style={styles.container}>
             {renderHeader()}
             {renderContent()}
-            <PregnancyWeekByWeekPopup1 ref={refPregnancyWeekByWeekPopup1} />
-            <PregnancyWeekByWeekPopup2 ref={refPregnancyWeekByWeekPopup2} />
-            <PregnancyWeekByWeekPopup3 ref={refPregnancyWeekByWeekPopup3} />
         </View>
     );
 };
@@ -264,6 +330,9 @@ const myStyles = (theme: string) => {
         line: {
             borderWidth: 0.5,
             borderColor: color.Text_Dark_5,
+        },
+        txtBold: {
+            ...Fonts.inter600,
         },
     });
 };

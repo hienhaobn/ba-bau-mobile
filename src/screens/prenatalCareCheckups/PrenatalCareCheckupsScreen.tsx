@@ -114,7 +114,7 @@ const PrenatalCareCheckupsScreen = () => {
     const renderContent = () => (
         <FlatList
             data={history?.data?.reverse()}
-            keyExtractor={(item) => item.toString()}
+            keyExtractor={(item) => item.momId._id.toString()}
             renderItem={(item) => renderItem(item.item)}
             style={styles.wrapperContent}
             contentContainerStyle={styles.contentContainer}
