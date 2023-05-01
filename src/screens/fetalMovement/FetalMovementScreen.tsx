@@ -94,10 +94,26 @@ const FetalMovementScreen = () => {
         </TouchableOpacity>
     );
 
+    const getTimeCountdown = (countdown: number) => {
+        // calculate time left
+        const days = Math.floor(countdown / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((countdown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((countdown % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((countdown % (1000 * 60)) / 1000);
+
+        return { days, hours, minutes, seconds };
+    };
+
     const onPause = () => {
         refFetalMovementConfirmPopup.current?.hideModal();
         const timeCountdown = refFetalMovementCountdown.current?.getTimeCountdown?.();
-        setTimeCount(`${timeCountdown?.minutes}:${timeCountdown?.seconds}`);
+        const DAY_IN_MS = 1 * 60 * 60 * 1000;
+        const MINUTES_IN_MS = timeCountdown?.minutes * 60 * 1000;
+        const SECOND_IN_MS = timeCountdown?.seconds * 1000;
+        const NOW_IN_MS = new Date().getTime();
+        const DATETIME_AFTER_DAY = DAY_IN_MS - MINUTES_IN_MS - SECOND_IN_MS + NOW_IN_MS;
+        const time = getTimeCountdown(DATETIME_AFTER_DAY - new Date().getTime());
+        setTimeCount(`${time?.minutes}:${time?.seconds}`);
         refFetalMovementCountdown.current?.callback?.();
         setTimeout(() => {
             setIsPlay(false);

@@ -7,11 +7,6 @@ import { useTheme } from 'hooks/useTheme';
 import { Fonts } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-
-const DAY_IN_MS = 1 * 60 * 60 * 1000;
-const NOW_IN_MS = new Date().getTime();
-const DATETIME_AFTER_DAY = NOW_IN_MS + DAY_IN_MS;
-
 interface TimeCountdown {
     days: number;
     hours: number;
@@ -35,6 +30,9 @@ const FetalMovementCountdown = (props: FetalMovementCountdownProps, ref: Ref<Fet
     const styles = myStyles(theme);
     const { containerStyle, countdownStyle, isPlay } = props;
     const [countdown, setCountdown] = useState<number>(0);
+    const DAY_IN_MS = 1 * 60 * 60 * 1000;
+    const NOW_IN_MS = new Date().getTime();
+    const DATETIME_AFTER_DAY = NOW_IN_MS + DAY_IN_MS;
 
     useEffect(() => {
         const interval = setInterval(() => {
