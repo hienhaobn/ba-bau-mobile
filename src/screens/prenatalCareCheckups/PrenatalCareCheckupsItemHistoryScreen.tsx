@@ -11,10 +11,18 @@ import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import { RouteProp } from '@react-navigation/native';
+import { RootNavigatorParamList } from 'navigation/types';
 
-const PrenatalCareCheckupsItemHistoryScreen = () => {
+interface IPrenatalCareCheckupsItemHistoryScreenProps {
+    route: RouteProp<RootNavigatorParamList, 'PrenatalCareCheckupsItemHistory'>
+}
+
+const PrenatalCareCheckupsItemHistoryScreen = (props: IPrenatalCareCheckupsItemHistoryScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { route } = props;
+    const { child, momId } = route.params;
 
     const renderContent = () => (
         <View style={styles.content}>
@@ -28,34 +36,34 @@ const PrenatalCareCheckupsItemHistoryScreen = () => {
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Cân nặng</Text>
-                    <Text style={styles.valueItem}>57 kg</Text>
+                    <Text style={styles.valueItem}>{momId.weight} kg</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Huyết áp</Text>
-                    <Text style={styles.valueItem}>120/90 mmHg</Text>
+                    <Text style={styles.valueItem}>{momId.bloodPressure}/90 mmHg</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Chỉ số đường huyết</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>+ Lúc đói</Text>
-                    <Text style={styles.valueItem}>5 mmHg</Text>
+                    <Text style={styles.valueItem}>{momId.fastingGlycemicIndex} mmHg</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>+ Sau ăn 1h</Text>
-                    <Text style={styles.valueItem}>10 mmHg</Text>
+                    <Text style={styles.valueItem}>{momId.eating1hGlycemicIndex} mmHg</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>+ Sau ăn 2h</Text>
-                    <Text style={styles.valueItem}>10 mmHg</Text>
+                    <Text style={styles.valueItem}>{momId.eating2hGlycemicIndex} mmHg</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Các bệnh lý khác</Text>
-                    <Text style={styles.valueItem}>Có vấn đề về nhau thai</Text>
+                    <Text style={styles.valueItem}>{ momId.commonDiseases }</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Kết quả khám</Text>
-                    <Text style={styles.valueItem}>Khỏe</Text>
+                    <Text style={styles.valueItem}>{momId.note ? momId.note : 'Bình thường'}</Text>
                 </View>
             </View>
             {/* baby */}
@@ -66,23 +74,23 @@ const PrenatalCareCheckupsItemHistoryScreen = () => {
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Chiều dài (CRL)</Text>
-                    <Text style={styles.valueItem}>2mm</Text>
+                    <Text style={styles.valueItem}>{child.femurLength}mm</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Đường kính lưỡng đỉnh (BPD)</Text>
-                    <Text style={styles.valueItem}>2mm</Text>
+                    <Text style={styles.valueItem}>{child.dualTopDiameter}mm</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Chiều dài xương đùi (FL)</Text>
-                    <Text style={styles.valueItem}>2mm</Text>
+                    <Text style={styles.valueItem}>{child.femurLength}mm</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Chu vi đầu (HC)</Text>
-                    <Text style={styles.valueItem}>2mm</Text>
+                    <Text style={styles.valueItem}>{child.headPerimeter}mm</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Cân nặng ước tính</Text>
-                    <Text style={styles.valueItem}>2 gram</Text>
+                    <Text style={styles.valueItem}>{child.weight} gram</Text>
                 </View>
             </View>
         </View>

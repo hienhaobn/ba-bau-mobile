@@ -1,11 +1,16 @@
+import { RouteProp } from '@react-navigation/native';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
+
+import PrenatalCareCheckupsHealthyIndex from './src/components/PrenatalCareCheckupsHealthyIndex';
 
 import Header from 'components/Header';
 
 import { useTheme } from 'hooks/useTheme';
+
+import { RootNavigatorParamList } from 'navigation/types';
 
 import { fetchMomCheckupsHistory } from 'states/user/fetchCheckups';
 
@@ -14,10 +19,17 @@ import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
-const PrenatalCareCheckupsChartMomScreen = () => {
+interface IPrenatalCareCheckupsChartMomScreenProps {
+    route: RouteProp<RootNavigatorParamList, 'PrenatalCareCheckupsChartMom'>;
+}
+
+const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMomScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { route } = props;
     const [data, setData] = useState<user.MomCheckupsResponse[]>([]);
+    const [healthyIndex, setHealthyIndex] = useState<string>(moment().format('YYYY-MM-DD'));
+
     const first = moment().subtract(5, 'days').toDate();
     const second = moment().subtract(4, 'days').toDate();
     const third = moment().subtract(3, 'days').toDate();
@@ -32,7 +44,7 @@ const PrenatalCareCheckupsChartMomScreen = () => {
         }
     };
 
-    const getDataChart = (currentDate: number) => {
+    const getValueChart = (currentDate: number) => {
         let count = 0;
         if (data?.length) {
             data?.map((element) => {
@@ -45,9 +57,52 @@ const PrenatalCareCheckupsChartMomScreen = () => {
         return count;
     };
 
-    useEffect(() => {
-        console.log('response', data);
-    }, [data]);
+    const getOnlyElementChart = useCallback(() => {
+        let bloodPressure = 0;
+        let commonDiseases = '';
+        let createdAt = '';
+        let eating1hGlycemicIndex = 0;
+        let eating2hGlycemicIndex = 0;
+        let fastingGlycemicIndex = 0;
+        let idAccount = '';
+        let note = '';
+        let updatedAt = '';
+        let weeksOfPregnacy = '';
+        let weight = 0;
+        let _id = '';
+        if (data?.length) {
+            data?.map((element, index) => {
+                if (element.createdAt.includes(healthyIndex)) {
+                    _id = element._id;
+                    updatedAt = element.updatedAt;
+                    commonDiseases = element.commonDiseases;
+                    idAccount = element.idAccount;
+                    createdAt = element.createdAt;
+                    note = element.note;
+                    weeksOfPregnacy = element.weeksOfPregnacy;
+                    weight += element.weight;
+                    bloodPressure += element.bloodPressure;
+                    eating1hGlycemicIndex += element.eating1hGlycemicIndex;
+                    eating2hGlycemicIndex += element.eating2hGlycemicIndex;
+                    fastingGlycemicIndex += element.fastingGlycemicIndex;
+                }
+            });
+        }
+        return {
+            bloodPressure,
+            commonDiseases,
+            createdAt,
+            eating1hGlycemicIndex,
+            eating2hGlycemicIndex,
+            fastingGlycemicIndex,
+            idAccount,
+            note,
+            updatedAt,
+            weeksOfPregnacy,
+            weight,
+            _id,
+        };
+    }, [healthyIndex]);
 
     useEffect(() => {
         getData();
@@ -55,62 +110,62 @@ const PrenatalCareCheckupsChartMomScreen = () => {
 
     const barData = [
         {
-            value: getDataChart(first.getDate()),
-            label: `${first.getDate()}/${first.getMonth()}`,
+            value: getValueChart(first.getDate()),
+            label: `${first.getDate()}/${first.getMonth() + 1}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
-                    {getDataChart(first.getDate())}
+                    {getValueChart(first.getDate())}
                 </Text>
             ),
         },
         {
-            value: getDataChart(second.getDate()),
-            label: `${second.getDate()}/${second.getMonth()}`,
+            value: getValueChart(second.getDate()),
+            label: `${second.getDate()}/${second.getMonth() + 1}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
-                    {getDataChart(second.getDate())}
+                    {getValueChart(second.getDate())}
                 </Text>
             ),
         },
         {
-            value: getDataChart(third.getDate()),
-            label: `${third.getDate()}/${third.getMonth()}`,
+            value: getValueChart(third.getDate()),
+            label: `${third.getDate()}/${third.getMonth() + 1}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
-                    {getDataChart(third.getDate())}
+                    {getValueChart(third.getDate())}
                 </Text>
             ),
         },
         {
-            value: getDataChart(fourth.getDate()),
-            label: `${fourth.getDate()}/${fourth.getMonth()}`,
+            value: getValueChart(fourth.getDate()),
+            label: `${fourth.getDate()}/${fourth.getMonth() + 1}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
-                    {getDataChart(fourth.getDate())}
+                    {getValueChart(fourth.getDate())}
                 </Text>
             ),
         },
         {
-            value: getDataChart(fifth.getDate()),
-            label: `${fifth.getDate()}/${fifth.getMonth()}`,
+            value: getValueChart(fifth.getDate()),
+            label: `${fifth.getDate()}/${fifth.getMonth() + 1}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
-                    {getDataChart(fifth.getDate())}
+                    {getValueChart(fifth.getDate())}
                 </Text>
             ),
         },
         {
-            value: getDataChart(sixth.getDate()),
-            label: `${sixth.getDate()}/${sixth.getMonth()}`,
+            value: getValueChart(sixth.getDate()),
+            label: `${sixth.getDate()}/${sixth.getMonth() + 1}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
-                    {getDataChart(sixth.getDate())}
+                    {getValueChart(sixth.getDate())}
                 </Text>
             ),
         },
@@ -137,16 +192,28 @@ const PrenatalCareCheckupsChartMomScreen = () => {
                     fontSize: scales(12),
                 }}
                 rotateLabel
+                onPress={(element) => {
+                    barData.map((el) => {
+                        if (el.label.includes(element.label)) {
+                            const splitDay = el.label.split('/');
+                            const elementDate = moment()
+                                .set('days', parseInt(splitDay[0]))
+                                .set('months', parseInt(splitDay[1]) - 1)
+                                .format('YYYY-MM-DD');
+                            setHealthyIndex(elementDate);
+                        }
+                    });
+                }}
             />
         </View>
     );
 
     const renderPregnancyWeekByWeek = () => (
         <View style={styles.pregnancyWeekContainer}>
-            <View style={styles.weekContainer}>
+            {/* <View style={styles.weekContainer}>
                 <Text style={styles.headerTitle}>Tuần thai: </Text>
-                <Text style={styles.week}>39 tuần 4 ngày</Text>
-            </View>
+                <Text style={styles.week}>{} tuần</Text>
+            </View> */}
         </View>
     );
 
@@ -160,7 +227,10 @@ const PrenatalCareCheckupsChartMomScreen = () => {
     return (
         <View style={styles.container}>
             <Header title="Biểu đồ của mẹ" />
-            {renderContent()}
+            <ScrollView>
+                {renderContent()}
+                <PrenatalCareCheckupsHealthyIndex data={getOnlyElementChart()} />
+            </ScrollView>
         </View>
     );
 };

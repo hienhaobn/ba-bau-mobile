@@ -8,6 +8,6 @@ export const goToPrenatalCareCheckupsChartMom = () => navigate('PrenatalCareChec
 
 export const goToAddPrenatalCareCheckupsStep1 = () => navigate('AddPrenatalCareCheckupsStep1');
 
-export const goToAddPrenatalCareCheckupsStep2 = (weeksOfPregnacy: string) => navigate('AddPrenatalCareCheckupsStep2', { weeksOfPregnacy });
+export const goToAddPrenatalCareCheckupsStep2 = (momCheckups: user.MomCheckupsRequest) => navigate('AddPrenatalCareCheckupsStep2', { momCheckups });
 
-export const goToPrenatalCareCheckupsItemHistory = () => navigate('PrenatalCareCheckupsItemHistory');
+export const goToPrenatalCareCheckupsItemHistory = (child: user.CheckupsScheduleChildResponse, momId: user.CheckupsScheduleMomResponse) => navigate('PrenatalCareCheckupsItemHistory', { child, momId });

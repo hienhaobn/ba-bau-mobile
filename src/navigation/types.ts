@@ -41,6 +41,6 @@ export type RootNavigatorParamList = {
   PregnancyProductsDetail5: undefined,
   PregnancyProductsDetail6: undefined,
   AddPrenatalCareCheckupsStep1: undefined,
-  AddPrenatalCareCheckupsStep2: { weeksOfPregnacy: string },
-  PrenatalCareCheckupsItemHistory: undefined,
+  AddPrenatalCareCheckupsStep2: { momCheckups: user.MomCheckupsRequest },
+  PrenatalCareCheckupsItemHistory: { child: user.CheckupsScheduleChildResponse, momId: user.CheckupsScheduleMomResponse },
 };

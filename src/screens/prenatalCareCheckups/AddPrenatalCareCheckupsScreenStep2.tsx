@@ -4,16 +4,20 @@ import { StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import Button from 'components/Button/Button';
-import Header from 'components/Header';
 import Input from 'components/Input';
 
 import { useTheme } from 'hooks/useTheme';
+
 import { RootNavigatorParamList } from 'navigation/types';
 import { pop } from 'navigation/utils';
+
+import { createBabyCheckups } from 'states/user/fetchCheckups';
+
 import { Fonts, Sizes } from 'themes';
+
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import { createBabyCheckups } from 'states/user/fetchCheckups';
+import { showCustomToast } from 'utils/toast';
 
 interface IAddPrenatalCareCheckupsScreenStep2Props {
     route: RouteProp<RootNavigatorParamList, 'AddPrenatalCareCheckupsStep2'>;
@@ -22,7 +26,7 @@ interface IAddPrenatalCareCheckupsScreenStep2Props {
 const AddPrenatalCareCheckupsScreenStep2 = (props: IAddPrenatalCareCheckupsScreenStep2Props) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const { weeksOfPregnacy } = props.route.params;
+    const { momCheckups } = props.route.params;
     const [babyFL, setBabyFL] = useState<string>('');
     const [babyHC, setBabyHC] = useState<string>('');
     const [babyWeight, setBabyWeight] = useState<string>('');
@@ -31,18 +35,44 @@ const AddPrenatalCareCheckupsScreenStep2 = (props: IAddPrenatalCareCheckupsScree
     const [babyLength, setBabyLength] = useState<string>('');
 
     const onUpdate = async () => {
+        if (validate()) {
+            return;
+        }
         const body = {
-            weeksOfPregnacy,
-            weight: parseFloat(babyWeight),
-            note: babyNote,
-            dualTopDiameter: parseFloat(babyBPD),
-            femurLength: parseFloat(babyFL),
-            headPerimeter: parseFloat(babyHC),
-        } as user.BabyCheckupsRequest;
+            momData: momCheckups,
+            childData: {
+                weeksOfPregnacy: momCheckups.weeksOfPregnacy,
+                weight: parseFloat(babyWeight),
+                note: babyNote,
+                dualTopDiameter: parseFloat(babyBPD),
+                femurLength: parseFloat(babyFL),
+                headPerimeter: parseFloat(babyHC),
+            },
+        } as user.CheckupsScheduleRequest;
         const response = await createBabyCheckups(body);
         if (response) {
             pop(2);
         }
+    };
+
+    const validate = () => {
+        if (!babyLength) {
+            showCustomToast('Vui lòng nhập chiều dài của bé');
+            return true;
+        } else if (!babyBPD) {
+            showCustomToast('Vui lòng nhập đường kính lưỡng đỉnh của bé');
+            return true;
+        } else if (!babyFL) {
+            showCustomToast('Vui lòng nhập chiều dài xương đùi của bé');
+            return true;
+        } else if (!babyHC) {
+            showCustomToast('Vui lòng nhập chu vi đầu của bé');
+            return true;
+        } else if (!babyWeight) {
+            showCustomToast('Vui lòng nhập cân nặng ước tính của bé');
+            return true;
+        }
+        return false;
     };
 
     const renderInputBabyCRL = () => (

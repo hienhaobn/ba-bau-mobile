@@ -74,4 +74,45 @@ declare namespace user {
         headPerimeter: number;
         note: string;
     }
+
+    interface CheckupsScheduleRequest {
+        momData: MomCheckupsRequest;
+        childData: BabyCheckupsRequest;
+    }
+
+    interface CheckupsScheduleMomResponse {
+        _id: string;
+        weight: number;
+        weeksOfPregnacy: string;
+        bloodPressure: number;
+        fastingGlycemicIndex: number;
+        eating1hGlycemicIndex: number;
+        eating2hGlycemicIndex: number;
+        note: string;
+        commonDiseases: string;
+        idAccount: string;
+        createdAt: string;
+        updatedAt: string;
+    }
+
+    interface CheckupsScheduleChildResponse {
+        _id: string;
+        weight: number;
+        weeksOfPregnacy: string;
+        dualTopDiameter: number;
+        femurLength: number;
+        headPerimeter: number;
+        note: string;
+        idAccount: string;
+        momId: CheckupsScheduleMomResponse;
+        createdAt: string;
+        updatedAt: string;
+    }
+
+    interface CheckupsScheduleHistoryResponse {
+        data: {
+            child: CheckupsScheduleChildResponse;
+            momId: CheckupsScheduleMomResponse;
+        }[];
+    }
 }

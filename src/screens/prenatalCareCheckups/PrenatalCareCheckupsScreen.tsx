@@ -1,16 +1,25 @@
-import React, { useRef } from 'react';
-import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import moment from 'moment';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 
-import PrenatalCareCheckupsConfirmPremium, { IPrenatalCareCheckupsConfirmPremiumRef } from './src/components/PrenatalCareCheckupsConfirmPremium';
-import { goToAddPrenatalCareCheckupsStep1, goToPrenatalCareCheckupsChartMom, goToPrenatalCareCheckupsItemHistory, goToRoutineCheckups } from './src/utils';
+import PrenatalCareCheckupsConfirmPremium, {
+    IPrenatalCareCheckupsConfirmPremiumRef,
+} from './src/components/PrenatalCareCheckupsConfirmPremium';
+import {
+    goToAddPrenatalCareCheckupsStep1,
+    goToPrenatalCareCheckupsChartMom,
+    goToPrenatalCareCheckupsItemHistory,
+    goToRoutineCheckups,
+} from './src/utils';
 
 import Images from 'assets/images';
-import SvgIcons from 'assets/svgs';
 
 import Header from 'components/Header';
 import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
+
+import { fetchBabyCheckupsHistory } from 'states/user/fetchCheckups';
 
 import { Fonts, Sizes } from 'themes';
 
@@ -21,10 +30,22 @@ const PrenatalCareCheckupsScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const refPrenatalCareCheckupsConfirmPremium = useRef<IPrenatalCareCheckupsConfirmPremiumRef>(null);
+    const [history, setHistory] = useState<user.CheckupsScheduleHistoryResponse>(null);
+
+    const getDataHistory = async () => {
+        const response = await fetchBabyCheckupsHistory();
+        if (response) {
+            setHistory(response);
+        }
+    };
+
+    useEffect(() => {
+        getDataHistory();
+    }, []);
 
     const onOpenConfirm = () => {
         refPrenatalCareCheckupsConfirmPremium.current.showModal();
-    }
+    };
 
     const renderHeader = () => <Header title="Lịch khám thai" />;
 
@@ -36,7 +57,9 @@ const PrenatalCareCheckupsScreen = () => {
                 </View>
                 <Text style={styles.itemText}>Lịch khám định kỳ</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.itemHeaderContainer} onPress={goToPrenatalCareCheckupsChartMom}>
+            <TouchableOpacity
+                style={styles.itemHeaderContainer}
+                onPress={goToPrenatalCareCheckupsChartMom}>
                 <View style={styles.imageContainer}>
                     <Image source={Images.PieChart} style={styles.imgItem} />
                 </View>
@@ -60,39 +83,39 @@ const PrenatalCareCheckupsScreen = () => {
         </View>
     );
 
-    const renderItem = () => (
-        <TouchableOpacity style={styles.itemContainer} onPress={goToPrenatalCareCheckupsItemHistory}>
-            <Text style={styles.titleItem}>Lần khám thai thứ 1</Text>
+    const renderItem = (element: {
+        child: user.CheckupsScheduleChildResponse;
+        momId: user.CheckupsScheduleMomResponse;
+    }) => (
+        <TouchableOpacity
+            style={styles.itemContainer}
+            onPress={() => goToPrenatalCareCheckupsItemHistory(element.child, element.momId)}>
+            <Text style={styles.titleItem}>Ngày khám {moment(element.momId.createdAt).format('DD/MM/YYYY')}</Text>
             <View style={styles.row}>
                 <Text style={styles.titleLeft}>
-                    Tuần thai: <Text style={styles.textBold}>39 tuần</Text>
+                    Tuần thai: <Text style={styles.textBold}>{element.momId.weeksOfPregnacy} tuần</Text>
                 </Text>
                 <Text style={styles.valueRight}>
-                    Chiều dài: <Text style={styles.textBold}>2 mm</Text>
+                    Chiều dài: <Text style={styles.textBold}>{element.child.femurLength} mm</Text>
                 </Text>
             </View>
             <View style={styles.row}>
                 <Text style={styles.titleLeft}>
-                    Cân nặng của mẹ: <Text style={styles.textBold}>57kg</Text>
+                    Cân nặng của mẹ: <Text style={styles.textBold}>{element.momId.weight} kg</Text>
                 </Text>
                 <Text style={styles.valueRight}>
-                    Cân nặng của bé: <Text style={styles.textBold}>2gr</Text>
+                    Cân nặng của bé: <Text style={styles.textBold}>{element.child.weight} gr</Text>
                 </Text>
             </View>
-            <View style={styles.itemDate}>
-                <SvgIcons.IcDateRange width={scales(17)} height={scales(17)} color={getThemeColor().Text_Dark_1} />
-                <Text style={styles.dateText}>19/03/2023</Text>
-            </View>
-
             <View style={styles.line} />
         </TouchableOpacity>
     );
 
     const renderContent = () => (
         <FlatList
-            data={[1, 2, 3, 4, 5, 6]}
+            data={history?.data?.reverse()}
             keyExtractor={(item) => item.toString()}
-            renderItem={renderItem}
+            renderItem={(item) => renderItem(item.item)}
             style={styles.wrapperContent}
             contentContainerStyle={styles.contentContainer}
             onEndReachedThreshold={0.1}
@@ -184,6 +207,7 @@ const myStyles = (theme: string) => {
         line: {
             borderWidth: 0.5,
             borderColor: color.Text_Dark_4,
+            marginVertical: scales(10),
         },
         titleHistory: {
             ...Fonts.inter700,

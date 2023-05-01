@@ -3,23 +3,10 @@ import axiosInstance from 'services/api-requests';
 
 import { showCustomToast } from 'utils/toast';
 
-export const createMomCheckups = async (body: user.MomCheckupsRequest) => {
+export const createBabyCheckups = async (body: user.CheckupsScheduleRequest) => {
     try {
         showLoading();
-        const res: { statusCode: number; message: string } = await axiosInstance.post('/mom-chart', body);
-        hideLoading();
-        return res;
-    } catch (error) {
-        hideLoading();
-        showCustomToast(error.message);
-        console.log(error);
-    }
-};
-
-export const createBabyCheckups = async (body: user.BabyCheckupsRequest) => {
-    try {
-        showLoading();
-        const res: { statusCode: number; message: string } = await axiosInstance.post('/child-chart', body);
+        const res: { statusCode: number; message: string } = await axiosInstance.post('/child-chart/result-schedule', body);
         showCustomToast('Thành công');
         hideLoading();
         return res;
@@ -29,6 +16,20 @@ export const createBabyCheckups = async (body: user.BabyCheckupsRequest) => {
         console.log(error);
     }
 };
+
+export const fetchBabyCheckupsHistory = async () => {
+    try {
+        showLoading();
+        const res: user.CheckupsScheduleHistoryResponse = await axiosInstance.get('/child-chart/result-schedule');
+        hideLoading();
+        return res;
+    } catch (error) {
+        hideLoading();
+        showCustomToast('Thất bại');
+        console.log(error);
+    }
+};
+
 
 export const fetchMomCheckupsHistory = async () => {
     try {

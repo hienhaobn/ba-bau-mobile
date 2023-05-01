@@ -10,15 +10,9 @@ import Button from 'components/Button/Button';
 import CheckBox from 'components/CheckBox';
 import Header from 'components/Header';
 import Input from 'components/Input';
-import { showLoading } from 'components/Loading';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
-import { createMomCheckups } from 'states/user/fetchCheckups';
-
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
@@ -38,6 +32,21 @@ const AddPrenatalCareCheckupsScreenStep1 = () => {
     const [checkBox2, setCheckBox2] = useState<boolean>(false);
     const [checkBox3, setCheckBox3] = useState<boolean>(false);
     const [result, setResult] = useState<string>('');
+
+    const setDefaultData = () => {
+        setMomWeight('');
+        setWeeksOfPregnancy('');
+        setMomBloodPressure('');
+        setMomBloodPressureHungry('');
+        setMomBloodPressureAfter1Hour('');
+        setMomBloodPressureAfter2Hour('');
+        setDateCheckups(moment().toDate());
+        setSelectDateVisible(false);
+        setCheckBox1(false);
+        setCheckBox2(false);
+        setCheckBox3(false);
+        setResult('');
+    }
 
     const onConfirmDate = (value: Date) => {
         setSelectDateVisible(false);
@@ -64,9 +73,25 @@ const AddPrenatalCareCheckupsScreenStep1 = () => {
         if (!weeksOfPregnancy) {
             showCustomToast('Vui lòng nhập số tuần');
             return true;
+        } else if (!momWeight) {
+            showCustomToast('Vui lòng nhập cân nặng');
+            return true;
+        } else if (!momBloodPressure) {
+            showCustomToast('Vui lòng nhập chỉ số huyết áp');
+            return true;
+        } else if (!momBloodPressureHungry) {
+            showCustomToast('Vui lòng nhập chỉ số chỉ số đường huyết lúc đói');
+            return true;
+        } else if (!momBloodPressureAfter1Hour) {
+            showCustomToast('Vui lòng nhập chỉ số chỉ số đường huyết sau ăn 1 giờ');
+            return true;
+        } else if (!momBloodPressureAfter2Hour) {
+            showCustomToast('Vui lòng nhập chỉ số chỉ số đường huyết sau ăn 2 giờ');
+            return true;
         }
         return false;
     };
+
     const onUpdate = async () => {
         // call api
         const body = {
@@ -83,11 +108,9 @@ const AddPrenatalCareCheckupsScreenStep1 = () => {
         if (validate()) {
             return;
         }
-        const response = await createMomCheckups(body);
-        if (response) {
-            // go to step 2
-            goToAddPrenatalCareCheckupsStep2(weeksOfPregnancy);
-        }
+        // go to step 2
+        goToAddPrenatalCareCheckupsStep2(body);
+        setDefaultData();
     };
 
     const renderInputMomWeight = () => (
