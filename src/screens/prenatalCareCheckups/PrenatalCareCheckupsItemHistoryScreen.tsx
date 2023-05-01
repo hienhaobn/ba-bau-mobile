@@ -13,6 +13,7 @@ import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { RouteProp } from '@react-navigation/native';
 import { RootNavigatorParamList } from 'navigation/types';
+import moment from 'moment';
 
 interface IPrenatalCareCheckupsItemHistoryScreenProps {
     route: RouteProp<RootNavigatorParamList, 'PrenatalCareCheckupsItemHistory'>
@@ -98,7 +99,7 @@ const PrenatalCareCheckupsItemHistoryScreen = (props: IPrenatalCareCheckupsItemH
 
     return (
         <View style={styles.container}>
-            <Header title="Ngày khám 09/11/2022" />
+            <Header title={`Ngày khám ${moment(momId.createdAt).format('DD/MM/YYYY')}`} />
             <ScrollView showsVerticalScrollIndicator={false}>{renderContent()}</ScrollView>
         </View>
     );

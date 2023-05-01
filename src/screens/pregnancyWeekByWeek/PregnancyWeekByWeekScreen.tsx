@@ -1,22 +1,18 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import Images from 'assets/images';
-import SvgIcons from 'assets/svgs';
-
-import DropdownComponent from 'components/Dropdown';
-import Header from 'components/Header';
-import TouchableOpacity from 'components/TouchableOpacity';
-
-import { useTheme } from 'hooks/useTheme';
-
-import { Fonts, Sizes } from 'themes';
-
-import { getThemeColor } from 'utils/getThemeColor';
-import { scales } from 'utils/scales';
 import PregnancyWeekByWeekPopup1, { IPregnancyWeekByWeekPopup1Ref } from './src/components/PregnancyWeekByWeekPopup1';
 import PregnancyWeekByWeekPopup2, { IPregnancyWeekByWeekPopup2Ref } from './src/components/PregnancyWeekByWeekPopup2';
 import PregnancyWeekByWeekPopup3, { IPregnancyWeekByWeekPopup3Ref } from './src/components/PregnancyWeekByWeekPopup3';
+
+import Images from 'assets/images';
+import DropdownComponent from 'components/Dropdown';
+import Header from 'components/Header';
+import TouchableOpacity from 'components/TouchableOpacity';
+import { useTheme } from 'hooks/useTheme';
+import { Fonts, Sizes } from 'themes';
+import { getThemeColor } from 'utils/getThemeColor';
+import { scales } from 'utils/scales';
 
 const dataDropdown = [
     { label: 'Tuần 1', value: '1' },
@@ -64,6 +60,7 @@ const dataDropdown = [
 const PregnancyWeekByWeekScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    // const [showMore, setShowMore] = useState<''>();
     const refPregnancyWeekByWeekPopup1 = useRef<IPregnancyWeekByWeekPopup1Ref>(null);
     const refPregnancyWeekByWeekPopup2 = useRef<IPregnancyWeekByWeekPopup2Ref>(null);
     const refPregnancyWeekByWeekPopup3 = useRef<IPregnancyWeekByWeekPopup3Ref>(null);
@@ -74,7 +71,7 @@ const PregnancyWeekByWeekScreen = () => {
         <View style={styles.contentContentContainer}>
             <Text style={styles.textTime}>Thời gian: </Text>
             <View style={{ flex: 1 }}>
-                <DropdownComponent data={dataDropdown} placeholder='Tuần' searchPlaceholder='Tìm kiếm tuần' />
+                <DropdownComponent data={dataDropdown} placeholder="Tuần" searchPlaceholder="Tìm kiếm tuần" />
             </View>
         </View>
     );
@@ -93,8 +90,29 @@ const PregnancyWeekByWeekScreen = () => {
                         Chào mẹ, vậy là mẹ đã chính thức vào tuần đầu tiên của hành trình 40 tuần ấp ủ “mầm sống yêu
                         thương” rồi đấy! Trong tuần đầu...
                     </Text>
+                    <Text style={styles.desc}>
+                        Chào mẹ, vậy là mẹ đã chính thức bước vào tuần đầu tiên của hành trình 40 tuần ấp ủ “ mầm sống
+                        yêu thương ” rồi đấy ! Trong tuần đầu tiên này , thậm chí bé yêu còn chưa hình thành , tuy nhiên
+                        bác sĩ vẫn tính đây là một phần quá trình phát triển của thai nhi . Ở tuần thai đầu tiên , hãy
+                        lưu ý những thông tin sau để bé yêu phát triển khỏe mạnh mẹ nhé !
+                    </Text>
+                    <Text style={styles.desc}>
+                        Hành trình mang thai đã bắt đầu khởi động từ ngày đầu tiên của kỳ kinh nguyệt cuối cùng . Bác sĩ
+                        sẽ tính tuổi thai dựa theo khung thời gian này thay vì tuổi thực của em bé . Bởi vì ngay cả các
+                        chuyên gia nhiều kinh nghiệm nhất cũng khó có thể xác định được thời điểm rụng trứng và thụ tinh
+                        thành công của mẹ để đo tuổi thực của thai một cách chính xác . Vậy nên , có những mẹ bầu sinh
+                        em bé vào tuần thứ 40 ( tuổi thai thật khoảng 38 , 39 ) , và cũng có những mẹ bầu sinh con vào
+                        tuần thứ 42 ( tuổi thai thật khoảng 40 ).
+                    </Text>
+                    <Text style={styles.desc}>
+                        Trong tuần thai 01 , em bé có thể chưa được hình thành vì sự rụng trứng của người mẹ thường diễn
+                        ra từ ngày 12 - 18 nếu mẹ có chu kỳ kinh nguyệt đều đặn và kéo dài khoảng 30 ngày . Do vậy ,
+                        thường thì thai nhi sẽ được hình thành trong tuần thứ 3 nếu trứng được thụ tinh thành công .
+                    </Text>
                 </View>
-                <TouchableOpacity style={styles.moreContainer} onPress={() => refPregnancyWeekByWeekPopup1.current.showModal()}>
+                <TouchableOpacity
+                    style={styles.moreContainer}
+                    onPress={() => refPregnancyWeekByWeekPopup1.current.showModal()}>
                     <Text style={styles.more}>Xem thêm</Text>
                 </TouchableOpacity>
             </View>
@@ -112,7 +130,9 @@ const PregnancyWeekByWeekScreen = () => {
                         thay đổi. Thường thì ...
                     </Text>
                 </View>
-                <TouchableOpacity style={styles.moreContainer} onPress={() => refPregnancyWeekByWeekPopup2.current.showModal()}>
+                <TouchableOpacity
+                    style={styles.moreContainer}
+                    onPress={() => refPregnancyWeekByWeekPopup2.current.showModal()}>
                     <Text style={styles.more}>Xem thêm</Text>
                 </TouchableOpacity>
             </View>
@@ -130,7 +150,9 @@ const PregnancyWeekByWeekScreen = () => {
                         quá căng...
                     </Text>
                 </View>
-                <TouchableOpacity style={styles.moreContainer} onPress={() => refPregnancyWeekByWeekPopup3.current.showModal()}>
+                <TouchableOpacity
+                    style={styles.moreContainer}
+                    onPress={() => refPregnancyWeekByWeekPopup3.current.showModal()}>
                     <Text style={styles.more}>Xem thêm</Text>
                 </TouchableOpacity>
             </View>
@@ -227,6 +249,7 @@ const myStyles = (theme: string) => {
             ...Fonts.inter400,
             fontSize: scales(12),
             color: color.Text_Dark_1,
+            lineHeight: scales(25),
         },
         moreContainer: {
             marginTop: scales(8),
