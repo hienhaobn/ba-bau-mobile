@@ -3,14 +3,22 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { DishDetailScreenRouteProps } from 'screens/foods/DishDetailScreen';
+
 import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
-const DishDetailMakingScene = () => {
+interface IDishDetailMakingSceneProps {
+    route: DishDetailScreenRouteProps;
+}
+
+const DishDetailMakingScene = (props: IDishDetailMakingSceneProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { route } = props;
+    const { foodOfCategory } = route;
 
     const renderContent = () => (
         <ScrollView
@@ -19,27 +27,7 @@ const DishDetailMakingScene = () => {
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}>
             <View>
-                <Text style={styles.desc}>
-                    <Text style={styles.txtBold}>Bước 1 : </Text>Thịt bò rửa sạch , băm nhuyễn , thêm xì dầu , cho bột
-                    năng pha loãng nước và dầu vào trộn đều.
-                </Text>
-                <Text style={styles.desc}>
-                    <Text style={styles.txtBold}>Bước 2 : </Text> Dưa chua rửa sạch , vắt hết nước rồi cắt nhỏ để sẵn.
-                </Text>
-                <Text style={styles.desc}>
-                    {' '}
-                    <Text style={styles.txtBold}>Bước 3 : </Text> Cho dầu vào trong chảo , nấu nóng lên , cho thịt bò
-                    vào xào chín , vớt ra đĩa .
-                </Text>
-                <Text style={styles.desc}>
-                    <Text style={styles.txtBold}>Bước 4 : </Text> : Cho dầu vào chảo đun nóng , cho dưa chua vào xào ,
-                    thêm đường và một ít muối . Cho thịt bò vào trộn đều cùng dưa chua là xong .
-                </Text>
-                <Text style={styles.txtBold}>Yêu cầu thành phẩm</Text>
-                <Text style={styles.desc}>
-                    Món ngon sau khi hoàn thành sẽ có vị ch ua của dưa kết hợp với thịt bò mềm thơm ăn kèm cơm nóng ngon
-                    miễn chê . Chúc mẹ làm thành công và có một bữa ăn thực sự chất lượng !
-                </Text>
+                <Text style={styles.desc}>{foodOfCategory?.making}</Text>
             </View>
         </ScrollView>
     );

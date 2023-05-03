@@ -2,22 +2,26 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useTheme } from 'hooks/useTheme';
-
+import { DishDetailScreenRouteProps } from 'screens/foods/DishDetailScreen';
 import { Fonts } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
-const DishDetailIngredientScene = () => {
+interface IDishDetailIngredientSceneProps {
+    route: DishDetailScreenRouteProps;
+}
+
+const DishDetailIngredientScene = (props: IDishDetailIngredientSceneProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { route } = props;
+    const { foodOfCategory } = route;
 
     return (
         <View style={styles.container}>
-            <Text style={styles.txt}>- 250g thịt bò</Text>
-            <Text style={styles.txt}>- 250g dưa chua</Text>
-            <Text style={styles.txt}>- 50g dầu thực vật</Text>
-            <Text style={styles.txt}>- Đường, xì dầu, bột năng, muối</Text>
+            {foodOfCategory?.ingredient?.split(', ').map(element => (
+                <Text key={element} style={styles.txt}>- {element}</Text>
+            )) }
         </View>
     );
 };

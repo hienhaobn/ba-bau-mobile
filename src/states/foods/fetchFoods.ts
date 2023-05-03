@@ -17,10 +17,10 @@ export const fetchFoodCategoryRoot = async () => {
     }
 };
 
-export const fetchFoodCategoryById = async (categoryById: string) =>  {
+export const fetchFoodCategoryByFoodCategoryRootId = async (categoryRootId: string) =>  {
     try {
         showLoading();
-        const res: food.FoodCategory[] = await axiosInstance.get(`/food-categories/root/${categoryById}`);
+        const res: food.FoodCategory[] = await axiosInstance.get(`/food-categories/root/${categoryRootId}`);
         hideLoading();
         return res;
     } catch (error) {

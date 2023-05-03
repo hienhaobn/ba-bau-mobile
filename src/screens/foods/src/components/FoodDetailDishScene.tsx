@@ -1,98 +1,67 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import { goToDishDetail } from '../utils';
 
 import Images from 'assets/images';
-import SvgIcons from 'assets/svgs';
 
 import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
+
+import { FoodDetailScreenRouteProps } from 'screens/foods/FoodDetailScreen';
+
+import { fetchFoodCategoryByFoodCategoryRootId, fetchFoodsOfCategory } from 'states/foods/fetchFoods';
 
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
-const FoodDetailDishScene = () => {
+interface IFoodDetailDishSceneSceneProps {
+    route: FoodDetailScreenRouteProps;
+}
+
+const FoodDetailDishScene = (props: IFoodDetailDishSceneSceneProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { route } = props;
+    const { foodCategory } = route;
+    const [foodFavorites, setFoodFavorites] = useState<food.FoodOfCategory[]>([]);
+
+    const getFoodFavorites = async () => {
+        const response = await fetchFoodsOfCategory(foodCategory?._id);
+        setFoodFavorites(response);
+    };
+
+    useEffect(() => {
+        getFoodFavorites();
+    }, []);
+
+    const renderEmptyComponent = () => (
+        <View style={styles.emptyContainer}>
+            <Image source={Images.NoData} style={styles.emptyImage} resizeMode="contain" />
+            <Text style={styles.noData}>Không có dữ liệu</Text>
+        </View>
+    );
 
     const renderContent = () => (
         <View>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={goToDishDetail}>
-                <Image source={Images.Beef} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>Thịt bò xào dưa</Text>
-                    <Text style={styles.itemContentDesc}>
-                        Bước 1: Thịt bò rửa sạch, băm nhuyễn, thêm xì dầu, cho bột năng, pha loãng,...
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Beef} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>Thịt bò xào dưa</Text>
-                    <Text style={styles.itemContentDesc}>
-                        Bước 1: Thịt bò rửa sạch, băm nhuyễn, thêm xì dầu, cho bột năng, pha loãng,...
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Beef} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>Thịt bò xào dưa</Text>
-                    <Text style={styles.itemContentDesc}>
-                        Bước 1: Thịt bò rửa sạch, băm nhuyễn, thêm xì dầu, cho bột năng, pha loãng,...
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Beef} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>Thịt bò xào dưa</Text>
-                    <Text style={styles.itemContentDesc}>
-                        Bước 1: Thịt bò rửa sạch, băm nhuyễn, thêm xì dầu, cho bột năng, pha loãng,...
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Beef} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>Thịt bò xào dưa</Text>
-                    <Text style={styles.itemContentDesc}>
-                        Bước 1: Thịt bò rửa sạch, băm nhuyễn, thêm xì dầu, cho bột năng, pha loãng,...
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Beef} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>Thịt bò xào dưa</Text>
-                    <Text style={styles.itemContentDesc}>
-                        Bước 1: Thịt bò rửa sạch, băm nhuyễn, thêm xì dầu, cho bột năng, pha loãng,...
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Beef} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>Thịt bò xào dưa</Text>
-                    <Text style={styles.itemContentDesc}>
-                        Bước 1: Thịt bò rửa sạch, băm nhuyễn, thêm xì dầu, cho bột năng, pha loãng,...
-                    </Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Beef} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>Thịt bò xào dưa</Text>
-                    <Text style={styles.itemContentDesc}>
-                        Bước 1: Thịt bò rửa sạch, băm nhuyễn, thêm xì dầu, cho bột năng, pha loãng,...
-                    </Text>
-                </View>
-            </TouchableOpacity>
+            {foodFavorites.length > 0 ? foodFavorites?.map((food) => (
+                <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={() => goToDishDetail(food)}>
+                    <FastImage
+                        source={food?.image ? { uri: food?.image } : Images.Beef}
+                        style={styles.image}
+                    />
+                    <View style={styles.itemContent}>
+                        <Text style={styles.itemContentHeader}>{food?.name}</Text>
+                        <Text style={styles.itemContentDesc} numberOfLines={1}>
+                            {food?.making}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            )) : renderEmptyComponent()}
         </View>
     );
 
@@ -168,10 +137,21 @@ const myStyles = (theme: string) => {
             fontSize: scales(12),
             color: color.Text_Dark_1,
         },
-
         image: {
             width: scales(50),
             height: scales(50),
+        },
+        emptyImage: {
+            width: scales(200),
+            height: scales(200),
+        },
+        emptyContainer: {
+            alignItems: 'center',
+        },
+        noData: {
+            ...Fonts.inter400,
+            fontSize: scales(12),
+            color: color.Text_Dark_2,
         },
     });
 };

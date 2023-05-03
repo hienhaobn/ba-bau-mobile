@@ -1,18 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import SvgIcons from 'assets/svgs';
 
 import { useTheme } from 'hooks/useTheme';
 
-import { Fonts, Sizes } from 'themes';
+import { FoodDetailScreenRouteProps } from 'screens/foods/FoodDetailScreen';
+
+import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
-const FoodDetailInformationScene = () => {
+interface IFoodDetailInformationSceneProps {
+    route: FoodDetailScreenRouteProps;
+}
+
+const FoodDetailInformationScene = (props: IFoodDetailInformationSceneProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { route } = props;
+    const { foodCategory } = route;
+
+    const renderIconMonthly = (status: string) => {
+        if (status === 'ERR') {
+            return <SvgIcons.IcCloseRed />;
+        } else if (status === 'WARNING') {
+            return <SvgIcons.IcWarning />;
+        } else if (status === 'OK') {
+            return <SvgIcons.IcTickGreen />;
+        }
+    };
 
     const renderContent = () => (
         <ScrollView
@@ -20,34 +38,17 @@ const FoodDetailInformationScene = () => {
             contentContainerStyle={styles.contentContainer}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}>
-            <View style={styles.headerTitle}>
-                <SvgIcons.IcTickGreen />
-                <Text style={styles.month}>3 tháng đầu</Text>
-            </View>
-            <Text style={styles.desc}>
-                Thịt bò là thực phẩm cung cấp chất sắt rất lớn , giúp mẹ phòng chống thiếu máu và hỗ trợ thai nhi . Thịt
-                bò còn giúp mẹ ăn ngon miệng , tăng sức đề kháng và giúp thai nhi phát triển khoẻ mạnh . Nhưng mẹ hãy
-                luôn nhớ nên ăn vừa đủ và bổ sung các thực phẩm dinh dưỡng khác nữa nhé !{' '}
-            </Text>
-            <View style={styles.headerTitle}>
-                <SvgIcons.IcTickGreen />
-                <Text style={styles.month}>3 tháng giữa</Text>
-            </View>
-            <Text style={styles.desc}>
-                Sau khi sinh , thịt bò là thực phẩm an toàn cung cấp nguồn dinh dưỡng dồi dào giúp mẹ nhanh chóng phục
-                hồi sức khỏe . Ngoài ra , ăn thịt bò còn hỗ trợ mẹ rất nhiều trong việc kiểm soát cân nặng vì thịt bò có
-                chứa Cytocilin – chất giúp đốt cháy chất béo . Hơn nữa , một nửa chất béo trong thịt bò là chất béo đơn
-                nguyên không no ( không bão hòa ) vì vậy lượng cholesterol của mẹ sẽ được giữ ở trạng thái ổn định và an
-                toàn.
-            </Text>
-            <View style={styles.headerTitle}>
-                <SvgIcons.IcTickGreen />
-                <Text style={styles.month}>3 tháng cuối</Text>
-            </View>
-            <Text style={styles.desc}>
-                Mẹ con bú ăn thịt bò rất tốt , vừa giúp mẹ có sức mà cũng tăng cường nguồn sữa mẹ , giúp bé nhận được
-                nhiều chất dinh dưỡng có ích hơn .
-            </Text>
+            {foodCategory?.monthlyData?.map((element) => (
+                <View key={element._id}>
+                    <View style={styles.headerTitle}>
+                        {renderIconMonthly(element?.status)}
+                        <Text style={styles.month}>{element?.month}</Text>
+                    </View>
+                    <Text style={styles.desc}>
+                        {element?.description}
+                    </Text>
+                </View>
+            ))}
         </ScrollView>
     );
     return <View style={styles.container}>{renderContent()}</View>;

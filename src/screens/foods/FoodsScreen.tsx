@@ -16,7 +16,7 @@ import { useTheme } from 'hooks/useTheme';
 
 import { RootNavigatorParamList } from 'navigation/types';
 
-import { fetchFoodCategoryById } from 'states/foods/fetchFoods';
+import { fetchFoodCategoryByFoodCategoryRootId } from 'states/foods/fetchFoods';
 
 import { Fonts, Sizes } from 'themes';
 
@@ -35,7 +35,7 @@ const FoodsScreen = (props: IFoodsScreenProps) => {
     const [foodCategory, setFoodCategory] = useState<food.FoodCategory[]>([]);
 
     const getFoodCategory = async () => {
-        const response = await fetchFoodCategoryById(foodCategoryRoot?._id);
+        const response = await fetchFoodCategoryByFoodCategoryRootId(foodCategoryRoot?._id);
         setFoodCategory(response);
     };
 
@@ -76,14 +76,14 @@ const FoodsScreen = (props: IFoodsScreenProps) => {
                           key={item._id}
                           style={styles.itemContentContainer}
                           activeOpacity={0.9}
-                          onPress={() => goToFoodDetail(item._id)}>
+                          onPress={() => goToFoodDetail(item)}>
                           <View style={styles.row}>
                               <FastImage
                                   source={item?.image ? { uri: item?.image } : Images.Beef}
                                   style={styles.image}
                               />
                               <View style={styles.itemContent}>
-                                  <Text style={styles.itemContentHeader}>Thịt bò</Text>
+                                  <Text style={styles.itemContentHeader}>{item.name}</Text>
                                   <Text style={styles.itemContentDesc}>
                                       Sắt, kẽm, natri, vitamin D, vitamin B6, vitamin B12, magie
                                   </Text>
@@ -96,18 +96,6 @@ const FoodsScreen = (props: IFoodsScreenProps) => {
                                       <Text style={styles.month}>{monthly.month}</Text>
                                   </View>
                               ))}
-                              {/* <View style={styles.monthContainer}>
-                                  <SvgIcons.IcTickGreen />
-                                  <Text style={styles.month}>3 tháng đầu</Text>
-                              </View>
-                              <View style={styles.monthContainer}>
-                                  <SvgIcons.IcCloseRed />
-                                  <Text style={styles.month}>3 tháng giữa</Text>
-                              </View>
-                              <View style={styles.monthContainer}>
-                                  <SvgIcons.IcWarning />
-                                  <Text style={styles.month}>3 tháng cuối</Text>
-                              </View> */}
                           </View>
                       </TouchableOpacity>
                   ))

@@ -2,6 +2,7 @@ import { RouteProp } from '@react-navigation/native';
 import { indexOf } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { SceneMap, TabBar, TabBarItemProps, TabView } from 'react-native-tab-view';
 
 import FoodDetailDishScene from './src/components/FoodDetailDishScene';
@@ -16,15 +17,17 @@ import { useTheme } from 'hooks/useTheme';
 
 import { RootNavigatorParamList } from 'navigation/types';
 
+import { fetchFoodsOfCategory } from 'states/foods/fetchFoods';
+
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import { fetchFoodsOfCategory } from 'states/foods/fetchFoods';
 
-export interface RouteProps {
+export interface FoodDetailScreenRouteProps {
     key: string;
     title?: string;
+    foodCategory?: food.FoodCategory;
 }
 
 interface IFoodDetailScreenProps {
@@ -40,28 +43,27 @@ const FoodDetailScreen = (props: IFoodDetailScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const { route } = props;
-    const { foodId } = route.params;
+    const { foodCategory } = route.params;
     const layout = useWindowDimensions();
     const [index, setIndex] = React.useState(0);
-    const [foodDetail, setFoodDetail] = useState(null);
+    const [foodDetail, setFoodDetail] = useState<food.FoodOfCategory[]>([]);
     const [routes] = React.useState([
-        { key: 'foodDetailInformationScene', title: 'Thông tin' },
-        { key: 'foodDetailDishScene', title: 'Món ngon' },
+        { key: 'foodDetailInformationScene', title: 'Thông tin', foodCategory },
+        { key: 'foodDetailDishScene', title: 'Món ngon', foodCategory },
     ]);
 
     const getFoodDetail = async () => {
-        const response = await fetchFoodsOfCategory(foodId);
-        console.log('response', response);
-        setFoodDetail(response)
+        const response = await fetchFoodsOfCategory(foodCategory?._id);
+        setFoodDetail(response);
     };
 
     useEffect(() => {
         getFoodDetail();
     }, []);
 
-    const renderHeader = () => <Header title="Thịt bò" />;
+    const renderHeader = () => <Header title={foodCategory?.name} />;
 
-    const renderTabItem = (tabProps: TabBarItemProps<RouteProps>) => {
+    const renderTabItem = (tabProps: TabBarItemProps<FoodDetailScreenRouteProps>) => {
         const { title } = tabProps.route;
         const active = indexOf(routes, tabProps.route) === tabProps.navigationState.index;
         return (
@@ -102,30 +104,18 @@ const FoodDetailScreen = (props: IFoodDetailScreenProps) => {
 
     const renderContent = () => (
         <View style={styles.content}>
-            <Image source={Images.Beef2} style={styles.headerImg} resizeMode="contain" />
-            <Text style={styles.titleHeader}>Thịt bò</Text>
-            <Text style={styles.desc}>
-                Chất đạm, Chất béo, Sắt, Kẽm, Natri, Vitamin D, Vitamin B6, Vitamin B12, Magie
-            </Text>
+            {/* <Image source={Images.Beef2} style={styles.headerImg} resizeMode="contain" /> */}
+            <FastImage
+                source={foodCategory?.image ? { uri: foodCategory?.image } : Images.Beef}
+                style={styles.headerImg}
+                resizeMode="contain"
+            />
+            <Text style={styles.titleHeader}>{foodCategory?.name}</Text>
+            <Text style={styles.desc}>{foodDetail?.[0]?.description}</Text>
             <Text style={styles.tag}># Thuộc nhóm Thịt</Text>
 
             <View style={styles.line} />
             {renderTabview()}
-            {/* <View style={styles.itemContentContainer}>
-                <Text style={styles.contentHeader}>Nàng công chúa ống tre</Text>
-                <Text style={styles.contentDesc}>
-                    Truyện kể rằng ngày xưa có một chú bé tiều phu đần bắt gặp một cô gái xinh xắn trong một ống tre tên
-                    là Bích Hồng. Ngày ngày chú bé cố gắng để cưa đổ cây tre nhằm cưới được cô gái trong ống tre đó về
-                    làm vợ, nhưng khổ nỗi chú bé bị đần. Hết truyện! Truyện kể rằng ngày xưa có một chú bé tiều phu đần
-                    bắt gặp một cô gái xinh xắn trong một ống tre tên là Bích Hồng. Ngày ngày chú bé cố gắng để cưa đổ
-                    cây tre nhằm cưới được cô gái trong ống tre đó về làm vợ, nhưng khổ nỗi chú bé bị đần. Hết truyện!
-                    Truyện kể rằng ngày xưa có một chú bé tiều phu đần bắt gặp một cô gái xinh xắn trong một ống tre tên
-                    là Bích Hồng. Ngày ngày chú bé cố gắng để cưa đổ cây tre nhằm cưới được cô gái trong ống tre đó về
-                    làm vợ, nhưng khổ nỗi chú bé bị đần. Hết truyện! Truyện kể rằng ngày xưa có một chú bé tiều phu đần
-                    bắt gặp một cô gái xinh xắn trong một ống tre tên là Bích Hồng. Ngày ngày chú bé cố gắng để cưa đổ
-                    cây tre nhằm cưới được cô gái trong ống tre đó về làm vợ, nhưng khổ nỗi chú bé bị đần. Hết truyện!
-                </Text>
-            </View> */}
             <View />
         </View>
     );

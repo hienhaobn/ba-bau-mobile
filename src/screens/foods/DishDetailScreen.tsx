@@ -1,6 +1,8 @@
+import { RouteProp } from '@react-navigation/native';
 import { indexOf } from 'lodash';
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { SceneMap, TabBar, TabBarItemProps, TabView } from 'react-native-tab-view';
 
 import DishDetailIngredientScene from './src/components/DishDetailIngredientScene';
@@ -14,14 +16,17 @@ import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { RootNavigatorParamList } from 'navigation/types';
+
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
-export interface RouteProps {
+export interface DishDetailScreenRouteProps {
     key: string;
     title?: string;
+    foodOfCategory: food.FoodOfCategory;
 }
 
 const renderScene = SceneMap({
@@ -30,20 +35,26 @@ const renderScene = SceneMap({
     dishDetailVideoScene: DishDetailVideoScene,
 });
 
-const DishDetailScreen = () => {
+interface IDishDetailScreenProps {
+    route: RouteProp<RootNavigatorParamList, 'DishDetail'>;
+}
+
+const DishDetailScreen = (props: IDishDetailScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const layout = useWindowDimensions();
+    const { route } = props;
+    const { foodOfCategory } = route.params;
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
-        { key: 'dishDetailIngredientScene', title: 'Nguyên liệu' },
-        { key: 'dishDetailMakingScene', title: 'Cách làm' },
-        { key: 'dishDetailVideoScene', title: 'Video' },
+        { key: 'dishDetailIngredientScene', title: 'Nguyên liệu', foodOfCategory },
+        { key: 'dishDetailMakingScene', title: 'Cách làm', foodOfCategory },
+        { key: 'dishDetailVideoScene', title: 'Video', foodOfCategory },
     ]);
 
-    const renderHeader = () => <Header title="Thịt bò xào dưa chua" />;
+    const renderHeader = () => <Header title={foodOfCategory?.name} />;
 
-    const renderTabItem = (tabProps: TabBarItemProps<RouteProps>) => {
+    const renderTabItem = (tabProps: TabBarItemProps<DishDetailScreenRouteProps>) => {
         const { title } = tabProps.route;
         const active = indexOf(routes, tabProps.route) === tabProps.navigationState.index;
         return (
@@ -54,14 +65,12 @@ const DishDetailScreen = () => {
                 }}
                 onPress={() => {
                     setIndex(indexOf(routes, tabProps.route));
-                }}
-            >
+                }}>
                 <Text
                     style={[
                         styles.labelTabText,
                         active ? { color: getThemeColor().Color_Primary } : { color: getThemeColor().Text_Dark_1 },
-                    ]}
-                >
+                    ]}>
                     {title}
                 </Text>
             </TouchableOpacity>
@@ -86,8 +95,8 @@ const DishDetailScreen = () => {
 
     const renderContent = () => (
         <View style={styles.content}>
-            <Image source={Images.Beef2} style={styles.headerImg} resizeMode="contain" />
-            <Text style={styles.titleHeader}>Thịt bò xào dưa chua</Text>
+            <FastImage source={foodOfCategory?.image ? { uri: foodOfCategory?.image } : Images.Beef} style={styles.headerImg} />
+            <Text style={styles.titleHeader}>{foodOfCategory?.name}</Text>
             <Text style={styles.tag}>#duachua #thitbo</Text>
 
             <View style={styles.line} />
