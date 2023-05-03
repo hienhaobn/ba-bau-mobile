@@ -1,5 +1,6 @@
-import React from 'react';
-import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, ScrollView, ScrollViewBase, StyleSheet, Text, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
@@ -7,19 +8,26 @@ import SvgIcons from 'assets/svgs';
 import Header from 'components/Header';
 import Input from 'components/Input';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { goToFoods } from 'screens/foods/src/utils';
-
+import { fetchFoodCategoryRoot } from 'states/foods/fetchFoods';
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
 const NutritionalRegimenScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const [foodCategoryRoot, setFoodCategoryRoot] = useState<food.FoodCategoryRoot[]>([]);
+
+    const getFoodCategoryRoot = async () => {
+        const response: food.FoodCategoryRoot[] = await fetchFoodCategoryRoot();
+        setFoodCategoryRoot(response);
+    };
+
+    useEffect(() => {
+        getFoodCategoryRoot();
+    }, []);
 
     const renderHeader = () => (
         <Header
@@ -28,87 +36,50 @@ const NutritionalRegimenScreen = () => {
         />
     );
 
-    const renderInputSearch = () => <Input placeholder="Tên thực phẩm, thành phần chính" />;
+    const renderInputSearch = () => (
+        <View style={styles.searchContainer}>
+            <Input placeholder="Tên thực phẩm, thành phần chính" />
+        </View>
+    );
 
-    const renderContentFoods = () => (
+    const renderEmptyComponent = () => (
+        <View style={styles.emptyContainer}>
+            <Image source={Images.NoData} style={styles.image} resizeMode="contain" />
+            <Text style={styles.noData}>Không có dữ liệu</Text>
+        </View>
+    );
+
+    const renderContentFoods = (item: food.FoodCategoryRoot) => (
         <View style={styles.contentFoodContainer}>
-            <Text style={styles.titleContent}>Nhóm thực phẩm</Text>
-            <View style={styles.rowItems}>
-                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
-                    <View style={styles.imgContentFoodItemContainer}>
-                        <Image source={Images.Meat} style={styles.imgContentFoodItem} resizeMode="contain" />
-                    </View>
-                    <Text style={styles.itemContentFoodText}>Thịt</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
-                    <View style={styles.imgContentFoodItemContainer}>
-                        <Image source={Images.Seafood} style={styles.imgContentFoodItem} resizeMode="contain" />
-                    </View>
-                    <Text style={styles.itemContentFoodText}>Thủy hải sản</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
-                    <View style={styles.imgContentFoodItemContainer}>
-                        <Image source={Images.OrganicFood} style={styles.imgContentFoodItem} resizeMode="contain" />
-                    </View>
-                    <Text style={styles.itemContentFoodText}>Rau củ</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={[styles.rowItems, styles.rowBottom]}>
-                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
-                    <View style={styles.imgContentFoodItemContainer}>
-                        <Image source={Images.Vegetable} style={styles.imgContentFoodItem} resizeMode="contain" />
-                    </View>
-                    <Text style={styles.itemContentFoodText}>Trái cây</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
-                    <View style={styles.imgContentFoodItemContainer}>
-                        <Image source={Images.FastFoods} style={styles.imgContentFoodItem} resizeMode="contain" />
-                    </View>
-                    <Text style={styles.itemContentFoodText}>Ăn vặt</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
-                    <View style={styles.imgContentFoodItemContainer}>
-                        <Image source={Images.Drink} style={styles.imgContentFoodItem} resizeMode="contain" />
-                    </View>
-                    <Text style={styles.itemContentFoodText}>Đồ uống</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={[styles.rowItems, styles.rowBottom]}>
-                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
-                    <View style={styles.imgContentFoodItemContainer}>
-                        <Image source={Images.Vegetable} style={styles.imgContentFoodItem} resizeMode="contain" />
-                    </View>
-                    <Text style={styles.itemContentFoodText}>Thực phẩm bổ sung</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
-                    <View style={styles.imgContentFoodItemContainer}>
-                        <Image source={Images.FastFoods} style={styles.imgContentFoodItem} resizeMode="contain" />
-                    </View>
-                    <Text style={styles.itemContentFoodText}>Hạt, Ngũ cốc</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentFoodContainer} onPress={goToFoods}>
-                    <View style={styles.imgContentFoodItemContainer}>
-                        <Image source={Images.Drink} style={styles.imgContentFoodItem} resizeMode="contain" />
-                    </View>
-                    <Text style={styles.itemContentFoodText}>Thực phẩm từ sữa</Text>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.itemContentFoodContainer} onPress={() => goToFoods(item)}>
+                <View style={styles.imgContentFoodItemContainer}>
+                    <FastImage
+                        source={item?.image ? { uri: item?.image } : Images.Meat}
+                        style={styles.imgContentFoodItem}
+                    />
+                </View>
+                <Text style={styles.itemContentFoodText}>{item.name}</Text>
+            </TouchableOpacity>
         </View>
     );
 
     const renderContent = () => (
-        <ScrollView
+        <FlatList
+            data={foodCategoryRoot}
+            scrollEnabled={false}
             style={styles.wrapperContent}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.contentContainer}>
-            {renderInputSearch()}
-            {renderContentFoods()}
-        </ScrollView>
+            renderItem={(item) => renderContentFoods(item.item)}
+            ListEmptyComponent={renderEmptyComponent}
+            keyExtractor={(item) => item._id}
+            numColumns={3}
+        />
     );
 
     return (
         <View style={styles.container}>
             {renderHeader()}
+            {renderInputSearch()}
             {renderContent()}
         </View>
     );
@@ -126,10 +97,7 @@ const myStyles = (theme: string) => {
         wrapperContent: {
             flexGrow: 1,
             paddingHorizontal: scales(15),
-        },
-        contentContainer: {
-            paddingBottom: scales(30),
-            paddingTop: scales(15),
+            marginTop: scales(20),
         },
         imageItemSuitable: {
             width: scales(50),
@@ -154,7 +122,10 @@ const myStyles = (theme: string) => {
             marginVertical: scales(10),
         },
         contentFoodContainer: {
-            marginTop: scales(10),
+            marginVertical: scales(10),
+            width: Sizes.scrWidth / 3,
+            flexGrow: 3,
+            flexWrap: 'wrap',
         },
         imgContentFoodItemContainer: {
             backgroundColor: color.Color_Bg,
@@ -190,6 +161,21 @@ const myStyles = (theme: string) => {
         },
         rowBottom: {
             marginTop: scales(30),
+        },
+        searchContainer: {
+            marginHorizontal: scales(15),
+        },
+        image: {
+            width: scales(200),
+            height: scales(200),
+        },
+        emptyContainer: {
+            alignItems: 'center',
+        },
+        noData: {
+            ...Fonts.inter400,
+            fontSize: scales(12),
+            color: color.Text_Dark_2,
         },
     });
 };

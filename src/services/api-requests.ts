@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-import { EventBusName, onPushEventBus } from './event-bus';
-
 import { BASE_URL } from 'configs/api';
-
 import { GlobalVariables } from 'constants/index';
+import { resetStack } from 'navigation/utils';
+import Storages, { KeyStorage } from 'utils/storages';
 
 const TIME_OUT = 60 * 1000;
 const axiosInstance = axios.create({
@@ -28,6 +27,11 @@ axiosInstance.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+const onLogOut = () => {
+    Storages.remove(KeyStorage.Token);
+    resetStack('Login');
+};
+
 axiosInstance.interceptors.response.use(
     async (response) => {
         if (response && response.data) {
@@ -43,7 +47,7 @@ axiosInstance.interceptors.response.use(
 
             switch (error.response?.status) {
                 case 401:
-                    onPushEventBus(EventBusName.LOGOUT);
+                    onLogOut();
                     break;
                 case 500:
                     // noti.error(errorMessage.SERVER_INTERNAL_ERROR);
@@ -53,7 +57,7 @@ axiosInstance.interceptors.response.use(
                     return error.response;
 
                 case 403:
-                    onPushEventBus(EventBusName.LOGOUT);
+                    onLogOut();
                     return Promise.reject({ ...error });
 
                 case 302:

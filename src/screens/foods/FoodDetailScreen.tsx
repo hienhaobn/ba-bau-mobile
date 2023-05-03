@@ -1,6 +1,7 @@
+import { RouteProp } from '@react-navigation/native';
 import { indexOf } from 'lodash';
-import React from 'react';
-import { Image, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { SceneMap, TabBar, TabBarItemProps, TabView } from 'react-native-tab-view';
 
 import FoodDetailDishScene from './src/components/FoodDetailDishScene';
@@ -13,14 +14,21 @@ import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { RootNavigatorParamList } from 'navigation/types';
+
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import { fetchFoodsOfCategory } from 'states/foods/fetchFoods';
 
 export interface RouteProps {
     key: string;
     title?: string;
+}
+
+interface IFoodDetailScreenProps {
+    route: RouteProp<RootNavigatorParamList, 'FoodDetail'>;
 }
 
 const renderScene = SceneMap({
@@ -28,15 +36,28 @@ const renderScene = SceneMap({
     foodDetailDishScene: FoodDetailDishScene,
 });
 
-const FoodDetailScreen = () => {
+const FoodDetailScreen = (props: IFoodDetailScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { route } = props;
+    const { foodId } = route.params;
     const layout = useWindowDimensions();
     const [index, setIndex] = React.useState(0);
+    const [foodDetail, setFoodDetail] = useState(null);
     const [routes] = React.useState([
         { key: 'foodDetailInformationScene', title: 'Thông tin' },
         { key: 'foodDetailDishScene', title: 'Món ngon' },
     ]);
+
+    const getFoodDetail = async () => {
+        const response = await fetchFoodsOfCategory(foodId);
+        console.log('response', response);
+        setFoodDetail(response)
+    };
+
+    useEffect(() => {
+        getFoodDetail();
+    }, []);
 
     const renderHeader = () => <Header title="Thịt bò" />;
 

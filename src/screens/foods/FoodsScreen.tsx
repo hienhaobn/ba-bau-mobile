@@ -1,5 +1,8 @@
-import React from 'react';
+import { RouteProp } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
+import Video from 'react-native-video';
 
 import { goToFoodDetail } from './src/utils';
 
@@ -11,174 +14,104 @@ import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { RootNavigatorParamList } from 'navigation/types';
+
+import { fetchFoodCategoryById } from 'states/foods/fetchFoods';
+
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
-const FoodsScreen = () => {
+interface IFoodsScreenProps {
+    route: RouteProp<RootNavigatorParamList, 'Foods'>;
+}
+
+const FoodsScreen = (props: IFoodsScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { route } = props;
+    const { foodCategoryRoot } = route.params;
+    const [foodCategory, setFoodCategory] = useState<food.FoodCategory[]>([]);
+
+    const getFoodCategory = async () => {
+        const response = await fetchFoodCategoryById(foodCategoryRoot?._id);
+        setFoodCategory(response);
+    };
+
+    useEffect(() => {
+        getFoodCategory();
+    }, []);
 
     const renderHeader = () => <Header title="Thực phẩm" />;
 
+    const renderEmptyComponent = () => (
+        <View style={styles.emptyContainer}>
+            <Image source={Images.NoData} style={styles.emptyImage} resizeMode="contain" />
+            <Text style={styles.noData}>Không có dữ liệu</Text>
+        </View>
+    );
+
+    const renderIconMonthly = (status: string) => {
+        if (status === 'ERR') {
+            return <SvgIcons.IcCloseRed />;
+        } else if (status === 'WARNING') {
+            return <SvgIcons.IcWarning />;
+        } else if (status === 'OK') {
+            return <SvgIcons.IcTickGreen />;
+        }
+    };
+
     const renderContent = () => (
         <View>
-            <Text style={styles.desc}>
-                Là nguồn thực phẩm chứa nhiều protein, chất béo và các axit amin cần thiết giúp cung cấp nguồn năng
-                lượng dồi dào cho các hoạt động thường ngày của mẹ và đóng vai trò quan trọng trong việc hình thành và
-                phát triển của thai nhi.
-            </Text>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={goToFoodDetail}>
-                <View style={styles.row}>
-                    <Image source={Images.Beef} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Thịt bò</Text>
-                        <Text style={styles.itemContentDesc}>
-                            Sắt, kẽm, natri, vitamin D, vitamin B6, vitamin B12, magie
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.itemFooter}>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcTickGreen />
-                        <Text style={styles.month}>3 tháng đầu</Text>
-                    </View>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcCloseRed />
-                        <Text style={styles.month}>3 tháng giữa</Text>
-                    </View>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcWarning />
-                        <Text style={styles.month}>3 tháng cuối</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={goToFoodDetail}>
-                <View style={styles.row}>
-                    <Image source={Images.Beef} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Thịt bò</Text>
-                        <Text style={styles.itemContentDesc}>
-                            Sắt, kẽm, natri, vitamin D, vitamin B6, vitamin B12, magie
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.itemFooter}>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcTickGreen />
-                        <Text style={styles.month}>3 tháng đầu</Text>
-                    </View>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcCloseRed />
-                        <Text style={styles.month}>3 tháng giữa</Text>
-                    </View>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcWarning />
-                        <Text style={styles.month}>3 tháng cuối</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={goToFoodDetail}>
-                <View style={styles.row}>
-                    <Image source={Images.Beef} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Thịt bò</Text>
-                        <Text style={styles.itemContentDesc}>
-                            Sắt, kẽm, natri, vitamin D, vitamin B6, vitamin B12, magie
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.itemFooter}>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcTickGreen />
-                        <Text style={styles.month}>3 tháng đầu</Text>
-                    </View>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcCloseRed />
-                        <Text style={styles.month}>3 tháng giữa</Text>
-                    </View>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcWarning />
-                        <Text style={styles.month}>3 tháng cuối</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={goToFoodDetail}>
-                <View style={styles.row}>
-                    <Image source={Images.Beef} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Thịt bò</Text>
-                        <Text style={styles.itemContentDesc}>
-                            Sắt, kẽm, natri, vitamin D, vitamin B6, vitamin B12, magie
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.itemFooter}>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcTickGreen />
-                        <Text style={styles.month}>3 tháng đầu</Text>
-                    </View>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcCloseRed />
-                        <Text style={styles.month}>3 tháng giữa</Text>
-                    </View>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcWarning />
-                        <Text style={styles.month}>3 tháng cuối</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={goToFoodDetail}>
-                <View style={styles.row}>
-                    <Image source={Images.Beef} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Thịt bò</Text>
-                        <Text style={styles.itemContentDesc}>
-                            Sắt, kẽm, natri, vitamin D, vitamin B6, vitamin B12, magie
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.itemFooter}>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcTickGreen />
-                        <Text style={styles.month}>3 tháng đầu</Text>
-                    </View>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcCloseRed />
-                        <Text style={styles.month}>3 tháng giữa</Text>
-                    </View>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcWarning />
-                        <Text style={styles.month}>3 tháng cuối</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={goToFoodDetail}>
-                <View style={styles.row}>
-                    <Image source={Images.Beef} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Thịt bò</Text>
-                        <Text style={styles.itemContentDesc}>
-                            Sắt, kẽm, natri, vitamin D, vitamin B6, vitamin B12, magie
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.itemFooter}>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcTickGreen />
-                        <Text style={styles.month}>3 tháng đầu</Text>
-                    </View>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcCloseRed />
-                        <Text style={styles.month}>3 tháng giữa</Text>
-                    </View>
-                    <View style={styles.monthContainer}>
-                        <SvgIcons.IcWarning />
-                        <Text style={styles.month}>3 tháng cuối</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
+            {foodCategory?.length > 0 ? (
+                <Text style={styles.desc}>
+                   {foodCategoryRoot?.description}
+                </Text>
+            ) : null}
+
+            {foodCategory?.length > 0
+                ? foodCategory?.map((item) => (
+                      <TouchableOpacity
+                          key={item._id}
+                          style={styles.itemContentContainer}
+                          activeOpacity={0.9}
+                          onPress={() => goToFoodDetail(item._id)}>
+                          <View style={styles.row}>
+                              <FastImage
+                                  source={item?.image ? { uri: item?.image } : Images.Beef}
+                                  style={styles.image}
+                              />
+                              <View style={styles.itemContent}>
+                                  <Text style={styles.itemContentHeader}>Thịt bò</Text>
+                                  <Text style={styles.itemContentDesc}>
+                                      Sắt, kẽm, natri, vitamin D, vitamin B6, vitamin B12, magie
+                                  </Text>
+                              </View>
+                          </View>
+                          <View style={styles.itemFooter}>
+                              {item?.monthlyData?.map((monthly) => (
+                                  <View style={styles.monthContainer}>
+                                      {renderIconMonthly(monthly.status)}
+                                      <Text style={styles.month}>{monthly.month}</Text>
+                                  </View>
+                              ))}
+                              {/* <View style={styles.monthContainer}>
+                                  <SvgIcons.IcTickGreen />
+                                  <Text style={styles.month}>3 tháng đầu</Text>
+                              </View>
+                              <View style={styles.monthContainer}>
+                                  <SvgIcons.IcCloseRed />
+                                  <Text style={styles.month}>3 tháng giữa</Text>
+                              </View>
+                              <View style={styles.monthContainer}>
+                                  <SvgIcons.IcWarning />
+                                  <Text style={styles.month}>3 tháng cuối</Text>
+                              </View> */}
+                          </View>
+                      </TouchableOpacity>
+                  ))
+                : renderEmptyComponent()}
         </View>
     );
 
@@ -282,6 +215,18 @@ const myStyles = (theme: string) => {
             paddingTop: scales(10),
             borderTopWidth: 0.2,
             borderTopColor: color.Text_Dark_5,
+        },
+        emptyImage: {
+            width: scales(200),
+            height: scales(200),
+        },
+        emptyContainer: {
+            alignItems: 'center',
+        },
+        noData: {
+            ...Fonts.inter400,
+            fontSize: scales(12),
+            color: color.Text_Dark_2,
         },
     });
 };
