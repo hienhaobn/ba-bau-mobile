@@ -10,4 +10,4 @@ export const goToTeachFetusVideoBaby = () => navigate('TeachFetusVideoBaby');
 
 export const goToTeachFetusMomRead = () => navigate('TeachFetusMomRead');
 
-export const goToTeachFetusMomReadDetail = () => navigate('TeachFetusMomReadDetail');
+export const goToTeachFetusMomReadDetail = (story: premium.Story) => navigate('TeachFetusMomReadDetail', { story });

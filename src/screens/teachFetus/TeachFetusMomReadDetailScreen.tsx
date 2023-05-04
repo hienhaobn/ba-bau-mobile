@@ -1,42 +1,36 @@
+import { RouteProp } from '@react-navigation/native';
 import React from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import Images from 'assets/images';
-
 import Header from 'components/Header';
-
 import { useTheme } from 'hooks/useTheme';
-
+import { RootNavigatorParamList } from 'navigation/types';
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
-const TeachFetusMomReadDetailScreen = () => {
+interface ITeachFetusMomReadDetailScreenProps {
+    route: RouteProp<RootNavigatorParamList, 'TeachFetusMomReadDetail'>;
+}
+
+const TeachFetusMomReadDetailScreen = (props: ITeachFetusMomReadDetailScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { route } = props;
+    const { story } = route.params;
 
     const renderHeader = () => <Header title="Truyện kể cho con" />;
 
     const renderContent = () => (
         <View>
-            <Image source={Images.TruyenCayTre2} style={styles.headerImg} resizeMode="contain" />
+            <FastImage source={story?.image ? { uri: story?.image } : Images.TruyenCayTre} style={styles.headerImg} />
             <Text style={styles.titleHeader}>Truyện</Text>
             <Text style={styles.desc}>Những câu chuyện thú vị mẹ kể cho con mỗi ngày</Text>
             <View style={styles.itemContentContainer}>
-                <Text style={styles.contentHeader}>Nàng công chúa ống tre</Text>
-                <Text style={styles.contentDesc}>
-                    Truyện kể rằng ngày xưa có một chú bé tiều phu đần bắt gặp một cô gái xinh xắn trong một ống tre tên
-                    là Bích Hồng. Ngày ngày chú bé cố gắng để cưa đổ cây tre nhằm cưới được cô gái trong ống tre đó về
-                    làm vợ, nhưng khổ nỗi chú bé bị đần. Hết truyện! Truyện kể rằng ngày xưa có một chú bé tiều phu đần
-                    bắt gặp một cô gái xinh xắn trong một ống tre tên là Bích Hồng. Ngày ngày chú bé cố gắng để cưa đổ
-                    cây tre nhằm cưới được cô gái trong ống tre đó về làm vợ, nhưng khổ nỗi chú bé bị đần. Hết truyện!
-                    Truyện kể rằng ngày xưa có một chú bé tiều phu đần bắt gặp một cô gái xinh xắn trong một ống tre tên
-                    là Bích Hồng. Ngày ngày chú bé cố gắng để cưa đổ cây tre nhằm cưới được cô gái trong ống tre đó về
-                    làm vợ, nhưng khổ nỗi chú bé bị đần. Hết truyện! Truyện kể rằng ngày xưa có một chú bé tiều phu đần
-                    bắt gặp một cô gái xinh xắn trong một ống tre tên là Bích Hồng. Ngày ngày chú bé cố gắng để cưa đổ
-                    cây tre nhằm cưới được cô gái trong ống tre đó về làm vợ, nhưng khổ nỗi chú bé bị đần. Hết truyện!
-                </Text>
+                <Text style={styles.contentHeader}>{story?.title}</Text>
+                <Text style={styles.contentDesc}>{story?.content}</Text>
             </View>
         </View>
     );

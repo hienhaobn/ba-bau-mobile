@@ -27,7 +27,7 @@ export type RootNavigatorParamList = {
   TeachFetusMusicForMom: undefined,
   TeachFetusVideoBaby: undefined,
   TeachFetusMomRead: undefined,
-  TeachFetusMomReadDetail: undefined,
+  TeachFetusMomReadDetail: { story: premium.Story },
   Foods: { foodCategoryRoot: food.FoodCategoryRoot },
   FoodDetail: { foodCategory: food.FoodCategory },
   DishDetail: { foodOfCategory: food.FoodCategory },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { goToTeachFetusMomReadDetail } from './src/utils';
@@ -11,14 +11,27 @@ import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { fetchStories } from 'states/premium/fetchStories';
+
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import FastImage from 'react-native-fast-image';
 
 const TeachFetusMomReadScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const [stories, setStories] = useState<premium.Story[]>([]);
+
+    const getStories = async () => {
+        const response = await fetchStories();
+        setStories(response);
+    };
+
+    useEffect(() => {
+        getStories();
+    }, []);
 
     const renderHeader = () => <Header title="Truyện kể cho con" />;
 
@@ -28,76 +41,19 @@ const TeachFetusMomReadScreen = () => {
             <Text style={styles.titleHeader}>Truyện</Text>
             <Text style={styles.desc}>Những câu chuyện thú vị mẹ kể cho con mỗi ngày</Text>
             <View>
-                <TouchableOpacity
-                    style={styles.itemContentContainer}
-                    activeOpacity={0.9}
-                    onPress={goToTeachFetusMomReadDetail}>
-                    <Image source={Images.TruyenCayTre} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nàng công chúa ống tre</Text>
-                        <Text style={styles.itemContentDesc}>Truyện kể rằng ngày xưa trong một gia đình...</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.itemContentContainer}
-                    activeOpacity={0.9}
-                    onPress={goToTeachFetusMomReadDetail}>
-                    <Image source={Images.TruyenCayTre} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nàng công chúa ống tre</Text>
-                        <Text style={styles.itemContentDesc}>Truyện kể rằng ngày xưa trong một gia đình...</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.itemContentContainer}
-                    activeOpacity={0.9}
-                    onPress={goToTeachFetusMomReadDetail}>
-                    <Image source={Images.TruyenCayTre} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nàng công chúa ống tre</Text>
-                        <Text style={styles.itemContentDesc}>Truyện kể rằng ngày xưa trong một gia đình...</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.itemContentContainer}
-                    activeOpacity={0.9}
-                    onPress={goToTeachFetusMomReadDetail}>
-                    <Image source={Images.TruyenCayTre} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nàng công chúa ống tre</Text>
-                        <Text style={styles.itemContentDesc}>Truyện kể rằng ngày xưa trong một gia đình...</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.itemContentContainer}
-                    activeOpacity={0.9}
-                    onPress={goToTeachFetusMomReadDetail}>
-                    <Image source={Images.TruyenCayTre} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nàng công chúa ống tre</Text>
-                        <Text style={styles.itemContentDesc}>Truyện kể rằng ngày xưa trong một gia đình...</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.itemContentContainer}
-                    activeOpacity={0.9}
-                    onPress={goToTeachFetusMomReadDetail}>
-                    <Image source={Images.TruyenCayTre} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nàng công chúa ống tre</Text>
-                        <Text style={styles.itemContentDesc}>Truyện kể rằng ngày xưa trong một gia đình...</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.itemContentContainer}
-                    activeOpacity={0.9}
-                    onPress={goToTeachFetusMomReadDetail}>
-                    <Image source={Images.TruyenCayTre} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>Nàng công chúa ống tre</Text>
-                        <Text style={styles.itemContentDesc}>Truyện kể rằng ngày xưa trong một gia đình...</Text>
-                    </View>
-                </TouchableOpacity>
+                {stories?.map((story) => (
+                    <TouchableOpacity
+                        key={story._id}
+                        style={styles.itemContentContainer}
+                        activeOpacity={0.9}
+                        onPress={() => goToTeachFetusMomReadDetail(story)}>
+                        <FastImage source={story?.image ? { uri: story?.image } : Images.TruyenCayTre} style={styles.image} />
+                        <View style={styles.itemContent}>
+                            <Text style={styles.itemContentHeader} numberOfLines={1}>{story?.title}</Text>
+                            <Text style={styles.itemContentDesc} numberOfLines={1}>{story?.content}</Text>
+                        </View>
+                    </TouchableOpacity>
+                ))}
             </View>
         </View>
     );

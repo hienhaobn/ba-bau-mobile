@@ -1,40 +1,51 @@
-import React from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import Images from 'assets/images';
-
-import Header from 'components/Header';
-
 import { useTheme } from 'hooks/useTheme';
-
+import { fetchPhotoPremium } from 'states/premium/fetchPhoto';
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
 const TeachFetusPhotoGirlScene = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const [photos, setPhotos] = useState<premium.PhotoPremium[]>([]);
 
-    const renderContent = () => (
-        <View>
-            <Image source={Images.Babe2} style={styles.headerImg} resizeMode="contain" />
-            <Image source={Images.Babe2} style={styles.headerImg} resizeMode="contain" />
-            <Image source={Images.Babe2} style={styles.headerImg} resizeMode="contain" />
-            <Image source={Images.Babe2} style={styles.headerImg} resizeMode="contain" />
-            <Image source={Images.Babe2} style={styles.headerImg} resizeMode="contain" />
+    const getPhotoMale = async () => {
+        const response = await fetchPhotoPremium('female');
+        setPhotos(response);
+    };
+
+    useEffect(() => {
+        getPhotoMale();
+    }, []);
+
+    const renderEmptyComponent = () => (
+        <View style={styles.emptyContainer}>
+            <Image source={Images.NoData} style={styles.empImage} resizeMode="contain" />
+            <Text style={styles.noData}>Không có dữ liệu</Text>
         </View>
     );
 
     return (
         <View style={styles.container}>
-            <ScrollView
+            <FlatList
+                data={photos}
                 style={styles.wrapperContent}
                 contentContainerStyle={styles.contentContainer}
                 keyboardShouldPersistTaps="handled"
-                showsVerticalScrollIndicator={false}>
-                {renderContent()}
-            </ScrollView>
+                showsVerticalScrollIndicator={false}
+                renderItem={(item) => (
+                    <FastImage
+                        source={item?.item?.link ? { uri: item?.item?.link } : Images.Babe2}
+                        style={styles.headerImg}
+                    />
+                )}
+                ListEmptyComponent={renderEmptyComponent}
+            />
         </View>
     );
 };
@@ -72,6 +83,18 @@ const myStyles = (theme: string) => {
             fontSize: scales(12),
             color: color.Text_Dark_1,
             lineHeight: scales(25),
+        },
+        empImage: {
+            width: scales(200),
+            height: scales(200),
+        },
+        emptyContainer: {
+            alignItems: 'center',
+        },
+        noData: {
+            ...Fonts.inter400,
+            fontSize: scales(12),
+            color: color.Text_Dark_2,
         },
     });
 };
