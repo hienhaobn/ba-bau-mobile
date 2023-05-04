@@ -59,7 +59,7 @@ const FetalMovementChartHourScene = () => {
             label: '8-12h',
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(4, 8)}</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(8, 12)}</Text>
             ),
         },
         {
@@ -67,7 +67,7 @@ const FetalMovementChartHourScene = () => {
             label: '12-16h',
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(4, 8)}</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(12, 16)}</Text>
             ),
         },
         {
@@ -75,7 +75,7 @@ const FetalMovementChartHourScene = () => {
             label: '16-20h',
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(4, 8)}</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(16, 20)}</Text>
             ),
         },
         {
@@ -83,7 +83,7 @@ const FetalMovementChartHourScene = () => {
             label: '20-24h',
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(4, 8)}</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(20, 0)}</Text>
             ),
         },
     ];
