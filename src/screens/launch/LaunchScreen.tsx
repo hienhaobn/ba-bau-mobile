@@ -32,17 +32,6 @@ const LaunchScreen = (props) => {
     const dispatch = useAppDispatch();
     const { route } = props;
     const stateFromPath = route.params?.stateFromPath;
-    const refPaymentSuccess = useRef<IPaymentSuccessPopupRef>(null);
-    const refPaymentFailedPopup = useRef<IPaymentFailedPopupRef>(null);
-
-   useEffect(() => {
-    if (stateFromPath?.includes('payment-success')) {
-        refPaymentSuccess?.current?.showModal();
-    }
-    if (stateFromPath?.includes('payment-failed')) {
-        refPaymentFailedPopup?.current?.showModal();
-    }
-   }, [stateFromPath]);
 
     const initLocale = React.useCallback(() => {
         const currentLocale = 'en'; // Todo
@@ -70,7 +59,9 @@ const LaunchScreen = (props) => {
         }
 
         setTimeout(() => {
-            resetStack(screenName);
+            resetStack(screenName, {
+                stateFromPath: stateFromPath || null,
+            });
             dispatch(fetchProfile());
         }, 200);
     };
@@ -80,8 +71,6 @@ const LaunchScreen = (props) => {
             <View style={styles.img}>
                 <SvgIcons.IcLogoLaunch width={scales(365)} height={scales(365)} />
             </View>
-            <PaymentSuccessPopup ref={refPaymentSuccess} />
-            <PaymentFailedPopup ref={refPaymentFailedPopup} />
         </View>
     );
 };

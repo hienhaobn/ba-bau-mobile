@@ -62,13 +62,6 @@ const PaymentSuccessPopup = (props: IPaymentSuccessPopupProps, ref: React.Ref<IP
                 <Text style={styles.title}>Thanh toán thành công</Text>
                 <Text style={styles.text}>Bạn có thể sử dụng các chức năng Premium</Text>
                 <View style={styles.groupButton}>
-                    <Button
-                        title="Huỷ"
-                        customStyles={styles.buttonCancel}
-                        disableGradient
-                        customTextStyles={styles.buttonCancelText}
-                        onPress={hideModal}
-                    />
                     <Button title="Xác nhận" customStyles={styles.buttonConfirm} onPress={handleConfirm} />
                 </View>
             </View>
@@ -106,6 +99,7 @@ const myStyles = (theme: string) => {
             ...Fonts.inter400,
             fontSize: scales(12),
             color: color.Text_Dark_1,
+            alignSelf: 'center',
             marginTop: scales(12),
         },
         buttonCancel: {
@@ -117,7 +111,6 @@ const myStyles = (theme: string) => {
         },
         buttonConfirm: {
             flex: 1,
-            marginLeft: scales(20),
         },
     });
 };

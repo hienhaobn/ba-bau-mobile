@@ -1,4 +1,5 @@
-import React from 'react';
+import { useIsFocused } from '@react-navigation/native';
+import React, { useEffect, useMemo } from 'react';
 import { Image, ScrollView, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -6,20 +7,37 @@ import PremiumPaid from './src/components/PremiumPaid';
 import PremiumUnpaid from './src/components/PremiumUnpaid';
 
 import Images from 'assets/images';
+
 import Button from 'components/Button/Button';
+
 import { useTheme } from 'hooks/useTheme';
+
+import { getCurrentRoute } from 'navigation/utils';
+
+import { useAppDispatch } from 'states/index';
+import { fetchProfile } from 'states/user';
 import { selectUserInfo } from 'states/user/selector';
+
 import { Fonts, Sizes } from 'themes';
+
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
 const PremiumScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const dispatch = useAppDispatch();
     const userInfo = useSelector(selectUserInfo);
+    const routeName = getCurrentRoute();
+    const isFocused = useIsFocused();
 
     // call api
     const isPaid = userInfo?.balance > 0;
+    useMemo(() => {
+        if (routeName === 'Premium' && isFocused) {
+            dispatch(fetchProfile());
+        }
+    }, [isFocused]);
 
     const renderContentHeader = () => (
         <View>
@@ -29,13 +47,7 @@ const PremiumScreen = () => {
         </View>
     );
 
-    const renderContent = () => <View style={styles.content}>{!isPaid ? <PremiumPaid /> : <PremiumUnpaid />}</View>;
-
-    const renderButton = () => (
-        <View style={styles.buttonContainer}>
-            <Button title="Thanh toán ngay" />
-        </View>
-    );
+    const renderContent = () => <View style={styles.content}>{isPaid ? <PremiumPaid /> : <PremiumUnpaid />}</View>;
 
     return (
         <View style={styles.container}>
@@ -48,7 +60,6 @@ const PremiumScreen = () => {
                 {renderContentHeader()}
                 {renderContent()}
             </ScrollView>
-            {isPaid && renderButton()}
         </View>
     );
 };

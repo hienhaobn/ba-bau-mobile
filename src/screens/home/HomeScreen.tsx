@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import Images from 'assets/images';
@@ -15,17 +15,40 @@ import { goToNutritionalRegimen } from 'screens/nutritionalRegimen/src/utils';
 import { goToPregnancyDueDateCalculator } from 'screens/pregnancyDueDateCalculator/src/utils';
 import { goToPregnancyProducts } from 'screens/pregnancyProducts/src/utils';
 import { goToPregnancyWeekByWeek } from 'screens/pregnancyWeekByWeek/src/utils';
+import PaymentFailedPopup, { IPaymentFailedPopupRef } from 'screens/premium/src/components/PaymentFailedPopup';
+import PaymentSuccessPopup, { IPaymentSuccessPopupRef } from 'screens/premium/src/components/PaymentSuccessPopup';
 import { goToPrenatalCareCheckups } from 'screens/prenatalCareCheckups/src/utils';
 
+import { fetchBalance } from 'states/premium/fetchPayment';
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
 const HomeScreen = (props) => {
-    console.log('props1', props)
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { route } = props;
+    const stateFromPath = route.params?.stateFromPath;
+    const refPaymentSuccess = useRef<IPaymentSuccessPopupRef>(null);
+    const refPaymentFailedPopup = useRef<IPaymentFailedPopupRef>(null);
+
+    useEffect(() => {
+        if (stateFromPath?.includes('payment-success')) {
+            refPaymentSuccess?.current?.showModal();
+        }
+        if (stateFromPath?.includes('payment-failed')) {
+            refPaymentFailedPopup?.current?.showModal();
+        }
+    }, [stateFromPath]);
+
+    const handleFetchBalance = async () => {
+        if (stateFromPath) {
+            const stateFromPathSplit = stateFromPath?.split('?')[1].split('&');
+            const money = stateFromPathSplit[0];
+            const accountId = stateFromPathSplit[1];
+            await fetchBalance(`${money}&${accountId}`);
+        }
+    };
 
     const renderContentHeader = () => (
         <View style={styles.contentHeaderContainer}>
@@ -100,6 +123,8 @@ const HomeScreen = (props) => {
                 {renderContentItems()}
                 {renderContentBottom()}
             </ScrollView>
+            <PaymentSuccessPopup ref={refPaymentSuccess} onConfirm={handleFetchBalance} />
+            <PaymentFailedPopup ref={refPaymentFailedPopup} />
         </View>
     );
 };

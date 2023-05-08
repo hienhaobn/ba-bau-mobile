@@ -1,7 +1,6 @@
 import { hideLoading, showLoading } from 'components/Loading';
 
 import axiosInstance from 'services/api-requests';
-
 import { showCustomToast } from 'utils/toast';
 
 export const fetchPayment = async () => {
@@ -24,3 +23,18 @@ export const fetchPayment = async () => {
         console.log(error);
     }
 };
+
+export const fetchBalance = async (subUrl: string) => {
+    try {
+        showLoading();
+        const res = await axiosInstance.get(`/accounts/payment/success?${subUrl}`);
+        hideLoading();
+        return res;
+    } catch (error) {
+        hideLoading();
+        showCustomToast(error?.response?.data?.message);
+        console.log(error);
+    }
+};
+
+
