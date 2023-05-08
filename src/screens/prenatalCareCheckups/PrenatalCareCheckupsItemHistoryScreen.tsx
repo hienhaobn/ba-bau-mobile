@@ -3,21 +3,16 @@ import moment from 'moment';
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { goToAddPrenatalCareCheckupsStep1 } from './src/utils';
+
 import Images from 'assets/images';
-
+import SvgIcons from 'assets/svgs';
 import Header from 'components/Header';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { RootNavigatorParamList } from 'navigation/types';
-
 import { Fonts } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import SvgIcons from 'assets/svgs';
-import { goToAddPrenatalCareCheckupsStep1 } from './src/utils';
-import { goToFetalHealthInfo } from 'screens/fetalHealth/src/utils';
 
 interface IPrenatalCareCheckupsItemHistoryScreenProps {
     route: RouteProp<RootNavigatorParamList, 'PrenatalCareCheckupsItemHistory'>;
@@ -110,12 +105,16 @@ const PrenatalCareCheckupsItemHistoryScreen = (props: IPrenatalCareCheckupsItemH
     );
 
     const onPressRight = () => {
-        goToAddPrenatalCareCheckupsStep1('EDIT', child, momId)
+        goToAddPrenatalCareCheckupsStep1('EDIT', child, momId);
     };
 
     return (
         <View style={styles.container}>
-            <Header title={`Ngày khám ${moment(momId.createdAt).format('DD/MM/YYYY')}`} iconRight={renderIconRight()} onPressRight={onPressRight}/>
+            <Header
+                title={`Ngày khám ${moment(momId.createdAt).format('DD/MM/YYYY')}`}
+                iconRight={renderIconRight()}
+                onPressRight={onPressRight}
+            />
             <ScrollView showsVerticalScrollIndicator={false}>{renderContent()}</ScrollView>
         </View>
     );

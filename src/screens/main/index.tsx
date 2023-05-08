@@ -13,6 +13,7 @@ const Main = () => {
     const renderTabBar = (bottomTabBarProps: BottomTabBarProps) => {
         return <MyTabBar {...bottomTabBarProps} />;
     };
+
     return (
         <Tab.Navigator
             initialRouteName={'Home'}

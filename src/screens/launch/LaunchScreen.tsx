@@ -17,11 +17,14 @@ import { scales } from 'utils/scales';
 import Storages, { KeyStorage } from 'utils/storages';
 
 import 'i18n';
+import { fetchProfile } from 'states/user';
+import { useAppDispatch } from 'states';
 
 const LaunchScreen = () => {
     const { theme } = useTheme();
     const { i18n } = useTranslation();
     const styles = myStyles(theme);
+    const dispatch = useAppDispatch();
 
     const initLocale = React.useCallback(() => {
         const currentLocale = 'en'; // Todo
@@ -50,6 +53,7 @@ const LaunchScreen = () => {
 
         setTimeout(() => {
             resetStack(screenName);
+            dispatch(fetchProfile());
         }, 200);
     };
 

@@ -1,26 +1,23 @@
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
-
-import { goToFetalHealthAnalysis, goToFetalHealthInfo } from './src/utils';
+import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 
 import Images from 'assets/images';
-import SvgIcons from 'assets/svgs';
-
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
-
+import TouchableOpacity from 'components/TouchableOpacity';
 import { useTheme } from 'hooks/useTheme';
+import {
+    goToAddPrenatalCareCheckupsStep1,
+    goToPrenatalCareCheckupsItemHistory,
+} from 'screens/prenatalCareCheckups/src/utils';
 
 import { fetchBabyCheckupsHistory } from 'states/user/fetchCheckups';
 
-import { Fonts, Sizes } from 'themes';
+import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
-import { s, scales } from 'utils/scales';
-import TouchableOpacity from 'components/TouchableOpacity';
-import { goToPrenatalCareCheckupsItemHistory } from 'screens/prenatalCareCheckups/src/utils';
-import moment from 'moment';
+import { scales } from 'utils/scales';
 
 const FetalHealthScreen = () => {
     const { theme } = useTheme();
@@ -45,7 +42,11 @@ const FetalHealthScreen = () => {
     );
 
     const renderHeader = () => (
-        <Header title="Sức khỏe thai nhi" iconRight={renderHeaderRight()} onPressRight={() => goToFetalHealthInfo('CREATE')} />
+        <Header
+            title="Sức khỏe thai nhi"
+            iconRight={renderHeaderRight()}
+            onPressRight={() => goToAddPrenatalCareCheckupsStep1('CREATE')}
+        />
     );
 
     const renderEmptyComponent = () => (

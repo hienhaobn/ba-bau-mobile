@@ -1,21 +1,22 @@
 import React from 'react';
-import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-import { goToFetalHealthAnalysis, goToFetalHealthInfo } from './src/utils';
+import { goToFetalHealthAnalysis } from './src/utils';
 
 import Images from 'assets/images';
-import SvgIcons from 'assets/svgs';
 
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { goToAddPrenatalCareCheckupsStep1 } from 'screens/prenatalCareCheckups/src/utils';
+
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
-import { s, scales } from 'utils/scales';
+import { scales } from 'utils/scales';
 
 const FetalHealthChartScreen = () => {
     const { theme } = useTheme();
@@ -28,7 +29,11 @@ const FetalHealthChartScreen = () => {
     );
 
     const renderHeader = () => (
-        <Header title="Sức khỏe thai nhi" iconRight={renderHeaderRight()} onPressRight={() => goToFetalHealthInfo('CREATE')} />
+        <Header
+            title="Sức khỏe thai nhi"
+            iconRight={renderHeaderRight()}
+            onPressRight={() => goToAddPrenatalCareCheckupsStep1('CREATE')}
+        />
     );
 
     const renderEmptyComponent = () => (
@@ -138,7 +143,11 @@ const FetalHealthChartScreen = () => {
     );
 
     const renderButton = () => (
-        <Button title="Phân tích" onPress={() => goToFetalHealthAnalysis('FETAL_HEALTH')} customStyles={styles.button} />
+        <Button
+            title="Phân tích"
+            onPress={() => goToFetalHealthAnalysis('FETAL_HEALTH')}
+            customStyles={styles.button}
+        />
     );
 
     return (

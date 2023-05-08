@@ -4,17 +4,15 @@ import axios from 'axios';
 import { BASE_URL } from 'configs/api';
 import { GlobalVariables } from 'constants/index';
 import { resetStack } from 'navigation/utils';
+import axiosInstance from 'services/api-requests';
 import { setMessage } from 'states/message';
 import Storages, { KeyStorage } from 'utils/storages';
 import { showCustomToast } from 'utils/toast';
 
-const initialState = {
-    data: [],
-    isLoggedIn: false,
-    userInfo: {},
+const initialState: user.State = {
+    profile: null,
     jwt: null,
-    error: '',
-    success: false,
+    isLogin: false,
 };
 
 export const fetchLogin = createAsyncThunk('user/login', async (user: user.UserLoginRequest, thunkAPI) => {
@@ -27,6 +25,7 @@ export const fetchLogin = createAsyncThunk('user/login', async (user: user.UserL
             Storages.saveObject(KeyStorage.Token, GlobalVariables.tokenInfo);
             resetStack('Main');
             showCustomToast('Đăng nhập thành công');
+            return response?.data?.jwt;
         }
     } catch (error) {
         showCustomToast('Đăng nhập thất bại');
@@ -37,29 +36,47 @@ export const fetchLogin = createAsyncThunk('user/login', async (user: user.UserL
     }
 });
 
+export const fetchProfile = createAsyncThunk<user.Profile>('user/profile', async () => {
+    try {
+        const response = await axiosInstance.get('/accounts/profile');
+        return response;
+    } catch (error) {
+        showCustomToast('Thất bại');
+        const message =
+            (error.message && error.response.data && error.response.data.message) || error.message || error.toString();
+        showCustomToast(message);
+    }
+})
+
 export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        userLogin: (state, action) => {
-            state.data = action.payload;
-        },
         userLogout: (state) => {
             state = initialState;
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchLogin.fulfilled, (state, action) => {
-            state.isLoggedIn = true;
-            state.userInfo = action.payload;
-        });
-        builder.addCase(fetchLogin.rejected, (state, action) => {
-            state.isLoggedIn = false;
-            state.userInfo = null;
-        });
+        builder
+        .addCase(fetchLogin.fulfilled, (state, action) => {
+            state.isLogin = true;
+            state.jwt = action.payload;
+        })
+        .addCase(fetchLogin.rejected, (state, action) => {
+            state.isLogin = false;
+            state.jwt = null;
+        })
+        .addCase(fetchProfile.rejected, (state) => {
+            state.isLogin = false;
+            state.profile = null;
+        })
+        .addCase(fetchProfile.fulfilled, (state, action) => {
+            state.isLogin = true;
+            state.profile = action.payload;
+        })
     },
 });
 
-export const { userLogin, userLogout } = userSlice.actions;
+export const { userLogout } = userSlice.actions;
 
 export default userSlice.reducer;

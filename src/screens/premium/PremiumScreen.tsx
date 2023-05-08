@@ -1,26 +1,25 @@
 import React from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import PremiumPaid from './src/components/PremiumPaid';
 import PremiumUnpaid from './src/components/PremiumUnpaid';
 
 import Images from 'assets/images';
-
 import Button from 'components/Button/Button';
-
 import { useTheme } from 'hooks/useTheme';
-
+import { selectUserInfo } from 'states/user/selector';
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
 const PremiumScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const userInfo = useSelector(selectUserInfo);
 
     // call api
-    const isPaid = true;
+    const isPaid = userInfo?.balance > 0;
 
     const renderContentHeader = () => (
         <View>
@@ -49,7 +48,7 @@ const PremiumScreen = () => {
                 {renderContentHeader()}
                 {renderContent()}
             </ScrollView>
-            {!isPaid && renderButton()}
+            {isPaid && renderButton()}
         </View>
     );
 };

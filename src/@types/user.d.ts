@@ -4,11 +4,18 @@ declare namespace user {
     interface Info {
         isLogin: boolean;
         jwt: string;
-        profile: string;
+        profile: Profile;
     }
 
     interface Profile {
-        _id: sting;
+        _id: string;
+        email: string;
+        phone: string;
+        balance: number;
+        activated: string;
+        role: string;
+        createdAt: string;
+        updatedAt: string;
     }
 
     interface UserLoginRequest {
