@@ -1,10 +1,10 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useRef } from 'react';
-import { StatusBar } from 'react-native';
+import { Linking, StatusBar } from 'react-native';
 
 import { RootNavigatorParamList } from './types';
-import { getCurrentRoute, navigationRef } from './utils';
+import { getCurrentRoute, navigationRef, resetStack } from './utils';
 
 import LoadingManager from 'components/Loading/loadingManager';
 import LoadingModal, { LoadingModalRef } from 'components/Loading/LoadingModal';
@@ -19,6 +19,7 @@ import SplashScreen from 'screens/launch/LaunchScreen';
 import MainScreen from 'screens/main';
 
 import { getThemeColor } from 'utils/getThemeColor';
+import { Text } from 'react-native-svg';
 
 const Stack = createNativeStackNavigator<RootNavigatorParamList>();
 
@@ -144,9 +145,42 @@ const StackNavigator = () => {
             }}
         />
     );
+    const config = {
+        screens: {
+            Payment: 'payment-success',
+            Splash: 'payment-failed',
+        },
+      };
+
+      const linking = {
+        prefixes: ['babau://'],
+        getStateFromPath: (path, options) => {
+          if (path.includes('payment')) {
+            const timer = GlobalVariables.activeRouteKey ? 0 : 3000;
+            setTimeout(() => {
+              resetStack('Splash', {
+                stateFromPath: path,
+              });
+            }, timer);
+          }
+        },
+        config,
+        async getInitialURL() {
+          const url = await Linking.getInitialURL();
+          const path = url.replace(/babau:\/\//g, '');
+          if (path.includes('payment')) {
+            setTimeout(() => {
+                resetStack('Splash', {
+                stateFromPath: path,
+              });
+            }, 2000);
+          }
+        },
+      };
+
 
     return (
-        <NavigationContainer ref={navigationRef} onStateChange={onStateChange}>
+        <NavigationContainer ref={navigationRef} onStateChange={onStateChange} linking={linking} fallback={<Text>Loading...</Text>}>
             <StatusBar
                 backgroundColor={getThemeColor().Color_Bg}
                 barStyle={theme === EThemeColor.Light ? 'dark-content' : 'light-content'}
