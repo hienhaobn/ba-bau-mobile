@@ -72,6 +72,7 @@ declare namespace user {
         dualTopDiameter: number;
         femurLength: number;
         headPerimeter: number;
+        width: number;
         note: string;
     }
 
@@ -107,6 +108,7 @@ declare namespace user {
         momId: CheckupsScheduleMomResponse;
         createdAt: string;
         updatedAt: string;
+        width: number;
     }
 
     interface CheckupsScheduleHistoryResponse {

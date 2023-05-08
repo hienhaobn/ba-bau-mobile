@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -12,14 +12,31 @@ import Header from 'components/Header';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { fetchBabyCheckupsHistory } from 'states/user/fetchCheckups';
+
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { s, scales } from 'utils/scales';
+import TouchableOpacity from 'components/TouchableOpacity';
+import { goToPrenatalCareCheckupsItemHistory } from 'screens/prenatalCareCheckups/src/utils';
+import moment from 'moment';
 
 const FetalHealthScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const [history, setHistory] = useState<user.CheckupsScheduleHistoryResponse>(null);
+
+    const getDataHistory = async () => {
+        const response = await fetchBabyCheckupsHistory();
+        if (response) {
+            setHistory(response);
+        }
+    };
+
+    useEffect(() => {
+        getDataHistory();
+    }, []);
 
     const renderHeaderRight = () => (
         <View style={styles.rightContainer}>
@@ -28,7 +45,7 @@ const FetalHealthScreen = () => {
     );
 
     const renderHeader = () => (
-        <Header title="Sức khỏe thai nhi" iconRight={renderHeaderRight()} onPressRight={goToFetalHealthInfo} />
+        <Header title="Sức khỏe thai nhi" iconRight={renderHeaderRight()} onPressRight={() => goToFetalHealthInfo('CREATE')} />
     );
 
     const renderEmptyComponent = () => (
@@ -40,112 +57,46 @@ const FetalHealthScreen = () => {
         </View>
     );
 
+    const renderItem = (element: {
+        child: user.CheckupsScheduleChildResponse;
+        momId: user.CheckupsScheduleMomResponse;
+    }) => (
+        <TouchableOpacity
+            style={styles.itemContainer}
+            onPress={() => goToPrenatalCareCheckupsItemHistory(element.child, element.momId, 'FETAL_HEALTH')}>
+            <Text style={styles.titleItem}>Ngày khám {moment(element.child.createdAt).format('DD/MM/YYYY')}</Text>
+            <View style={styles.row}>
+                <Text style={styles.titleLeft}>
+                    Tuần thai: <Text style={styles.textBold}>{element.child.weeksOfPregnacy} tuần</Text>
+                </Text>
+                <Text style={styles.valueRight}>
+                    Chiều dài: <Text style={styles.textBold}>{element.child.femurLength} mm</Text>
+                </Text>
+            </View>
+            <View style={styles.row}>
+                <Text style={styles.valueRight}>
+                    Cân nặng của bé: <Text style={styles.textBold}>{element.child.weight} gr</Text>
+                </Text>
+            </View>
+            <View style={styles.line} />
+        </TouchableOpacity>
+    );
+
     const renderContent = () => (
-        <View style={styles.content}>
-            <View style={styles.contentHeader}>
-                <Text style={styles.leftHeader}>Cân nặng</Text>
-                <Text style={styles.midHeader}>3000 Gram</Text>
-                <View style={styles.statusContainer}>
-                    <Text style={styles.statusTxt}>Thấp</Text>
-                </View>
-            </View>
-            <View style={styles.weekContainer}>
-                <Text style={styles.txtWeek}>Tuần thai: </Text>
-                <Text style={styles.week}>39 tuần</Text>
-            </View>
-            <View>
-                <View style={styles.pointContainer}>
-                    <Text style={styles.pointTxt}>Chiều dài (CRL)</Text>
-                    <View style={styles.statusContainer}>
-                        <Text style={styles.statusTxt}>Thấp</Text>
-                    </View>
-                </View>
-                <View style={styles.progress}>
-                    <LinearGradient
-                        useAngle
-                        angle={90}
-                        start={{ x: 0, y: 1 }}
-                        colors={['#80F1A6', '#EFBA00', '#EFBA00']}
-                        style={styles.linearGradient}>
-                        <Text />
-                    </LinearGradient>
-                    <Text style={styles.dotValue}>300 mm</Text>
-                    <View style={styles.dot} />
-                </View>
-            </View>
-            <View>
-                <View style={styles.pointContainer}>
-                    <Text style={styles.pointTxt}>Đường kính lưỡng đỉnh (BPD)</Text>
-                    <View style={[styles.statusContainer, { backgroundColor: getThemeColor().Color_Green }]}>
-                        <Text style={styles.statusTxt}>Bình thường</Text>
-                    </View>
-                </View>
-                <View style={styles.progress}>
-                    <LinearGradient
-                        useAngle
-                        angle={90}
-                        start={{ x: 0, y: 1 }}
-                        colors={['#80F1A6', '#EFBA00', '#EFBA00']}
-                        style={styles.linearGradient}>
-                        <Text />
-                    </LinearGradient>
-                    <Text style={styles.dotValue}>300 mm</Text>
-                    <View style={styles.dot} />
-                </View>
-            </View>
-            <View>
-                <View style={styles.pointContainer}>
-                    <Text style={styles.pointTxt}>Chiều dài xương đùi (FL)</Text>
-                    <View style={[styles.statusContainer, { backgroundColor: getThemeColor().red }]}>
-                        <Text style={styles.statusTxt}>Cao</Text>
-                    </View>
-                </View>
-                <View style={styles.progress}>
-                    <LinearGradient
-                        useAngle
-                        angle={90}
-                        start={{ x: 0, y: 1 }}
-                        colors={['#80F1A6', '#EFBA00', '#EFBA00']}
-                        style={styles.linearGradient}>
-                        <Text />
-                    </LinearGradient>
-                    <Text style={styles.dotValue}>300 mm</Text>
-                    <View style={styles.dot} />
-                </View>
-            </View>
-
-            <View>
-                <View style={styles.pointContainer}>
-                    <Text style={styles.pointTxt}>Chu vi đầu (HC)</Text>
-                    <View style={[styles.statusContainer, { backgroundColor: getThemeColor().red }]}>
-                        <Text style={styles.statusTxt}>Cao</Text>
-                    </View>
-                </View>
-                <View style={styles.progress}>
-                    <LinearGradient
-                        useAngle
-                        angle={90}
-                        start={{ x: 0, y: 1 }}
-                        colors={['#80F1A6', '#EFBA00', '#EFBA00']}
-                        style={styles.linearGradient}>
-                        <Text />
-                    </LinearGradient>
-                    <Text style={styles.dotValue}>300 mm</Text>
-                    <View style={styles.dot} />
-                </View>
-            </View>
-        </View>
+        <FlatList
+            data={history?.data?.reverse()}
+            keyExtractor={(item) => item.momId._id.toString()}
+            renderItem={(item) => renderItem(item.item)}
+            style={styles.wrapperContent}
+            contentContainerStyle={styles.contentContainer}
+            onEndReachedThreshold={0.1}
+            showsVerticalScrollIndicator={false}
+        />
     );
-
-    const renderButton = () => (
-        <Button title="Phân tích" onPress={goToFetalHealthAnalysis} customStyles={styles.button} />
-    );
-
     return (
         <View style={styles.container}>
             {renderHeader()}
-            <ScrollView>{renderContent()}</ScrollView>
-            {renderButton()}
+            {renderContent()}
         </View>
     );
 };
@@ -238,41 +189,62 @@ const myStyles = (theme: string) => {
             fontSize: scales(14),
             color: color.white,
         },
-        contentHeader: {
+        wrapperContent: {
+            flexGrow: 1,
+            paddingHorizontal: scales(15),
+        },
+        contentContainer: {
+            paddingBottom: scales(30),
+            paddingTop: scales(15),
+        },
+        line: {
+            borderWidth: 0.5,
+            borderColor: color.Text_Dark_4,
+            marginVertical: scales(10),
+        },
+        titleHistory: {
+            ...Fonts.inter700,
+            fontSize: scales(16),
+            color: color.Text_Dark_1,
+        },
+        itemContainer: {
+            marginBottom: scales(10),
+        },
+        titleItem: {
+            ...Fonts.inter600,
+            fontSize: scales(12),
+            color: color.Text_Dark_1,
+            marginBottom: scales(5),
+        },
+        row: {
             flexDirection: 'row',
+            alignItems: 'center',
             justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: scales(15),
+            marginVertical: scales(5),
         },
-        weekContainer: {
+        titleLeft: {
+            ...Fonts.inter400,
+            fontSize: scales(12),
+            color: color.Text_Dark_1,
+        },
+        valueRight: {
+            ...Fonts.inter400,
+            fontSize: scales(12),
+            color: color.Text_Dark_1,
+        },
+        itemDate: {
             flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: scales(20),
+            marginBottom: scales(10),
+            marginTop: scales(5),
         },
-        button: {
-            marginBottom: Sizes.bottomSpace + scales(5),
-            marginHorizontal: scales(15),
+        dateText: {
+            ...Fonts.inter400,
+            fontSize: scales(12),
+            color: color.Text_Dark_1,
+            marginLeft: scales(8),
         },
-        linearGradient: {
-            borderRadius: 5,
-            height: scales(5),
-        },
-        dot: {
-            position: 'absolute',
-            bottom: 0,
-            top: -scales(2),
-            left: scales(10),
-            width: scales(10),
-            height: scales(10),
-            backgroundColor: color.red,
-            borderRadius: scales(10),
-        },
-        dotValue: {
-            position: 'absolute',
-            bottom: scales(5),
-        },
-        progress: {
-            marginTop: scales(20),
+        textBold: {
+            ...Fonts.inter600,
         },
     });
 };

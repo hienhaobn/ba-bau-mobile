@@ -77,7 +77,7 @@ const PrenatalCareCheckupsScreen = () => {
     const renderHeaderPrenatalCareHistory = () => (
         <View style={styles.headerHistoryContainer}>
             <Text style={styles.titleHistory}>Lịch sử khám thai</Text>
-            <TouchableOpacity style={styles.iconPlusContainer} onPress={goToAddPrenatalCareCheckupsStep1}>
+            <TouchableOpacity style={styles.iconPlusContainer} onPress={() => goToAddPrenatalCareCheckupsStep1('CREATE')}>
                 <Text style={styles.iconPlus}>+</Text>
             </TouchableOpacity>
         </View>
@@ -89,7 +89,7 @@ const PrenatalCareCheckupsScreen = () => {
     }) => (
         <TouchableOpacity
             style={styles.itemContainer}
-            onPress={() => goToPrenatalCareCheckupsItemHistory(element.child, element.momId)}>
+            onPress={() => goToPrenatalCareCheckupsItemHistory(element.child, element.momId, 'PRENATAL_CARE_CHECKUPS')}>
             <Text style={styles.titleItem}>Ngày khám {moment(element.momId.createdAt).format('DD/MM/YYYY')}</Text>
             <View style={styles.row}>
                 <Text style={styles.titleLeft}>

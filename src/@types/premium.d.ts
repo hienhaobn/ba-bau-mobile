@@ -23,4 +23,14 @@ declare namespace premium {
         updatedAt: string;
         _id: string;
     }
+
+    interface MusicPremium {
+        audio: string;
+        createdAt: string;
+        image: string;
+        name: string;
+        threeMonth: string;
+        updatedAt: string;
+        _id: string;
+    }
 }

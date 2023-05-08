@@ -15,6 +15,7 @@ import IcPause from './ic_pause.svg';
 import IcPencil from './ic_pencil.svg';
 import IcPeople from './ic_people.svg';
 import IcPlay from './ic_play.svg';
+import IcRemove from './ic_remove.svg';
 import IcSave from './ic_save.svg';
 import IcScan from './ic_scan.svg';
 import IcSearch from './ic_search.svg';
@@ -72,6 +73,7 @@ const SvgIcons = {
     IcTickGreen,
     IcCloseRed,
     IcCheck,
+    IcRemove,
 };
 
 export default SvgIcons;

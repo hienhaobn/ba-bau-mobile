@@ -1,5 +1,6 @@
 import Account from './account/AccountScreen';
 import FetalHealthAnalysis from './fetalHealth/FetalHealthAnalysisScreen';
+import FetalHealthChart from './fetalHealth/FetalHealthChartScreen';
 import FetalHealthInfo from './fetalHealth/FetalHealthInfoScreen';
 import FetalHealth from './fetalHealth/FetalHealthScreen';
 import FetalMovementChart from './fetalMovement/FetalMovementChartScreen';
@@ -89,4 +90,5 @@ export const Screen = {
     AddPrenatalCareCheckupsStep1,
     AddPrenatalCareCheckupsStep2,
     PrenatalCareCheckupsItemHistory,
+    FetalHealthChart,
 };

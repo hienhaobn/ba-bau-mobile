@@ -1,3 +1,5 @@
+import { RouteProp } from '@react-navigation/native';
+import moment from 'moment';
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -7,66 +9,70 @@ import Header from 'components/Header';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { RootNavigatorParamList } from 'navigation/types';
+
 import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import { RouteProp } from '@react-navigation/native';
-import { RootNavigatorParamList } from 'navigation/types';
-import moment from 'moment';
+import SvgIcons from 'assets/svgs';
+import { goToAddPrenatalCareCheckupsStep1 } from './src/utils';
+import { goToFetalHealthInfo } from 'screens/fetalHealth/src/utils';
 
 interface IPrenatalCareCheckupsItemHistoryScreenProps {
-    route: RouteProp<RootNavigatorParamList, 'PrenatalCareCheckupsItemHistory'>
+    route: RouteProp<RootNavigatorParamList, 'PrenatalCareCheckupsItemHistory'>;
 }
 
 const PrenatalCareCheckupsItemHistoryScreen = (props: IPrenatalCareCheckupsItemHistoryScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const { route } = props;
-    const { child, momId } = route.params;
+    const { child, momId, fromScreen } = route.params;
 
     const renderContent = () => (
         <View style={styles.content}>
             {/* Mom */}
-            <View style={styles.infoContainer}>
-                <View style={styles.headerContainer}>
-                    <View style={styles.imgWomanContainer}>
-                        <Image source={Images.Woman} style={styles.imgWoman} />
+            {fromScreen === 'PRENATAL_CARE_CHECKUPS' ? (
+                <View style={styles.infoContainer}>
+                    <View style={styles.headerContainer}>
+                        <View style={styles.imgWomanContainer}>
+                            <Image source={Images.Woman} style={styles.imgWoman} />
+                        </View>
+                        <Text style={styles.title}>Thông tin mẹ</Text>
                     </View>
-                    <Text style={styles.title}>Thông tin mẹ</Text>
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.titleItem}>Cân nặng</Text>
+                        <Text style={styles.valueItem}>{momId.weight} kg</Text>
+                    </View>
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.titleItem}>Huyết áp</Text>
+                        <Text style={styles.valueItem}>{momId.bloodPressure}/90 mmHg</Text>
+                    </View>
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.titleItem}>Chỉ số đường huyết</Text>
+                    </View>
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.titleItem}>+ Lúc đói</Text>
+                        <Text style={styles.valueItem}>{momId.fastingGlycemicIndex} mmHg</Text>
+                    </View>
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.titleItem}>+ Sau ăn 1h</Text>
+                        <Text style={styles.valueItem}>{momId.eating1hGlycemicIndex} mmHg</Text>
+                    </View>
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.titleItem}>+ Sau ăn 2h</Text>
+                        <Text style={styles.valueItem}>{momId.eating2hGlycemicIndex} mmHg</Text>
+                    </View>
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.titleItem}>Các bệnh lý khác</Text>
+                        <Text style={styles.valueItem}>{momId.commonDiseases}</Text>
+                    </View>
+                    <View style={styles.itemContainer}>
+                        <Text style={styles.titleItem}>Kết quả khám</Text>
+                        <Text style={styles.valueItem}>{momId.note ? momId.note : 'Bình thường'}</Text>
+                    </View>
                 </View>
-                <View style={styles.itemContainer}>
-                    <Text style={styles.titleItem}>Cân nặng</Text>
-                    <Text style={styles.valueItem}>{momId.weight} kg</Text>
-                </View>
-                <View style={styles.itemContainer}>
-                    <Text style={styles.titleItem}>Huyết áp</Text>
-                    <Text style={styles.valueItem}>{momId.bloodPressure}/90 mmHg</Text>
-                </View>
-                <View style={styles.itemContainer}>
-                    <Text style={styles.titleItem}>Chỉ số đường huyết</Text>
-                </View>
-                <View style={styles.itemContainer}>
-                    <Text style={styles.titleItem}>+ Lúc đói</Text>
-                    <Text style={styles.valueItem}>{momId.fastingGlycemicIndex} mmHg</Text>
-                </View>
-                <View style={styles.itemContainer}>
-                    <Text style={styles.titleItem}>+ Sau ăn 1h</Text>
-                    <Text style={styles.valueItem}>{momId.eating1hGlycemicIndex} mmHg</Text>
-                </View>
-                <View style={styles.itemContainer}>
-                    <Text style={styles.titleItem}>+ Sau ăn 2h</Text>
-                    <Text style={styles.valueItem}>{momId.eating2hGlycemicIndex} mmHg</Text>
-                </View>
-                <View style={styles.itemContainer}>
-                    <Text style={styles.titleItem}>Các bệnh lý khác</Text>
-                    <Text style={styles.valueItem}>{ momId.commonDiseases }</Text>
-                </View>
-                <View style={styles.itemContainer}>
-                    <Text style={styles.titleItem}>Kết quả khám</Text>
-                    <Text style={styles.valueItem}>{momId.note ? momId.note : 'Bình thường'}</Text>
-                </View>
-            </View>
+            ) : null}
             {/* baby */}
             <View style={styles.infoContainer}>
                 <View style={styles.headerContainer}>
@@ -97,9 +103,19 @@ const PrenatalCareCheckupsItemHistoryScreen = (props: IPrenatalCareCheckupsItemH
         </View>
     );
 
+    const renderIconRight = () => (
+        <View style={styles.iconRight}>
+            <SvgIcons.IcPencil width={scales(12)} height={scales(12)} color={getThemeColor().white} />
+        </View>
+    );
+
+    const onPressRight = () => {
+        goToAddPrenatalCareCheckupsStep1('EDIT', child, momId)
+    };
+
     return (
         <View style={styles.container}>
-            <Header title={`Ngày khám ${moment(momId.createdAt).format('DD/MM/YYYY')}`} />
+            <Header title={`Ngày khám ${moment(momId.createdAt).format('DD/MM/YYYY')}`} iconRight={renderIconRight()} onPressRight={onPressRight}/>
             <ScrollView showsVerticalScrollIndicator={false}>{renderContent()}</ScrollView>
         </View>
     );
@@ -171,6 +187,12 @@ const myStyles = (theme: string) => {
             shadowOffset: { width: -1, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 3,
+        },
+        iconRight: {
+            backgroundColor: color.Color_Primary,
+            paddingHorizontal: scales(5),
+            paddingVertical: scales(5),
+            borderRadius: 100,
         },
     });
 };

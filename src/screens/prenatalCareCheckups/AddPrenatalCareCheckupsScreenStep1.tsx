@@ -1,3 +1,4 @@
+import { RouteProp } from '@react-navigation/native';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -6,26 +7,53 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 import { goToAddPrenatalCareCheckupsStep2 } from './src/utils';
 
+import SvgIcons from 'assets/svgs';
+
 import Button from 'components/Button/Button';
 import CheckBox from 'components/CheckBox';
 import Header from 'components/Header';
 import Input from 'components/Input';
 import TouchableOpacity from 'components/TouchableOpacity';
+
 import { useTheme } from 'hooks/useTheme';
+
+import { RootNavigatorParamList } from 'navigation/types';
+
+import { removePrenatalCareCheckups } from 'states/user/fetchCheckups';
+
 import { Fonts, Sizes } from 'themes';
+
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
+import { pop } from 'navigation/utils';
 
-const AddPrenatalCareCheckupsScreenStep1 = () => {
+interface IAddPrenatalCareCheckupsScreenStep1Props {
+    route: RouteProp<RootNavigatorParamList, 'AddPrenatalCareCheckupsStep1'>;
+}
+
+// eslint-disable-next-line complexity
+const AddPrenatalCareCheckupsScreenStep1 = (props: IAddPrenatalCareCheckupsScreenStep1Props) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const [momWeight, setMomWeight] = useState<string>('');
-    const [weeksOfPregnancy, setWeeksOfPregnancy] = useState<string>('');
-    const [momBloodPressure, setMomBloodPressure] = useState<string>('');
-    const [momBloodPressureHungry, setMomBloodPressureHungry] = useState<string>('');
-    const [momBloodPressureAfter1Hour, setMomBloodPressureAfter1Hour] = useState<string>('');
-    const [momBloodPressureAfter2Hour, setMomBloodPressureAfter2Hour] = useState<string>('');
+    const { route } = props;
+    const { action, child, momId } = route.params;
+    const [momWeight, setMomWeight] = useState<string>(action === 'EDIT' ? `${momId?.weight || 0}` : '');
+    const [weeksOfPregnancy, setWeeksOfPregnancy] = useState<string>(
+        action === 'EDIT' ? `${momId?.weeksOfPregnacy || child?.weeksOfPregnacy || 0}` : ''
+    );
+    const [momBloodPressure, setMomBloodPressure] = useState<string>(
+        action === 'EDIT' ? `${momId?.bloodPressure || 0}` : ''
+    );
+    const [momBloodPressureHungry, setMomBloodPressureHungry] = useState<string>(
+        action === 'EDIT' ? `${momId?.fastingGlycemicIndex || 0}` : ''
+    );
+    const [momBloodPressureAfter1Hour, setMomBloodPressureAfter1Hour] = useState<string>(
+        action === 'EDIT' ? `${momId?.eating1hGlycemicIndex || 0}` : ''
+    );
+    const [momBloodPressureAfter2Hour, setMomBloodPressureAfter2Hour] = useState<string>(
+        action === 'EDIT' ? `${momId?.eating2hGlycemicIndex || 0}` : ''
+    );
     const [dateCheckups, setDateCheckups] = useState<Date>(moment().toDate());
     const [selectDateVisible, setSelectDateVisible] = useState<boolean>(false);
     const [checkBox1, setCheckBox1] = useState<boolean>(false);
@@ -46,7 +74,7 @@ const AddPrenatalCareCheckupsScreenStep1 = () => {
         setCheckBox2(false);
         setCheckBox3(false);
         setResult('');
-    }
+    };
 
     const onConfirmDate = (value: Date) => {
         setSelectDateVisible(false);
@@ -109,21 +137,26 @@ const AddPrenatalCareCheckupsScreenStep1 = () => {
             return;
         }
         // go to step 2
-        goToAddPrenatalCareCheckupsStep2(body);
+        goToAddPrenatalCareCheckupsStep2(body, action, child, momId);
         setDefaultData();
     };
 
     const renderInputMomWeight = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Cân nặng *</Text>
-            <Input value={momWeight} onChangeText={setMomWeight} placeholder="Kg" />
+            <Input value={momWeight} onChangeText={setMomWeight} placeholder="Kg" keyboardType="number-pad" />
         </View>
     );
 
     const renderInputMomBloodPressure = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Huyết áp</Text>
-            <Input value={momBloodPressure} onChangeText={setMomBloodPressure} placeholder="mmHg" />
+            <Input
+                value={momBloodPressure}
+                onChangeText={setMomBloodPressure}
+                placeholder="mmHg"
+                keyboardType="number-pad"
+            />
         </View>
     );
 
@@ -134,6 +167,7 @@ const AddPrenatalCareCheckupsScreenStep1 = () => {
                 value={weeksOfPregnancy}
                 onChangeText={setWeeksOfPregnancy}
                 placeholder="Vui lòng nhập tuần của thai nhi"
+                keyboardType="number-pad"
             />
         </View>
     );
@@ -141,21 +175,36 @@ const AddPrenatalCareCheckupsScreenStep1 = () => {
     const renderInputMomBloodPressureHungry = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Lúc đói</Text>
-            <Input value={momBloodPressureHungry} onChangeText={setMomBloodPressureHungry} placeholder="mmHg" />
+            <Input
+                value={momBloodPressureHungry}
+                onChangeText={setMomBloodPressureHungry}
+                placeholder="mmHg"
+                keyboardType="number-pad"
+            />
         </View>
     );
 
     const renderInputMomBloodPressureAfter1Hour = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Sau ăn 1h</Text>
-            <Input value={momBloodPressureAfter1Hour} onChangeText={setMomBloodPressureAfter1Hour} placeholder="mmHg" />
+            <Input
+                value={momBloodPressureAfter1Hour}
+                onChangeText={setMomBloodPressureAfter1Hour}
+                placeholder="mmHg"
+                keyboardType="number-pad"
+            />
         </View>
     );
 
     const renderInputMomBloodPressureAfter2Hour = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Sau ăn 2h</Text>
-            <Input value={momBloodPressureAfter2Hour} onChangeText={setMomBloodPressureAfter2Hour} placeholder="mmHg" />
+            <Input
+                value={momBloodPressureAfter2Hour}
+                onChangeText={setMomBloodPressureAfter2Hour}
+                placeholder="mmHg"
+                keyboardType="number-pad"
+            />
         </View>
     );
 
@@ -220,9 +269,32 @@ const AddPrenatalCareCheckupsScreenStep1 = () => {
 
     const renderButton = () => <Button title="Tiếp" customStyles={styles.button} onPress={onUpdate} />;
 
+    const renderRightIcon = () => {
+        if (action === 'EDIT') {
+            return (
+                <View style={styles.iconRight}>
+                    <SvgIcons.IcRemove width={scales(17)} height={scales(17)} color={getThemeColor().white} />
+                </View>
+            );
+        }
+        return null;
+    };
+
+    const onPressRight = () => {
+        if (action === 'EDIT') {
+            removePrenatalCareCheckups(child?._id, momId?._id);
+            pop(2);
+            return;
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <Header title="Thêm kết quả khám" />
+            <Header
+                title="Thêm kết quả khám"
+                iconRight={renderRightIcon()}
+                onPressRight={onPressRight}
+            />
             <KeyboardAwareScrollView
                 extraHeight={scales(125)}
                 keyboardShouldPersistTaps="handled"
@@ -302,6 +374,11 @@ const myStyles = (theme: string) => {
         },
         txtBold: {
             ...Fonts.inter700,
+        },
+        iconRight: {
+            backgroundColor: color.Color_Primary,
+            borderRadius: 100,
+            padding: scales(5),
         },
     });
 };

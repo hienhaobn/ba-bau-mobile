@@ -2,6 +2,6 @@ import { navigate } from 'navigation/utils';
 
 export const goToFetalHealth = () => navigate('FetalHealth');
 
-export const goToFetalHealthAnalysis = () => navigate('FetalHealthAnalysis');
+export const goToFetalHealthAnalysis = (fromScreen: 'FETAL_HEALTH_INFO' | 'FETAL_HEALTH') => navigate('FetalHealthAnalysis', { fromScreen });
 
-export const goToFetalHealthInfo = () => navigate('FetalHealthInfo');
+export const goToFetalHealthInfo = (action: 'CREATE' | 'EDIT', child?: user.CheckupsScheduleChildResponse, momId?: user.CheckupsScheduleMomResponse) => navigate('FetalHealthInfo', { action, child, momId });

@@ -106,6 +106,8 @@ const RootStack = () => {
             <Stack.Screen name="AddPrenatalCareCheckupsStep2" component={Screen.AddPrenatalCareCheckupsStep2} />
 
             <Stack.Screen name="PrenatalCareCheckupsItemHistory" component={Screen.PrenatalCareCheckupsItemHistory} />
+
+            <Stack.Screen name="FetalHealthChart" component={Screen.FetalHealthChart} />
         </Stack.Navigator>
     );
 };

@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import Sound from 'react-native-sound';
+import SoundPlayer from 'react-native-sound-player'
 
 import Images from 'assets/images';
 
+import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
+
+import { fetchMusicForMonths } from 'states/premium/fetchMusic';
 
 import { Fonts, Sizes } from 'themes';
 
@@ -16,6 +21,26 @@ import { scales } from 'utils/scales';
 const TeachFetusMusicForMomStartScene = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const [music, setMusic] = useState<premium.MusicPremium[]>([]);
+    const getMusicForFirst3Months = async () => {
+        const response = await fetchMusicForMonths('first');
+        setMusic(response);
+    };
+
+    useEffect(() => {
+        getMusicForFirst3Months();
+    }, []);
+
+    const playTrack = () => {
+        try {
+            // play the file tone.mp3
+            // or play from url
+            SoundPlayer.playUrl('https://storage.googleapis.com/babau-ca037.appspot.com/%20Ariana%20Grande,%20Justin%20Bieber%20-%20Stuck%20with%20U.mp3')
+        } catch (e) {
+            console.log(`cannot play the sound file`, e)
+        }
+      }
+
     const renderContent = () => (
         <View>
             <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
@@ -78,6 +103,7 @@ const TeachFetusMusicForMomStartScene = () => {
                 showsVerticalScrollIndicator={false}>
                 {renderContent()}
             </ScrollView>
+            <Button title="play me" onPress={playTrack} />
         </View>
     );
 };

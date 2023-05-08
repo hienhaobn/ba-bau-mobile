@@ -54,6 +54,10 @@ const Images = {
     Pregnancy: require('./pregnancy.png'),
     Consulting: require('./consulting.png'),
     Pregnant: require('./pregnant.png'),
+    FE: require('./fe.png'),
+    FE2: require('./fe2.png'),
+    FE3: require('./fe3.png'),
+    FE4: require('./fe4.png'),
 };
 
 export default Images;

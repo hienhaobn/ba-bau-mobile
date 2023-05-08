@@ -11,7 +11,7 @@ import { useTheme } from 'hooks/useTheme';
 import { RootNavigatorParamList } from 'navigation/types';
 import { pop } from 'navigation/utils';
 
-import { createBabyCheckups } from 'states/user/fetchCheckups';
+import { createBabyCheckups, updateAddPrenatalCareCheckups } from 'states/user/fetchCheckups';
 
 import { Fonts, Sizes } from 'themes';
 
@@ -23,16 +23,17 @@ interface IAddPrenatalCareCheckupsScreenStep2Props {
     route: RouteProp<RootNavigatorParamList, 'AddPrenatalCareCheckupsStep2'>;
 }
 
+// eslint-disable-next-line complexity
 const AddPrenatalCareCheckupsScreenStep2 = (props: IAddPrenatalCareCheckupsScreenStep2Props) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const { momCheckups } = props.route.params;
-    const [babyFL, setBabyFL] = useState<string>('');
-    const [babyHC, setBabyHC] = useState<string>('');
-    const [babyWeight, setBabyWeight] = useState<string>('');
-    const [babyNote, setBabyNote] = useState<string>('');
-    const [babyBPD, setBabyBPD] = useState<string>('');
-    const [babyLength, setBabyLength] = useState<string>('');
+    const { momCheckups, action, child, momId } = props.route.params;
+    const [babyFL, setBabyFL] = useState<string>(action === 'EDIT' ? `${child?.femurLength || 0}` : '');
+    const [babyHC, setBabyHC] = useState<string>(action === 'EDIT' ? `${child?.dualTopDiameter || 0}` : '');
+    const [babyWeight, setBabyWeight] = useState<string>(action === 'EDIT' ? `${child?.weight || 0}` : '');
+    const [babyNote, setBabyNote] = useState<string>(action === 'EDIT' ? child?.note : '');
+    const [babyBPD, setBabyBPD] = useState<string>(action === 'EDIT' ? `${child?.headPerimeter || 0}` : '');
+    const [babyLength, setBabyLength] = useState<string>(action === 'EDIT' ? `${child?.width || 0}` : '');
 
     const onUpdate = async () => {
         if (validate()) {
@@ -49,7 +50,7 @@ const AddPrenatalCareCheckupsScreenStep2 = (props: IAddPrenatalCareCheckupsScree
                 headPerimeter: parseFloat(babyHC),
             },
         } as user.CheckupsScheduleRequest;
-        const response = await createBabyCheckups(body);
+        const response = action === 'EDIT' ? await updateAddPrenatalCareCheckups(child._id, momId._id, body) : await createBabyCheckups(body);
         if (response) {
             pop(2);
         }
@@ -78,28 +79,28 @@ const AddPrenatalCareCheckupsScreenStep2 = (props: IAddPrenatalCareCheckupsScree
     const renderInputBabyCRL = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Chiều dài (CRL)</Text>
-            <Input value={babyLength} onChangeText={setBabyLength} placeholder="mm" />
+            <Input value={babyLength} onChangeText={setBabyLength} placeholder="mm" keyboardType="number-pad" />
         </View>
     );
 
     const renderInputBabyBPD = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Đường kính lưỡng đỉnh (BPD)</Text>
-            <Input value={babyBPD} onChangeText={setBabyBPD} placeholder="mmHg" />
+            <Input value={babyBPD} onChangeText={setBabyBPD} placeholder="mmHg" keyboardType="number-pad" />
         </View>
     );
 
     const renderInputBabyHL = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Chiều dài xương đùi (FL)</Text>
-            <Input value={babyFL} onChangeText={setBabyFL} placeholder="mmol/L" />
+            <Input value={babyFL} onChangeText={setBabyFL} placeholder="mmol/L" keyboardType="number-pad" />
         </View>
     );
 
     const renderInputBabyHC = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Chu vi đầu (HC)</Text>
-            <Input value={babyHC} onChangeText={setBabyHC} placeholder="mmol/L" />
+            <Input value={babyHC} onChangeText={setBabyHC} placeholder="mmol/L" keyboardType="number-pad" />
         </View>
     );
 
@@ -108,7 +109,7 @@ const AddPrenatalCareCheckupsScreenStep2 = (props: IAddPrenatalCareCheckupsScree
             <Text style={styles.title}>
                 Cân nặng ước tính <Text style={styles.txtBold}>*</Text>
             </Text>
-            <Input value={babyWeight} onChangeText={setBabyWeight} placeholder="mg" />
+            <Input value={babyWeight} onChangeText={setBabyWeight} placeholder="mg" keyboardType="number-pad" />
         </View>
     );
 

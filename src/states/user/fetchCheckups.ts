@@ -17,6 +17,39 @@ export const createBabyCheckups = async (body: user.CheckupsScheduleRequest) => 
     }
 };
 
+export const updateAddPrenatalCareCheckups = async (childId: string, momId: string, body: user.CheckupsScheduleRequest) => {
+    try {
+        console.log(momId, body?.momData)
+        showLoading();
+        await axiosInstance.patch(`/child-chart/${childId}`, body?.childData);
+        const resMom: { statusCode: number; message: string } = await axiosInstance.patch(`/mom-chart/${momId}`, {
+            ...body?.momData,
+        });
+        showCustomToast('Thành công');
+        hideLoading();
+        return resMom;
+    } catch (error) {
+        hideLoading();
+        showCustomToast('Thất bại');
+        console.log(error);
+    }
+};
+
+export const removePrenatalCareCheckups = async (childId: string, momId: string) => {
+    try {
+        showLoading();
+        await axiosInstance.patch(`/child-chart/${childId}`);
+        const resMom: { statusCode: number; message: string } = await axiosInstance.patch(`/mom-chart/${momId}`);
+        showCustomToast('Thành công');
+        hideLoading();
+        return resMom;
+    } catch (error) {
+        hideLoading();
+        showCustomToast('Thất bại');
+        console.log(error);
+    }
+};
+
 export const fetchBabyCheckupsHistory = async () => {
     try {
         showLoading();
@@ -29,7 +62,6 @@ export const fetchBabyCheckupsHistory = async () => {
         console.log(error);
     }
 };
-
 
 export const fetchMomCheckupsHistory = async () => {
     try {
