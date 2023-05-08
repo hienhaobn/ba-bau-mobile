@@ -29,7 +29,7 @@ const PremiumScreen = () => {
         </View>
     );
 
-    const renderContent = () => <View style={styles.content}>{isPaid ? <PremiumPaid /> : <PremiumUnpaid />}</View>;
+    const renderContent = () => <View style={styles.content}>{!isPaid ? <PremiumPaid /> : <PremiumUnpaid />}</View>;
 
     const renderButton = () => (
         <View style={styles.buttonContainer}>

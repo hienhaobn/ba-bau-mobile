@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
@@ -12,19 +12,37 @@ import { useTheme } from 'hooks/useTheme';
 import { RootNavigatorParamList } from 'navigation/types';
 import { resetStack } from 'navigation/utils';
 
+import PaymentSuccessPopup, { IPaymentSuccessPopupRef } from 'screens/premium/src/components/PaymentSuccessPopup';
+
+import { fetchProfile } from 'states/user';
+
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import Storages, { KeyStorage } from 'utils/storages';
 
 import 'i18n';
-import { fetchProfile } from 'states/user';
-import { useAppDispatch } from 'states';
 
-const LaunchScreen = () => {
+import { useAppDispatch } from 'states';
+import PaymentFailedPopup, { IPaymentFailedPopupRef } from 'screens/premium/src/components/PaymentFailedPopup';
+
+const LaunchScreen = (props) => {
     const { theme } = useTheme();
     const { i18n } = useTranslation();
     const styles = myStyles(theme);
     const dispatch = useAppDispatch();
+    const { route } = props;
+    const stateFromPath = route.params?.stateFromPath;
+    const refPaymentSuccess = useRef<IPaymentSuccessPopupRef>(null);
+    const refPaymentFailedPopup = useRef<IPaymentFailedPopupRef>(null);
+
+   useEffect(() => {
+    if (stateFromPath?.includes('payment-success')) {
+        refPaymentSuccess?.current?.showModal();
+    }
+    if (stateFromPath?.includes('payment-failed')) {
+        refPaymentFailedPopup?.current?.showModal();
+    }
+   }, [stateFromPath]);
 
     const initLocale = React.useCallback(() => {
         const currentLocale = 'en'; // Todo
@@ -62,6 +80,8 @@ const LaunchScreen = () => {
             <View style={styles.img}>
                 <SvgIcons.IcLogoLaunch width={scales(365)} height={scales(365)} />
             </View>
+            <PaymentSuccessPopup ref={refPaymentSuccess} />
+            <PaymentFailedPopup ref={refPaymentFailedPopup} />
         </View>
     );
 };

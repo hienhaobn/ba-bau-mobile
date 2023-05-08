@@ -9,7 +9,18 @@ import { Screen } from 'screens';
 
 const Tab = createBottomTabNavigator<RootNavigatorParamList>();
 
-const Main = () => {
+const Main = (props) => {
+    // const { route } = props;
+    // const { stateFromPath } = route.params;
+    // const refPaymentSuccess = useRef<IPaymentSuccessPopupRef>(null);
+    // const refPaymentFailedPopup = useRef<IPaymentFailedPopupRef>(null);
+
+    // if (stateFromPath?.includes('payment-success')) {
+    //     refPaymentSuccess?.current?.showModal();
+    // }
+    // if (stateFromPath?.includes('payment-failed')) {
+    //     refPaymentFailedPopup?.current?.showModal();
+    // }
     const renderTabBar = (bottomTabBarProps: BottomTabBarProps) => {
         return <MyTabBar {...bottomTabBarProps} />;
     };

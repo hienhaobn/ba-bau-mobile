@@ -22,7 +22,8 @@ import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
-const HomeScreen = () => {
+const HomeScreen = (props) => {
+    console.log('props1', props)
     const { theme } = useTheme();
     const styles = myStyles(theme);
 

@@ -155,6 +155,7 @@ const StackNavigator = () => {
       const linking = {
         prefixes: ['babau://'],
         getStateFromPath: (path, options) => {
+            console.log('path', path)
           if (path.includes('payment')) {
             const timer = GlobalVariables.activeRouteKey ? 0 : 3000;
             setTimeout(() => {
