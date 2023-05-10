@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
 
 import { goToAddHistoryFetus } from './src/utils';
 
@@ -21,47 +20,8 @@ import { showCustomToast } from 'utils/toast';
 const HistoryFetusScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const bottomSheetRef = useRef<boolean>();
 
     const renderHeader = () => <Header title="Nhật ký thai nhi" />;
-
-    const onImageLibraryPress = async () => {
-        try {
-            const image = await ImagePicker.openPicker({
-                cropping: true,
-                compressImageQuality: 0.5,
-                mediaType: 'photo',
-            });
-            if (image.size > 1024 * 1024 * 2.5) {
-                showCustomToast('Kích cỡ ảnh không vượt quá 2.5MB');
-                return;
-            }
-            if (image) {
-                // dispatch(userActionCreators.changeAvatar(formatImage(image)))
-            }
-        } catch (err) {
-            if (err?.message?.includes?.('not grant library permission')) {
-                showCustomToast('User did not grant library permission');
-            }
-        }
-    };
-
-    const onCameraPress = async () => {
-        try {
-            const image = await ImagePicker.openCamera({
-                cropping: true,
-                compressImageQuality: 0.5,
-                mediaType: 'photo',
-            });
-            if (image) {
-                // dispatch(userActionCreators.changeAvatar(formatImage(image)))
-            }
-        } catch (err) {
-            if (err?.message?.includes?.('not grant camera permission')) {
-                showCustomToast('User did not grant library permission');
-            }
-        }
-    };
 
     const renderContent = () => (
         <View>
@@ -252,59 +212,6 @@ const myStyles = (theme: string) => {
             color: color.Color_Primary,
             lineHeight: scales(25),
             marginLeft: scales(5),
-        },
-        blurContainer: {
-            position: 'absolute',
-            top: scales(0),
-            right: scales(0),
-            bottom: scales(0),
-            left: scales(0),
-        },
-        popupView: {
-            width: '100%',
-            backgroundColor: color.white,
-            borderTopRightRadius: scales(20),
-            borderTopLeftRadius: scales(20),
-            position: 'absolute',
-            bottom: scales(0),
-            paddingTop: scales(40),
-        },
-        chooseImg: {
-            //    color: Colors[theme].white
-            ...Fonts.inter600,
-            fontWeight: 'bold',
-            fontSize: scales(24),
-            marginLeft: scales(20),
-        },
-        chooseOption1: {
-            borderBottomWidth: scales(1),
-            borderColor: color.Text_Dark_1,
-            paddingTop: scales(30),
-            paddingBottom: scales(20),
-            paddingHorizontal: scales(20),
-        },
-        chooseOption: {
-            borderBottomWidth: scales(1),
-            borderColor: color.Text_Dark_1,
-            paddingVertical: scales(20),
-            paddingHorizontal: scales(20),
-        },
-        textOption: {
-            //    color: Colors[theme].white
-            ...Fonts.inter600,
-            fontSize: scales(14),
-        },
-        buttonClose: {
-            borderRadius: scales(50),
-            backgroundColor: color.Color_Primary,
-            marginVertical: scales(20),
-            paddingVertical: scales(15),
-            marginHorizontal: scales(20),
-        },
-        textClose: {
-            ...Fonts.inter700,
-            color: color.white,
-            textAlign: 'center',
         },
     });
 };
