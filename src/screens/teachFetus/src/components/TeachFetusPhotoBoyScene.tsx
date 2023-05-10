@@ -40,7 +40,7 @@ const TeachFetusPhotoBoyScene = () => {
                 showsVerticalScrollIndicator={false}
                 renderItem={(item) => (
                     <FastImage
-                        source={item?.item?.link ? { uri: item?.item?.link } : Images.Babe2}
+                        source={item?.item?.image ? { uri: item?.item?.image } : Images.Babe2}
                         style={styles.headerImg}
                     />
                 )}

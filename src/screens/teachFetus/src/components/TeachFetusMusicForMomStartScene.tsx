@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Sound from 'react-native-sound';
-import SoundPlayer from 'react-native-sound-player'
+import FastImage from 'react-native-fast-image';
+import SoundPlayer from 'react-native-sound-player';
 
 import Images from 'assets/images';
 
-import Button from 'components/Button/Button';
-import Header from 'components/Header';
 import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
@@ -22,6 +21,8 @@ const TeachFetusMusicForMomStartScene = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const [music, setMusic] = useState<premium.MusicPremium[]>([]);
+    const [playFromItemId, setPlayFromItemId] = useState<string>('');
+
     const getMusicForFirst3Months = async () => {
         const response = await fetchMusicForMonths('first');
         setMusic(response?.musices);
@@ -31,83 +32,48 @@ const TeachFetusMusicForMomStartScene = () => {
         getMusicForFirst3Months();
     }, []);
 
-    const playTrack = () => {
+    const playTrack = (item: premium.MusicPremium) => {
         try {
-            // play the file tone.mp3
-            // or play from url
-            SoundPlayer.playUrl('https://storage.googleapis.com/babau-ca037.appspot.com/%20Ariana%20Grande,%20Justin%20Bieber%20-%20Stuck%20with%20U.mp3')
+            SoundPlayer.playUrl(item?.audio);
+            setPlayFromItemId(item?._id);
         } catch (e) {
-            console.log(`cannot play the sound file`, e)
+            console.log(`cannot play the sound file`, e);
         }
-      }
+    };
 
-    const renderContent = () => (
-        <View>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Mom1} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>3.Vivace</Text>
-                    <Text style={styles.itemContentDesc}>3.Vivace</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.MomRead} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>3.Vivace</Text>
-                    <Text style={styles.itemContentDesc}>3.Vivace</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Babe} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>3.Vivace</Text>
-                    <Text style={styles.itemContentDesc}>3.Vivace</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Babe} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>3.Vivace</Text>
-                    <Text style={styles.itemContentDesc}>3.Vivace</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Babe} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>3.Vivace</Text>
-                    <Text style={styles.itemContentDesc}>3.Vivace</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Babe} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>3.Vivace</Text>
-                    <Text style={styles.itemContentDesc}>3.Vivace</Text>
-                </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                <Image source={Images.Babe} style={styles.image} />
-                <View style={styles.itemContent}>
-                    <Text style={styles.itemContentHeader}>3.Vivace</Text>
-                    <Text style={styles.itemContentDesc}>3.Vivace</Text>
-                </View>
-            </TouchableOpacity>
+    const renderItem = (item: premium.MusicPremium) => (
+        <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={() => playTrack(item)}>
+            <FastImage source={item?.image ? { uri: item?.image } : Images.Babe} style={styles.image} />
+            <View style={styles.itemContent}>
+                <Text style={styles.itemContentHeader}>{item?.name}</Text>
+            </View>
+        </TouchableOpacity>
+    );
+
+    const renderEmptyComponent = () => (
+        <View style={styles.emptyContainer}>
+            <Image source={Images.NoData} style={styles.imageEmpty} resizeMode='contain' />
+            <Text style={styles.noData}>Không có dữ liệu</Text>
         </View>
     );
+
     return (
         <View style={styles.container}>
-            <ScrollView
+            <FlatList
+                data={music}
+                renderItem={(item) => renderItem(item.item)}
+                keyExtractor={(item) => item._id}
+                ListEmptyComponent={renderEmptyComponent}
                 style={styles.wrapperContent}
                 contentContainerStyle={styles.contentContainer}
-                keyboardShouldPersistTaps="handled"
-                showsVerticalScrollIndicator={false}>
-                {renderContent()}
-            </ScrollView>
-            <Button title="play me" onPress={playTrack} />
+                showsVerticalScrollIndicator={false}
+            />
         </View>
     );
 };
+
 export default TeachFetusMusicForMomStartScene;
+
 const myStyles = (theme: string) => {
     const color = getThemeColor();
     return StyleSheet.create({
@@ -169,6 +135,18 @@ const myStyles = (theme: string) => {
             width: Sizes.scrWidth - scales(30),
             height: scales(188),
             marginBottom: scales(15),
+        },
+        imageEmpty: {
+            width: scales(200),
+            height: scales(200),
+        },
+        emptyContainer: {
+            alignItems: 'center',
+        },
+        noData: {
+            ...Fonts.inter400,
+            fontSize: scales(12),
+            color: color.Text_Dark_2,
         },
     });
 };

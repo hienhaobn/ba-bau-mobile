@@ -18,7 +18,7 @@ declare namespace premium {
     interface PhotoPremium {
         createdAt: string;
         gender: string;
-        link: string;
+        image: string;
         updatedAt: string;
         _id: string;
     }
