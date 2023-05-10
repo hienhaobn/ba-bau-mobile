@@ -8,12 +8,26 @@ declare namespace premium {
         updatedAt: string;
     }
 
+    interface StoryResponse {
+        current_page: number;
+        total_page: number;
+        count: number;
+        stories: Story[];
+    }
+
     interface PhotoPremium {
         createdAt: string;
         gender: string;
         link: string;
         updatedAt: string;
         _id: string;
+    }
+
+    interface PhotoPremiumResponse {
+        current_page: number;
+        total_page: number;
+        count: number;
+        images: PhotoPremium[];
     }
 
     interface VideoPremium {
@@ -32,5 +46,12 @@ declare namespace premium {
         threeMonth: string;
         updatedAt: string;
         _id: string;
+    }
+
+    interface MusicPremiumResponse {
+        current_page: number;
+        total_page: number;
+        count: number;
+        musices: MusicPremium[],
     }
 }

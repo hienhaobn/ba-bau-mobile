@@ -1,3 +1,9 @@
+import axios from 'axios';
+
+import { BASE_URL } from 'configs/api';
+
+import { GlobalVariables } from 'constants/index';
+
 import axiosInstance from 'services/api-requests';
 
 import { showCustomToast } from 'utils/toast';
@@ -14,14 +20,28 @@ export const fetchFetalHistory = async () => {
 
 export const createFetalHistory = async (body: { file: object; note: string; weeksOfPregnancy: string }) => {
     try {
-        const data = new FormData();
-        data.append('file', body.file);
-        data.append('note', body.note);
-        data.append('weeksOfPregnancy', body.weeksOfPregnancy);
-        const res: fetal.FetalHistory[] = await axiosInstance.post(`/baby-diaries`, data);
-        return res;
+        const bodyFormData = new FormData();
+        console.log('body.file', body.file)
+        bodyFormData.append('file', body.file);
+        bodyFormData.append('note', body.note);
+        bodyFormData.append('weeksOfPregnancy', body.weeksOfPregnancy);
+        const token = GlobalVariables?.tokenInfo?.accessToken
+            ? `Bearer ${GlobalVariables?.tokenInfo?.accessToken}`
+            : '';
+
+        // const response = await axios({
+        //     method: 'POST',
+        //     url: `${BASE_URL}/baby-diaries`,
+        //     data: bodyFormData,
+        //     headers: { 'Content-Type': 'multipart/form-data', 'Accept': 'application/json', 'Authorization': token },
+        // });
+        // console.log('response', response);
+        const response = await axios.post(`${BASE_URL}/baby-diaries`, bodyFormData, {
+            headers: { 'Content-Type': 'multipart/form-data', 'Authorization': token },
+        });
+        return response;
     } catch (error) {
         showCustomToast(error?.response?.data?.message);
-        console.log(error);
+        console.log('error', error?.response?.data);
     }
 };

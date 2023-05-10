@@ -7,7 +7,7 @@ import { showCustomToast } from 'utils/toast';
 export const fetchStories = async () => {
     try {
         showLoading();
-        const res: premium.Story[] = await axiosInstance.get(`/stories`);
+        const res: premium.StoryResponse = await axiosInstance.get(`/stories`);
         hideLoading();
         return res;
     } catch (error) {

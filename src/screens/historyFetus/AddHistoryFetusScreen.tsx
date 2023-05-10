@@ -25,6 +25,10 @@ import { showCustomToast } from 'utils/toast';
 import { createFetalHistory } from 'states/fetal/fetchFetalHistory';
 import { hideLoading, showLoading } from 'components/Loading';
 import { EventBusName, onPushEventBus } from 'services/event-bus';
+import { formatImage } from 'utils/image';
+import axios from 'axios';
+import { BASE_URL } from 'configs/api';
+import { GlobalVariables } from 'constants';
 
 interface ImageChoose {
     creationDate: string;
@@ -54,14 +58,14 @@ const AddHistoryFetusScreen = () => {
     const bottomSheetRef = useRef<CustomBottomSheetRefType>(null);
 
     const onCreateHistory = async () => {
-        console.log({file: imageChoose, note, weeksOfPregnancy: week})
-        // showLoading();
-        // const response = await createFetalHistory({file: imageChoose, note, weeksOfPregnancy: week})
-        // hideLoading();
-        // if (response) {
-        //     onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
-        //     goBack();
-        // }
+        console.log({file: formatImage(imageChoose), note, weeksOfPregnancy: week})
+        showLoading();
+        const response = await createFetalHistory({file: formatImage(imageChoose), note, weeksOfPregnancy: week})
+        hideLoading();
+        if (response) {
+            onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
+            // goBack();
+        }
     }
 
     const showBottomSheet = () => {
@@ -97,7 +101,6 @@ const AddHistoryFetusScreen = () => {
             if (imageCrop) {
                 setImageChoose(imageCrop);
                 dismissBottomSheet();
-                // dispatch(userActionCreators.changeAvatar(formatImage(imageCrop)))
             }
         } catch (err) {
             if (err?.message?.includes?.('not grant library permission')) {

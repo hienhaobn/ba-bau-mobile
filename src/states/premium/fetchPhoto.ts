@@ -7,7 +7,7 @@ import { showCustomToast } from 'utils/toast';
 export const fetchPhotoPremium = async (gender: 'male' | 'female') => {
     try {
         showLoading();
-        const res: premium.PhotoPremium[] = await axiosInstance.get(`/image-children`, {
+        const res: premium.PhotoPremiumResponse = await axiosInstance.get(`/image-children`, {
             params: {
                 gender,
             },

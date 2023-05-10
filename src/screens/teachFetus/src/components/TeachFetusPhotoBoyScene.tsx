@@ -16,7 +16,7 @@ const TeachFetusPhotoBoyScene = () => {
 
     const getPhotoMale = async () => {
         const response = await fetchPhotoPremium('male');
-        setPhotos(response);
+        setPhotos(response?.images);
     };
 
     useEffect(() => {

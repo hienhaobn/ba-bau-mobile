@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import { goToTeachFetusMomReadDetail } from './src/utils';
 
 import Images from 'assets/images';
-import SvgIcons from 'assets/svgs';
 
 import Header from 'components/Header';
 import TouchableOpacity from 'components/TouchableOpacity';
@@ -17,7 +17,6 @@ import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import FastImage from 'react-native-fast-image';
 
 const TeachFetusMomReadScreen = () => {
     const { theme } = useTheme();
@@ -26,7 +25,7 @@ const TeachFetusMomReadScreen = () => {
 
     const getStories = async () => {
         const response = await fetchStories();
-        setStories(response);
+        setStories(response?.stories);
     };
 
     useEffect(() => {
@@ -47,10 +46,17 @@ const TeachFetusMomReadScreen = () => {
                         style={styles.itemContentContainer}
                         activeOpacity={0.9}
                         onPress={() => goToTeachFetusMomReadDetail(story)}>
-                        <FastImage source={story?.image ? { uri: story?.image } : Images.TruyenCayTre} style={styles.image} />
+                        <FastImage
+                            source={story?.image ? { uri: story?.image } : Images.TruyenCayTre}
+                            style={styles.image}
+                        />
                         <View style={styles.itemContent}>
-                            <Text style={styles.itemContentHeader} numberOfLines={1}>{story?.title}</Text>
-                            <Text style={styles.itemContentDesc} numberOfLines={1}>{story?.content}</Text>
+                            <Text style={styles.itemContentHeader} numberOfLines={1}>
+                                {story?.title}
+                            </Text>
+                            <Text style={styles.itemContentDesc} numberOfLines={1}>
+                                {story?.content}
+                            </Text>
                         </View>
                     </TouchableOpacity>
                 ))}

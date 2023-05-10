@@ -4,7 +4,7 @@ import { showCustomToast } from 'utils/toast';
 
 export const fetchMusicForMonths = async (months: 'first' | 'middle' | 'last') => {
     try {
-        const res: premium.MusicPremium[] = await axiosInstance.get(`/music?three_month=${months}`);
+        const res: premium.MusicPremiumResponse = await axiosInstance.get(`/music?three_month=${months}`);
         return res;
     } catch (error) {
         showCustomToast(error?.response?.data?.message);

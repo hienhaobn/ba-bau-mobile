@@ -24,7 +24,7 @@ const TeachFetusMusicForMomStartScene = () => {
     const [music, setMusic] = useState<premium.MusicPremium[]>([]);
     const getMusicForFirst3Months = async () => {
         const response = await fetchMusicForMonths('first');
-        setMusic(response);
+        setMusic(response?.musices);
     };
 
     useEffect(() => {
