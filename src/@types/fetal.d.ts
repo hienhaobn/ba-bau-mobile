@@ -31,4 +31,11 @@ declare namespace fetal {
         createdAt: string;
         updatedAt: string;
     }
+
+    interface FetalHistoryResponse {
+        current_page: number,
+        total_page: number,
+        count: number,
+        babyDiaries: FetalHistory[]
+    }
 }

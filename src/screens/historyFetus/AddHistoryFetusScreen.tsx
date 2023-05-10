@@ -58,13 +58,12 @@ const AddHistoryFetusScreen = () => {
     const bottomSheetRef = useRef<CustomBottomSheetRefType>(null);
 
     const onCreateHistory = async () => {
-        console.log({file: formatImage(imageChoose), note, weeksOfPregnancy: week})
         showLoading();
         const response = await createFetalHistory({file: formatImage(imageChoose), note, weeksOfPregnancy: week})
         hideLoading();
         if (response) {
             onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
-            // goBack();
+            goBack();
         }
     }
 

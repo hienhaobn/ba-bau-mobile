@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { Subscription } from 'rxjs';
+import EventBus, { BaseEvent, EventBusName } from 'services/event-bus';
 
 import { goToAddHistoryFetus } from './src/utils';
 
@@ -25,108 +27,37 @@ const HistoryFetusScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const [history, setHistory] = useState<fetal.FetalHistory[]>([]);
+    const subScription = new Subscription();
+
+    useEffect(() => {
+        onRegisterEventBus();
+        return () => {
+            subScription?.unsubscribe?.();
+        };
+    }, []);
+
+    const onRegisterEventBus = () => {
+        subScription.add(EventBus.getInstance().events.subscribe(
+            (res: BaseEvent<string>) => {
+                if (res?.type === EventBusName.CREATE_FETAL_HISTORY_SUCCESS) {
+                    getHistory();
+                }
+            })
+        );
+    };
 
     const getHistory = async () => {
         showLoading();
         const response = await fetchFetalHistory();
         hideLoading();
-        setHistory(response);
+        setHistory(response?.babyDiaries);
     };
 
     useEffect(() => {
         getHistory();
     }, []);
 
-    useEffect(() => {
-        console.log('history', history);
-    }, [history]);
-
     const renderHeader = () => <Header title="Nhật ký thai nhi" />;
-
-    const renderContent = () => (
-        <View>
-            <Text style={styles.desc}>Hãy lưu lại những khoảnh khắc đẹp với bé yêu nào mẹ bầu !</Text>
-            <View>
-                <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                    <Image source={Images.Babe3} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <View style={styles.itemHeader}>
-                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
-                            <Text style={styles.week}>Tuần 39</Text>
-                        </View>
-                        <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
-                        <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                    <Image source={Images.Babe3} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <View style={styles.itemHeader}>
-                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
-                            <Text style={styles.week}>Tuần 39</Text>
-                        </View>
-                        <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
-                        <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                    <Image source={Images.Babe3} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <View style={styles.itemHeader}>
-                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
-                            <Text style={styles.week}>Tuần 39</Text>
-                        </View>
-                        <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
-                        <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                    <Image source={Images.Babe3} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <View style={styles.itemHeader}>
-                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
-                            <Text style={styles.week}>Tuần 39</Text>
-                        </View>
-                        <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
-                        <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                    <Image source={Images.Babe3} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <View style={styles.itemHeader}>
-                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
-                            <Text style={styles.week}>Tuần 39</Text>
-                        </View>
-                        <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
-                        <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                    <Image source={Images.Babe3} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <View style={styles.itemHeader}>
-                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
-                            <Text style={styles.week}>Tuần 39</Text>
-                        </View>
-                        <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
-                        <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
-                    <Image source={Images.Babe3} style={styles.image} />
-                    <View style={styles.itemContent}>
-                        <View style={styles.itemHeader}>
-                            <Text style={styles.itemContentHeader}>Nhật ký thai nhi</Text>
-                            <Text style={styles.week}>Tuần 39</Text>
-                        </View>
-                        <Text style={styles.itemContentDesc}>Bé yêu của mẹ nè.</Text>
-                        <Text style={styles.itemContentDesc}>Ngày chụp: 12/11/2021</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-        </View>
-    );
 
     const renderEmptyComponent = () => (
         <View style={styles.emptyContainer}>

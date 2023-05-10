@@ -167,7 +167,7 @@ const StackNavigator = () => {
         config,
         async getInitialURL() {
           const url = await Linking.getInitialURL();
-          const path = url.replace(/babau:\/\//g, '');
+          const path = url?.replace(/babau:\/\//g, '');
           if (path.includes('payment')) {
             setTimeout(() => {
                 resetStack('Splash', {

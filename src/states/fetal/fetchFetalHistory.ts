@@ -10,7 +10,7 @@ import { showCustomToast } from 'utils/toast';
 
 export const fetchFetalHistory = async () => {
     try {
-        const res: fetal.FetalHistory[] = await axiosInstance.get(`/baby-diaries`);
+        const res: fetal.FetalHistoryResponse = await axiosInstance.get(`/baby-diaries`);
         return res;
     } catch (error) {
         showCustomToast(error?.response?.data?.message);
@@ -22,7 +22,7 @@ export const createFetalHistory = async (body: { file: object; note: string; wee
     try {
         const bodyFormData = new FormData();
         console.log('body.file', body.file)
-        bodyFormData.append('file', body.file);
+        bodyFormData.append('image', body.file);
         bodyFormData.append('note', body.note);
         bodyFormData.append('weeksOfPregnancy', body.weeksOfPregnancy);
         const token = GlobalVariables?.tokenInfo?.accessToken
@@ -39,6 +39,8 @@ export const createFetalHistory = async (body: { file: object; note: string; wee
         const response = await axios.post(`${BASE_URL}/baby-diaries`, bodyFormData, {
             headers: { 'Content-Type': 'multipart/form-data', 'Authorization': token },
         });
+
+        console.log('response', response);
         return response;
     } catch (error) {
         showCustomToast(error?.response?.data?.message);
