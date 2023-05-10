@@ -38,6 +38,13 @@ declare namespace premium {
         _id: string;
     }
 
+    interface VideoPremiumResponse {
+        count: number;
+        current_page: number;
+        total_page: number;
+        videos: VideoPremium[];
+    }
+
     interface MusicPremium {
         audio: string;
         createdAt: string;

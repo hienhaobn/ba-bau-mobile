@@ -7,7 +7,7 @@ import { showCustomToast } from 'utils/toast';
 export const fetchVideos = async () => {
     try {
         showLoading();
-        const res: premium.VideoPremium[] = await axiosInstance.get(`/videos`);
+        const res: premium.VideoPremiumResponse = await axiosInstance.get(`/videos`);
         hideLoading();
         return res;
     } catch (error) {

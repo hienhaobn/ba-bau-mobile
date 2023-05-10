@@ -22,7 +22,7 @@ const TeachFetusVideoBabyScreen = () => {
 
     const getVideos = async () => {
         const response = await fetchVideos();
-        setVideos(response);
+        setVideos(response?.videos);
     };
 
     useEffect(() => {
