@@ -22,6 +22,9 @@ import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
+import { createFetalHistory } from 'states/fetal/fetchFetalHistory';
+import { hideLoading, showLoading } from 'components/Loading';
+import { EventBusName, onPushEventBus } from 'services/event-bus';
 
 interface ImageChoose {
     creationDate: string;
@@ -47,8 +50,19 @@ const AddHistoryFetusScreen = () => {
     const [date, setDate] = useState<Date>(moment().toDate());
     const [week, setWeek] = useState<string>('');
     const [note, setNote] = useState<string>('');
-    const [imageChoose, setImageChoose] = useState<Image>(null);
+    const [imageChoose, setImageChoose] = useState<ImageChoose>(null);
     const bottomSheetRef = useRef<CustomBottomSheetRefType>(null);
+
+    const onCreateHistory = async () => {
+        console.log({file: imageChoose, note, weeksOfPregnancy: week})
+        // showLoading();
+        // const response = await createFetalHistory({file: imageChoose, note, weeksOfPregnancy: week})
+        // hideLoading();
+        // if (response) {
+        //     onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
+        //     goBack();
+        // }
+    }
 
     const showBottomSheet = () => {
         if (bottomSheetRef) {
@@ -157,8 +171,6 @@ const AddHistoryFetusScreen = () => {
         setSelectDateVisible(false);
     };
 
-    console.log(imageChoose?.path)
-
     const renderContent = () => (
         <View style={styles.content}>
             <View style={styles.contentHeaderContainer}>
@@ -217,7 +229,7 @@ const AddHistoryFetusScreen = () => {
 
     const renderButton = () => (
         <View style={styles.buttonContainer}>
-            <Button title="Lưu" onPress={goBack} />
+            <Button title="Lưu" onPress={onCreateHistory} />
         </View>
     );
 

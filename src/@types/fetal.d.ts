@@ -22,4 +22,13 @@ declare namespace fetal {
         isLoading: boolean;
     }
 
+    interface FetalHistory {
+        _id: string;
+        image: string;
+        note: string;
+        weeksOfPregnancy: string;
+        idAccount: string;
+        createdAt: string;
+        updatedAt: string;
+    }
 }

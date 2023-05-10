@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import { goToAddHistoryFetus } from './src/utils';
 
@@ -7,19 +8,38 @@ import Images from 'assets/images';
 
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
+import { hideLoading, showLoading } from 'components/Loading';
 import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
+
+import { fetchFetalHistory } from 'states/fetal/fetchFetalHistory';
 
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import { showCustomToast } from 'utils/toast';
+import moment from 'moment';
 
 const HistoryFetusScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const [history, setHistory] = useState<fetal.FetalHistory[]>([]);
+
+    const getHistory = async () => {
+        showLoading();
+        const response = await fetchFetalHistory();
+        hideLoading();
+        setHistory(response);
+    };
+
+    useEffect(() => {
+        getHistory();
+    }, []);
+
+    useEffect(() => {
+        console.log('history', history);
+    }, [history]);
 
     const renderHeader = () => <Header title="Nhật ký thai nhi" />;
 
@@ -108,6 +128,28 @@ const HistoryFetusScreen = () => {
         </View>
     );
 
+    const renderEmptyComponent = () => (
+        <View style={styles.emptyContainer}>
+            <Image source={Images.NoData} style={styles.imageEmpty} resizeMode="contain" />
+            <Text style={styles.noData}>Không có dữ liệu</Text>
+        </View>
+    );
+
+    const renderItem = (item: fetal.FetalHistory) => {
+        return (
+            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
+                <FastImage source={item?.image ? { uri: item?.image } : Images.Babe3} style={styles.image} />
+                <View style={styles.itemContent}>
+                    <View style={styles.itemHeader}>
+                        <Text style={styles.week}>Tuần {item?.weeksOfPregnancy}</Text>
+                    </View>
+                    <Text style={styles.itemContentDesc}>{item?.note}</Text>
+                    <Text style={styles.itemContentDesc}>Ngày chụp: {moment(item?.createdAt).format('DD/MM/YYYY')}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
     const renderButton = () => (
         <Button title="Thêm nhật ký" customStyles={styles.button} onPress={goToAddHistoryFetus} />
     );
@@ -116,13 +158,15 @@ const HistoryFetusScreen = () => {
         <>
             <View style={styles.container}>
                 {renderHeader()}
-                <ScrollView
+                <Text style={styles.desc}>Hãy lưu lại những khoảnh khắc đẹp với bé yêu nào mẹ bầu !</Text>
+                <FlatList
+                    renderItem={(item) => renderItem(item.item)}
+                    data={history}
+                    keyExtractor={(item) => item._id}
+                    ListEmptyComponent={renderEmptyComponent()}
                     style={styles.wrapperContent}
                     contentContainerStyle={styles.contentContainer}
-                    keyboardShouldPersistTaps="handled"
-                    showsVerticalScrollIndicator={false}>
-                    {renderContent()}
-                </ScrollView>
+                />
                 {renderButton()}
             </View>
         </>
@@ -151,6 +195,7 @@ const myStyles = (theme: string) => {
             color: color.Text_Dark_1,
             lineHeight: scales(25),
             marginBottom: scales(15),
+            marginHorizontal: scales(15),
         },
         image: {
             width: scales(50),
@@ -211,7 +256,18 @@ const myStyles = (theme: string) => {
             fontSize: scales(14),
             color: color.Color_Primary,
             lineHeight: scales(25),
-            marginLeft: scales(5),
+        },
+        imageEmpty: {
+            width: scales(200),
+            height: scales(200),
+        },
+        emptyContainer: {
+            alignItems: 'center',
+        },
+        noData: {
+            ...Fonts.inter400,
+            fontSize: scales(12),
+            color: color.Text_Dark_2,
         },
     });
 };
