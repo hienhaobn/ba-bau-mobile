@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { RouteProp } from '@react-navigation/native';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -39,6 +40,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
 
     const getData = async () => {
         const res = await fetchMomCheckupsHistory();
+        console.log(res)
         if (res) {
             setData(res);
         }
@@ -110,8 +112,8 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
 
     const barData = [
         {
-            value: getValueChart(first.getDate()),
-            label: `${first.getDate()}/${first.getMonth() + 1}`,
+            value: getValueChart(first.getDate()) || 0,
+            label: `${first.getDate()}/${first.getMonth() + 1 || '0'}`  || '0',
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -120,8 +122,8 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
             ),
         },
         {
-            value: getValueChart(second.getDate()),
-            label: `${second.getDate()}/${second.getMonth() + 1}`,
+            value: getValueChart(second.getDate()) || 0,
+            label: `${second.getDate()}/${second.getMonth() + 1 || '0'}` || '0',
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -130,8 +132,8 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
             ),
         },
         {
-            value: getValueChart(third.getDate()),
-            label: `${third.getDate()}/${third.getMonth() + 1}`,
+            value: getValueChart(third.getDate()) || 0,
+            label: `${third.getDate()}/${third.getMonth() + 1 || '0'}` || '0',
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -140,8 +142,8 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
             ),
         },
         {
-            value: getValueChart(fourth.getDate()),
-            label: `${fourth.getDate()}/${fourth.getMonth() + 1}`,
+            value: getValueChart(fourth.getDate()) || 0,
+            label: `${fourth.getDate()}/${fourth.getMonth() + 1 || '0'}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -150,8 +152,8 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
             ),
         },
         {
-            value: getValueChart(fifth.getDate()),
-            label: `${fifth.getDate()}/${fifth.getMonth() + 1}`,
+            value: getValueChart(fifth.getDate()) || 0,
+            label: `${fifth.getDate()}/${fifth.getMonth() + 1 || '0'}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -160,8 +162,8 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
             ),
         },
         {
-            value: getValueChart(sixth.getDate()),
-            label: `${sixth.getDate()}/${sixth.getMonth() + 1}`,
+            value: getValueChart(sixth.getDate()) || 0,
+            label: `${sixth.getDate()}/${sixth.getMonth() + 1 || '0'}` ,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>

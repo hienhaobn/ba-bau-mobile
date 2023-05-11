@@ -52,9 +52,9 @@ export const removePrenatalCareCheckups = async (childId: string, momId: string)
 
 export const fetchBabyCheckupsHistory = async () => {
     try {
-        showLoading();
+        // showLoading();
         const res: user.CheckupsScheduleHistoryResponse = await axiosInstance.get('/child-chart/result-schedule');
-        hideLoading();
+        // hideLoading();
         return res;
     } catch (error) {
         hideLoading();
@@ -65,9 +65,9 @@ export const fetchBabyCheckupsHistory = async () => {
 
 export const fetchMomCheckupsHistory = async () => {
     try {
-        showLoading();
+        // showLoading();
         const res: user.MomCheckupsResponse[] = await axiosInstance.get('/mom-chart');
-        hideLoading();
+        // hideLoading();
         return res;
     } catch (error) {
         hideLoading();
