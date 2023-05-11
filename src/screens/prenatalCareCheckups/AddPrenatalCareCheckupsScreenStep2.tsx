@@ -18,6 +18,7 @@ import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
+import { EventBusName, onPushEventBus } from 'services/event-bus';
 
 interface IAddPrenatalCareCheckupsScreenStep2Props {
     route: RouteProp<RootNavigatorParamList, 'AddPrenatalCareCheckupsStep2'>;
@@ -52,6 +53,7 @@ const AddPrenatalCareCheckupsScreenStep2 = (props: IAddPrenatalCareCheckupsScree
         } as user.CheckupsScheduleRequest;
         const response = action === 'EDIT' ? await updateAddPrenatalCareCheckups(child._id, momId._id, body) : await createBabyCheckups(body);
         if (response) {
+            onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
             pop(2);
         }
     };

@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { Subscription } from 'rxjs';
 
 import PrenatalCareCheckupsConfirmPremium, {
     IPrenatalCareCheckupsConfirmPremiumRef,
@@ -19,6 +20,8 @@ import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
 
+import EventBus, { BaseEvent, EventBusName } from 'services/event-bus';
+
 import { fetchBabyCheckupsHistory } from 'states/user/fetchCheckups';
 
 import { Fonts, Sizes } from 'themes';
@@ -31,6 +34,7 @@ const PrenatalCareCheckupsScreen = () => {
     const styles = myStyles(theme);
     const refPrenatalCareCheckupsConfirmPremium = useRef<IPrenatalCareCheckupsConfirmPremiumRef>(null);
     const [history, setHistory] = useState<user.CheckupsScheduleHistoryResponse>(null);
+    const subScription = new Subscription();
 
     const getDataHistory = async () => {
         const response = await fetchBabyCheckupsHistory();
@@ -42,6 +46,25 @@ const PrenatalCareCheckupsScreen = () => {
     useEffect(() => {
         getDataHistory();
     }, []);
+
+    useEffect(() => {
+        onRegisterEventBus();
+        return () => {
+            subScription?.unsubscribe?.();
+        };
+    }, []);
+
+    const onRegisterEventBus = () => {
+        subScription.add(
+            EventBus.getInstance().events.subscribe((res: BaseEvent<string>) => {
+                if (res?.type === EventBusName.REMOVE_FETAL_HISTORY_SUCCESS) {
+                    getDataHistory();
+                } else if (res?.type === EventBusName.CREATE_FETAL_HISTORY_SUCCESS) {
+                    getDataHistory();
+                }
+            })
+        );
+    };
 
     const onOpenConfirm = () => {
         refPrenatalCareCheckupsConfirmPremium.current.showModal();
@@ -57,9 +80,7 @@ const PrenatalCareCheckupsScreen = () => {
                 </View>
                 <Text style={styles.itemText}>Lịch khám định kỳ</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.itemHeaderContainer}
-                onPress={goToPrenatalCareCheckupsChartMom}>
+            <TouchableOpacity style={styles.itemHeaderContainer} onPress={goToPrenatalCareCheckupsChartMom}>
                 <View style={styles.imageContainer}>
                     <Image source={Images.PieChart} style={styles.imgItem} />
                 </View>
@@ -77,7 +98,9 @@ const PrenatalCareCheckupsScreen = () => {
     const renderHeaderPrenatalCareHistory = () => (
         <View style={styles.headerHistoryContainer}>
             <Text style={styles.titleHistory}>Lịch sử khám thai</Text>
-            <TouchableOpacity style={styles.iconPlusContainer} onPress={() => goToAddPrenatalCareCheckupsStep1('CREATE')}>
+            <TouchableOpacity
+                style={styles.iconPlusContainer}
+                onPress={() => goToAddPrenatalCareCheckupsStep1('CREATE')}>
                 <Text style={styles.iconPlus}>+</Text>
             </TouchableOpacity>
         </View>

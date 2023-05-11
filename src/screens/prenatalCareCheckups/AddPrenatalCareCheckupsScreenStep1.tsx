@@ -281,9 +281,9 @@ const AddPrenatalCareCheckupsScreenStep1 = (props: IAddPrenatalCareCheckupsScree
         return null;
     };
 
-    const onPressRight = () => {
+    const onPressRight = async () => {
         if (action === 'EDIT') {
-            removePrenatalCareCheckups(child?._id, momId?._id);
+            await removePrenatalCareCheckups(child?._id, momId?._id);
             onPushEventBus(EventBusName.REMOVE_FETAL_HISTORY_SUCCESS);
             pop(2);
             return;
