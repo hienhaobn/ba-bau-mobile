@@ -1,22 +1,17 @@
+import { RouteProp } from '@react-navigation/native';
 import React from 'react';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 
 import Images from 'assets/images';
-
 import Header from 'components/Header';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
-import { goToPregnancyProductsDetail1 } from 'screens/pregnancyProducts/src/utils';
-
-import { Fonts } from 'themes';
-
-import { getThemeColor } from 'utils/getThemeColor';
-import { s, scales } from 'utils/scales';
-import { RouteProp } from '@react-navigation/native';
 import { RootNavigatorParamList } from 'navigation/types';
-import { pop } from 'navigation/utils';
+import { goBack, pop } from 'navigation/utils';
+import { goToPregnancyProductsDetail1 } from 'screens/pregnancyProducts/src/utils';
+import { Fonts } from 'themes';
+import { getThemeColor } from 'utils/getThemeColor';
+import { scales } from 'utils/scales';
 
 interface IFetalHealthAnalysisScreenProps {
     route: RouteProp<RootNavigatorParamList, 'FetalHealthAnalysis'>;
@@ -32,6 +27,7 @@ const FetalHealthAnalysisScreen = (props: IFetalHealthAnalysisScreenProps) => {
         if (fromScreen === 'FETAL_HEALTH_INFO') {
             pop(2);
         }
+        goBack();
     };
 
     const renderHeader = () => <Header title="Kết quả phân tích" onPressLeft={onPressLeft} />;

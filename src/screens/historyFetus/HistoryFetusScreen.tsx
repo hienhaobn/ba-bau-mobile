@@ -1,27 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Subscription } from 'rxjs';
-import EventBus, { BaseEvent, EventBusName } from 'services/event-bus';
 
 import { goToAddHistoryFetus } from './src/utils';
 
 import Images from 'assets/images';
-
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import { hideLoading, showLoading } from 'components/Loading';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
+import EventBus, { BaseEvent, EventBusName } from 'services/event-bus';
 import { fetchFetalHistory } from 'states/fetal/fetchFetalHistory';
-
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import moment from 'moment';
 
 const HistoryFetusScreen = () => {
     const { theme } = useTheme();
@@ -37,9 +32,11 @@ const HistoryFetusScreen = () => {
     }, []);
 
     const onRegisterEventBus = () => {
-        subScription.add(EventBus.getInstance().events.subscribe(
-            (res: BaseEvent<string>) => {
+        subScription.add(
+            EventBus.getInstance().events.subscribe((res: BaseEvent<string>) => {
                 if (res?.type === EventBusName.CREATE_FETAL_HISTORY_SUCCESS) {
+                    getHistory();
+                } else if (res?.type === EventBusName.REMOVE_FETAL_HEALTHY_SUCCESS) {
                     getHistory();
                 }
             })
@@ -68,21 +65,23 @@ const HistoryFetusScreen = () => {
 
     const renderItem = (item: fetal.FetalHistory) => {
         return (
-            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9}>
+            <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={() => goToAddHistoryFetus('EDIT', item)}>
                 <FastImage source={item?.image ? { uri: item?.image } : Images.Babe3} style={styles.image} />
                 <View style={styles.itemContent}>
                     <View style={styles.itemHeader}>
                         <Text style={styles.week}>Tuần {item?.weeksOfPregnancy}</Text>
                     </View>
                     <Text style={styles.itemContentDesc}>{item?.note}</Text>
-                    <Text style={styles.itemContentDesc}>Ngày chụp: {moment(item?.createdAt).format('DD/MM/YYYY')}</Text>
+                    <Text style={styles.itemContentDesc}>
+                        Ngày chụp: {moment(item?.createdAt).format('DD/MM/YYYY')}
+                    </Text>
                 </View>
             </TouchableOpacity>
         );
     };
 
     const renderButton = () => (
-        <Button title="Thêm nhật ký" customStyles={styles.button} onPress={goToAddHistoryFetus} />
+        <Button title="Thêm nhật ký" customStyles={styles.button} onPress={() => goToAddHistoryFetus('CREATE')} />
     );
 
     return (

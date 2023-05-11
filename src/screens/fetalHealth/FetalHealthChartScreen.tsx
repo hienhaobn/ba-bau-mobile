@@ -1,4 +1,6 @@
-import React from 'react';
+import { RouteProp } from '@react-navigation/native';
+import BigNumber from 'bignumber.js';
+import React, { useCallback } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -11,6 +13,8 @@ import Header from 'components/Header';
 
 import { useTheme } from 'hooks/useTheme';
 
+import { RootNavigatorParamList } from 'navigation/types';
+
 import { goToAddPrenatalCareCheckupsStep1 } from 'screens/prenatalCareCheckups/src/utils';
 
 import { Fonts, Sizes } from 'themes';
@@ -18,23 +22,32 @@ import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
-const FetalHealthChartScreen = () => {
+interface FetalHealthChartScreenProps {
+    route: RouteProp<RootNavigatorParamList, 'FetalHealthChart'>;
+}
+
+const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { route } = props;
+    const { child, momId } = route.params;
 
-    const renderHeaderRight = () => (
-        <View style={styles.rightContainer}>
-            <Text style={styles.plus}>+</Text>
-        </View>
-    );
+    const getDotPosition = (min: number, max: number, value: number) => {
+        const baseValue = BigNumber(max).minus(min);
+        const value1 = BigNumber(max).minus(value);
+        if (value < min) {
+            return 0;
+        }
+        if (value > max) {
+            return Sizes.scrWidth - scales(40);
+        }
+        return BigNumber(1)
+            .minus(BigNumber(value1).div(baseValue))
+            .times(Sizes.scrWidth - scales(40))
+            .toNumber();
+    };
 
-    const renderHeader = () => (
-        <Header
-            title="Sức khỏe thai nhi"
-            iconRight={renderHeaderRight()}
-            onPressRight={() => goToAddPrenatalCareCheckupsStep1('CREATE')}
-        />
-    );
+    const renderHeader = () => <Header title="Sức khỏe thai nhi" />;
 
     const renderEmptyComponent = () => (
         <View style={styles.emptyContainer}>
@@ -45,18 +58,19 @@ const FetalHealthChartScreen = () => {
         </View>
     );
 
+    // eslint-disable-next-line complexity
     const renderContent = () => (
         <View style={styles.content}>
             <View style={styles.contentHeader}>
                 <Text style={styles.leftHeader}>Cân nặng</Text>
-                <Text style={styles.midHeader}>3000 Gram</Text>
+                <Text style={styles.midHeader}>{child?.weight || 0} Gram</Text>
                 <View style={styles.statusContainer}>
                     <Text style={styles.statusTxt}>Thấp</Text>
                 </View>
             </View>
             <View style={styles.weekContainer}>
                 <Text style={styles.txtWeek}>Tuần thai: </Text>
-                <Text style={styles.week}>39 tuần</Text>
+                <Text style={styles.week}>{child?.weeksOfPregnacy || 0} tuần</Text>
             </View>
             <View>
                 <View style={styles.pointContainer}>
@@ -74,8 +88,10 @@ const FetalHealthChartScreen = () => {
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
-                    <Text style={styles.dotValue}>300 mm</Text>
-                    <View style={styles.dot} />
+                    <Text style={[styles.dotValue, { left: getDotPosition(70, 130, child?.width) || 0 }]}>
+                        {child?.width || 0} mm
+                    </Text>
+                    <View style={[styles.dot, { left: getDotPosition(70, 130, child?.width) || 0 }]} />
                 </View>
             </View>
             <View>
@@ -94,8 +110,10 @@ const FetalHealthChartScreen = () => {
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
-                    <Text style={styles.dotValue}>300 mm</Text>
-                    <View style={styles.dot} />
+                    <Text style={[styles.dotValue, { left: getDotPosition(70, 130, child?.dualTopDiameter) || 0 }]}>
+                        {child?.dualTopDiameter || 0} mm
+                    </Text>
+                    <View style={[styles.dot, { left: getDotPosition(70, 130, child?.dualTopDiameter) || 0 }]} />
                 </View>
             </View>
             <View>
@@ -114,8 +132,10 @@ const FetalHealthChartScreen = () => {
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
-                    <Text style={styles.dotValue}>300 mm</Text>
-                    <View style={styles.dot} />
+                    <Text style={[styles.dotValue, { left: getDotPosition(70, 130, child?.femurLength) || 0 }]}>
+                        {child?.femurLength} mm
+                    </Text>
+                    <View style={[styles.dot, { left: getDotPosition(70, 130, child?.femurLength) || 0 }]} />
                 </View>
             </View>
 
@@ -135,8 +155,10 @@ const FetalHealthChartScreen = () => {
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
-                    <Text style={styles.dotValue}>300 mm</Text>
-                    <View style={styles.dot} />
+                    <Text style={[styles.dotValue, { left: getDotPosition(70, 130, child?.headPerimeter) || 0 }]}>
+                        {child?.headPerimeter || 0} mm
+                    </Text>
+                    <View style={[styles.dot, { left: getDotPosition(70, 130, child?.headPerimeter) || 0 }]} />
                 </View>
             </View>
         </View>

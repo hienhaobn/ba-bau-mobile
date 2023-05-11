@@ -27,6 +27,7 @@ import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
 import { pop } from 'navigation/utils';
+import { EventBusName, onPushEventBus } from 'services/event-bus';
 
 interface IAddPrenatalCareCheckupsScreenStep1Props {
     route: RouteProp<RootNavigatorParamList, 'AddPrenatalCareCheckupsStep1'>;
@@ -283,6 +284,7 @@ const AddPrenatalCareCheckupsScreenStep1 = (props: IAddPrenatalCareCheckupsScree
     const onPressRight = () => {
         if (action === 'EDIT') {
             removePrenatalCareCheckups(child?._id, momId?._id);
+            onPushEventBus(EventBusName.REMOVE_FETAL_HISTORY_SUCCESS);
             pop(2);
             return;
         }

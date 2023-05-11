@@ -33,7 +33,7 @@ export type RootNavigatorParamList = {
   DishDetail: { foodOfCategory: food.FoodCategory },
   FetalHealthAnalysis: { fromScreen: 'FETAL_HEALTH_INFO' | 'FETAL_HEALTH' },
   FetalHealthInfo: { action: 'CREATE' | 'EDIT', child: user.CheckupsScheduleChildResponse, momId: user.CheckupsScheduleMomResponse, },
-  AddHistoryFetus: undefined,
+  AddHistoryFetus: { action: 'CREATE' | 'EDIT', history?: fetal.FetalHistory },
   PregnancyProductsDetail1: undefined,
   PregnancyProductsDetail2: undefined,
   PregnancyProductsDetail3: undefined,
@@ -43,5 +43,5 @@ export type RootNavigatorParamList = {
   AddPrenatalCareCheckupsStep1: { action: 'CREATE' | 'EDIT', child: user.CheckupsScheduleChildResponse, momId: user.CheckupsScheduleMomResponse },
   AddPrenatalCareCheckupsStep2: { momCheckups: user.MomCheckupsRequest, action: 'CREATE' | 'EDIT', child: user.CheckupsScheduleChildResponse, momId: user.CheckupsScheduleMomResponse },
   PrenatalCareCheckupsItemHistory: { child: user.CheckupsScheduleChildResponse, momId: user.CheckupsScheduleMomResponse, fromScreen: 'PRENATAL_CARE_CHECKUPS' | 'FETAL_HEALTH' },
-  FetalHealthChart: undefined,
+  FetalHealthChart: { child: user.CheckupsScheduleChildResponse, momId: user.CheckupsScheduleMomResponse },
 };

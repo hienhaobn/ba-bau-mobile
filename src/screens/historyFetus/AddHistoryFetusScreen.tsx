@@ -1,8 +1,10 @@
+import { RouteProp } from '@react-navigation/native';
 import moment from 'moment';
 import React, { useRef, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
-import ImagePicker, { ImageCropPicker } from 'react-native-image-crop-picker';
+import FastImage from 'react-native-fast-image';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
@@ -11,24 +13,24 @@ import BottomSheet, { CustomBottomSheetRefType } from 'components/BottomSheet/Bo
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
+import { hideLoading, showLoading } from 'components/Loading';
 import TouchableOpacity from 'components/TouchableOpacity';
 
 import { useTheme } from 'hooks/useTheme';
 
-import { goBack } from 'navigation/utils';
+import { RootNavigatorParamList } from 'navigation/types';
+import { goBack, pop } from 'navigation/utils';
+
+import { EventBusName, onPushEventBus } from 'services/event-bus';
+
+import { createFetalHistory, removeFetalHealthy } from 'states/fetal/fetchFetalHistory';
 
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
+import { formatImage } from 'utils/image';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
-import { createFetalHistory } from 'states/fetal/fetchFetalHistory';
-import { hideLoading, showLoading } from 'components/Loading';
-import { EventBusName, onPushEventBus } from 'services/event-bus';
-import { formatImage } from 'utils/image';
-import axios from 'axios';
-import { BASE_URL } from 'configs/api';
-import { GlobalVariables } from 'constants';
 
 interface ImageChoose {
     creationDate: string;
@@ -47,25 +49,31 @@ interface ImageChoose {
     width: number;
 }
 
-const AddHistoryFetusScreen = () => {
+interface AddHistoryFetusScreenProps {
+    route: RouteProp<RootNavigatorParamList, 'AddHistoryFetus'>;
+}
+
+const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { route } = props;
+    const { action, history } = route.params;
     const [selectDateVisible, setSelectDateVisible] = useState<boolean>(false);
-    const [date, setDate] = useState<Date>(moment().toDate());
-    const [week, setWeek] = useState<string>('');
-    const [note, setNote] = useState<string>('');
+    const [date, setDate] = useState<Date>(action === 'EDIT' ? moment(history?.createdAt).toDate() : moment().toDate());
+    const [week, setWeek] = useState<string>(action === 'EDIT' ? history?.createdAt || '' : '');
+    const [note, setNote] = useState<string>(action === 'EDIT' ? history?.note || '' : '');
     const [imageChoose, setImageChoose] = useState<ImageChoose>(null);
     const bottomSheetRef = useRef<CustomBottomSheetRefType>(null);
 
-    const onCreateHistory = async () => {
+    const onHistory = async () => {
         showLoading();
-        const response = await createFetalHistory({file: formatImage(imageChoose), note, weeksOfPregnancy: week})
+        const response = await createFetalHistory({ file: formatImage(imageChoose), note, weeksOfPregnancy: week });
         hideLoading();
         if (response) {
             onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
             goBack();
         }
-    }
+    };
 
     const showBottomSheet = () => {
         if (bottomSheetRef) {
@@ -158,7 +166,29 @@ const AddHistoryFetusScreen = () => {
         </BottomSheet>
     );
 
-    const renderHeader = () => <Header title="Nhật ký thai nhi" />;
+    const renderRightIcon = () => {
+        if (action === 'EDIT') {
+            return (
+                <View style={styles.iconRight}>
+                    <SvgIcons.IcRemove width={scales(17)} height={scales(17)} color={getThemeColor().white} />
+                </View>
+            );
+        }
+        return null;
+    };
+
+    const onPressRight = async () => {
+        if (action === 'EDIT') {
+            // call api
+            await removeFetalHealthy(history?._id)
+            onPushEventBus(EventBusName.REMOVE_FETAL_HEALTHY_SUCCESS);
+            goBack();
+        }
+    };
+
+    const renderHeader = () => (
+        <Header title="Nhật ký thai nhi" iconRight={renderRightIcon()} onPressRight={onPressRight} />
+    );
 
     const onShowSelectDate = () => {
         setSelectDateVisible(true);
@@ -176,7 +206,10 @@ const AddHistoryFetusScreen = () => {
     const renderContent = () => (
         <View style={styles.content}>
             <View style={styles.contentHeaderContainer}>
-                <Image source={imageChoose?.path ? { uri:  imageChoose?.path } : Images.Babe3} style={styles.image} />
+                <FastImage
+                    source={imageChoose?.path ? { uri: imageChoose?.path } : Images.Babe3}
+                    style={styles.image}
+                />
                 <TouchableOpacity style={styles.pencilContainer} onPress={showBottomSheet}>
                     <SvgIcons.IcPencil width={scales(17)} height={scales(17)} color={getThemeColor().Color_Primary} />
                 </TouchableOpacity>
@@ -231,7 +264,7 @@ const AddHistoryFetusScreen = () => {
 
     const renderButton = () => (
         <View style={styles.buttonContainer}>
-            <Button title="Lưu" onPress={onCreateHistory} />
+            <Button title="Lưu" onPress={onHistory} />
         </View>
     );
 
@@ -362,6 +395,11 @@ const myStyles = (theme: string) => {
             ...Fonts.inter700,
             color: color.white,
             textAlign: 'center',
+        },
+        iconRight: {
+            backgroundColor: color.Color_Primary,
+            borderRadius: 100,
+            padding: scales(5),
         },
     });
 };

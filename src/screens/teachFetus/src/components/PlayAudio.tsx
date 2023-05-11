@@ -45,6 +45,7 @@ const PlayAudio = (props: IPlayAudioProps) => {
             audio.play((success) => {
                 if (success) {
                     setPlaying(false);
+                    audio.release();
                     console.log('successfully finished playing');
                 } else {
                     audio.stop();

@@ -1,16 +1,22 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { Subscription } from 'rxjs';
 
 import Images from 'assets/images';
+
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import TouchableOpacity from 'components/TouchableOpacity';
+
 import { useTheme } from 'hooks/useTheme';
+
 import {
     goToAddPrenatalCareCheckupsStep1,
     goToPrenatalCareCheckupsItemHistory,
 } from 'screens/prenatalCareCheckups/src/utils';
+
+import EventBus, { BaseEvent, EventBusName } from 'services/event-bus';
 
 import { fetchBabyCheckupsHistory } from 'states/user/fetchCheckups';
 
@@ -18,11 +24,13 @@ import { Fonts } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import { goToFetalHealthChart } from './src/utils';
 
 const FetalHealthScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const [history, setHistory] = useState<user.CheckupsScheduleHistoryResponse>(null);
+    const subScription = new Subscription();
 
     const getDataHistory = async () => {
         const response = await fetchBabyCheckupsHistory();
@@ -34,6 +42,25 @@ const FetalHealthScreen = () => {
     useEffect(() => {
         getDataHistory();
     }, []);
+
+    useEffect(() => {
+        onRegisterEventBus();
+        return () => {
+            subScription?.unsubscribe?.();
+        };
+    }, []);
+
+    const onRegisterEventBus = () => {
+        subScription.add(
+            EventBus.getInstance().events.subscribe((res: BaseEvent<string>) => {
+                if (res?.type === EventBusName.REMOVE_FETAL_HISTORY_SUCCESS) {
+                    getDataHistory();
+                } else if (res?.type === EventBusName.CREATE_FETAL_HISTORY_SUCCESS) {
+                    getDataHistory();
+                }
+            })
+        );
+    };
 
     const renderHeaderRight = () => (
         <View style={styles.rightContainer}>
@@ -62,9 +89,7 @@ const FetalHealthScreen = () => {
         child: user.CheckupsScheduleChildResponse;
         momId: user.CheckupsScheduleMomResponse;
     }) => (
-        <TouchableOpacity
-            style={styles.itemContainer}
-            onPress={() => goToPrenatalCareCheckupsItemHistory(element.child, element.momId, 'FETAL_HEALTH')}>
+        <View style={styles.itemContainer}>
             <Text style={styles.titleItem}>Ngày khám {moment(element.child.createdAt).format('DD/MM/YYYY')}</Text>
             <View style={styles.row}>
                 <Text style={styles.titleLeft}>
@@ -79,8 +104,17 @@ const FetalHealthScreen = () => {
                     Cân nặng của bé: <Text style={styles.textBold}>{element.child.weight} gr</Text>
                 </Text>
             </View>
+            <View style={styles.row}>
+                <TouchableOpacity
+                    onPress={() => goToPrenatalCareCheckupsItemHistory(element.child, element.momId, 'FETAL_HEALTH')}>
+                    <Text style={[styles.titleLeft,  { textDecorationLine: 'underline' }]}>Xem chi tiết</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => goToFetalHealthChart(element.child, element.momId)}>
+                    <Text style={[styles.valueRight, { textDecorationLine: 'underline' }]}>Hiển thị biểu đồ</Text>
+                </TouchableOpacity>
+            </View>
             <View style={styles.line} />
-        </TouchableOpacity>
+        </View>
     );
 
     const renderContent = () => (
@@ -92,6 +126,7 @@ const FetalHealthScreen = () => {
             contentContainerStyle={styles.contentContainer}
             onEndReachedThreshold={0.1}
             showsVerticalScrollIndicator={false}
+            ListEmptyComponent={renderEmptyComponent()}
         />
     );
     return (
