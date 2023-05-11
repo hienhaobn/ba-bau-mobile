@@ -35,6 +35,8 @@ import IcTabPremium from './tab_premium.svg';
 import IcTabPremiumActive from './tab_premium_active.svg';
 import IcVisibility from './visibility.svg';
 import IcVisibilityOff from './visibility_off.svg';
+// import IcPlay from './play.svg';
+// import IcPause from './pause.svg.svg';
 
 const SvgIcons = {
     IcBack,
