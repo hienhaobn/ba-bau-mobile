@@ -4,6 +4,8 @@
 import 'react-native-gesture-handler';
 
 import { AppRegistry, LogBox, Platform, StatusBar, Text, TextInput, TouchableOpacity } from 'react-native';
+import TrackPlayer from 'react-native-track-player';
+import { playbackService } from 'services/trackPlayer';
 
 import App from './App';
 import { name as appName } from './app.json';
@@ -33,3 +35,4 @@ LogBox.ignoreLogs([
 ]);
 
 AppRegistry.registerComponent(appName, () => App);
+TrackPlayer.registerPlaybackService(() => playbackService);

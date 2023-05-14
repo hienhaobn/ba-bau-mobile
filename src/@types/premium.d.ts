@@ -61,4 +61,12 @@ declare namespace premium {
         count: number;
         musices: MusicPremium[],
     }
+
+    interface Track {
+        id: string;
+        title: string;
+        url: string;
+        duration: number;
+        artist: string;
+    }
 }

@@ -1,61 +1,89 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    View,
+    ActivityIndicator,
+    TouchableOpacity,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import Sound from 'react-native-sound';
+import TrackPlayer, {
+    State, useTrackPlayerEvents,
+} from 'react-native-track-player';
+
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
 import { useTheme } from 'hooks/useTheme';
 import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+
 interface IPlayAudioProps {
     music: premium.MusicPremium;
 }
-const PlayAudio = (props: IPlayAudioProps) => {
+
+import { setupPlayer, addTracks } from 'services/trackPlayer';
+
+function PlayAudio(props: IPlayAudioProps) {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const [playing, setPlaying] = useState<boolean>(false);
     const { music } = props;
-    Sound.setCategory('Playback');
-    const audio = new Sound(music?.audio || '', null, (error) => {
-        if (error) {
-            console.log('failed to load the sound', error);
-            return;
-        }
-        // if loaded successfully
-        console.log(
-            'duration in seconds: ' + audio.getDuration() + 'number of channels: ' + audio.getNumberOfChannels()
-        );
-    });
+    const [isPlayerReady, setIsPlayerReady] = useState(false);
+    const [playing, setPlaying] = useState<boolean>(false);
+
     useEffect(() => {
-        audio.setVolume(1);
-        return () => {
-            audio.release();
-        };
-    }, []);
-    const playPause = () => {
-        if (playing) {
-            audio.pause(() => {
-                console.log('pause successful');
-                setPlaying(false);
+        async function setup() {
+            let isSetup = await setupPlayer();
+            const tracks: premium.Track[] = [];
+
+            tracks.push({
+                id: `${Math.random()}`,
+                title: music.name,
+                duration: 46000,
+                artist: 'ABC',
+                url: music.audio,
             });
-            audio.setVolume(0);
+
+            const queue = await TrackPlayer.getQueue();
+            console.log('queue', queue);
+            if (isSetup && queue.length <= 0) {
+                await addTracks(tracks);
+            }
+
+            const track = await TrackPlayer.getTrack(0);
+            console.log('track', track);
+
+            setIsPlayerReady(isSetup);
+        }
+
+        setup();
+        return () => {
+            TrackPlayer.reset();
+            TrackPlayer.remove(0)
+        }
+    }, [music]);
+
+    const handlePlayPress = async () => {
+        if (await TrackPlayer.getState() == State.Playing) {
+            TrackPlayer.pause();
+            setPlaying(false);
         } else {
             setPlaying(true);
-            audio.play((success) => {
-                if (success) {
-                    setPlaying(false);
-                    audio.release();
-                    console.log('successfully finished playing');
-                } else {
-                    audio.stop();
-                    console.log('playback failed due to audio decoding errors');
-                }
-            });
+            TrackPlayer.play();
         }
     };
+
+    if (!isPlayerReady) {
+        return (
+            <SafeAreaView>
+                <ActivityIndicator size='large' color='#bbb' />
+            </SafeAreaView>
+        );
+    }
+
     return (
-        <TouchableOpacity activeOpacity={0.9} onPress={playPause}>
+        <TouchableOpacity activeOpacity={0.9} onPress={handlePlayPress}>
             <View style={styles.itemContentContainer}>
                 <FastImage source={music?.image ? { uri: music?.image } : Images.Babe} style={styles.image} />
                 <View style={styles.itemContent}>
@@ -71,7 +99,8 @@ const PlayAudio = (props: IPlayAudioProps) => {
             </View>
         </TouchableOpacity>
     );
-};
+}
+
 const myStyles = (theme: string) => {
     const color = getThemeColor();
     return StyleSheet.create({
@@ -119,79 +148,3 @@ const myStyles = (theme: string) => {
     });
 };
 export default PlayAudio;
-// import React, { useEffect, useState } from 'react';
-// import { StyleSheet, TouchableOpacity, View } from 'react-native';
-
-// import SvgIcons from 'assets/svgs';
-
-// import { getThemeColor } from 'utils/getThemeColor';
-// import { scales } from 'utils/scales';
-
-// import Sound from 'react-native-sound';
-
-// Sound.setCategory('Playback');
-
-// const PlayAudio = () => {
-//     const [playing, setPlaying] = useState<boolean>(false);
-
-//     const audio = new Sound(
-//         'https://storage.googleapis.com/babau-ca037.appspot.com/MAKING%20MY%20WAY.mp3',
-//         '',
-//         (error) => {
-//             if (error) {
-//                 console.log('failed to load the sound', error);
-//                 return;
-//             }
-//             // if loaded successfully
-//             console.log(
-//                 'duration in seconds: ' + audio.getDuration() + 'number of channels: ' + audio.getNumberOfChannels()
-//             );
-//         }
-//     );
-//     useEffect(() => {
-//         audio.setVolume(1);
-//         return () => {
-//             audio.release();
-//         };
-//     }, []);
-//     const playPause = () => {
-//         if (audio.isPlaying()) {
-//             audio.pause();
-//             setPlaying(false);
-//         } else {
-//             setPlaying(true);
-//             audio.play((success) => {
-//                 if (success) {
-//                     setPlaying(false);
-//                     console.log('successfully finished playing');
-//                 } else {
-//                     setPlaying(false);
-//                     console.log('playback failed due to audio decoding errors');
-//                 }
-//             });
-//         }
-//     };
-//     return (
-//         <View style={styles.container}>
-//             <TouchableOpacity style={styles.playBtn} onPress={playPause}>
-//                 {!playing ? (
-//                     <SvgIcons.IcPlay width={scales(17)} height={scales(17)} color={getThemeColor().Color_Gray5} />
-//                 ) : (
-//                     <SvgIcons.IcPause width={scales(17)} height={scales(17)} color={getThemeColor().Color_Gray5} />
-//                 )}
-//             </TouchableOpacity>
-//         </View>
-//     );
-// };
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//         backgroundColor: '#000',
-//     },
-//     playBtn: {
-//         padding: 20,
-//     },
-// });
-// export default PlayAudio;

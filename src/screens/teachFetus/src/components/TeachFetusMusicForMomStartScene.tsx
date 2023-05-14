@@ -31,6 +31,7 @@ const TeachFetusMusicForMomStartScene = () => {
         getMusicForFirst3Months();
     }, []);
 
+
     const renderItem = (item: premium.MusicPremium) => <PlayAudio music={item} />;
 
     const renderEmptyComponent = () => (
