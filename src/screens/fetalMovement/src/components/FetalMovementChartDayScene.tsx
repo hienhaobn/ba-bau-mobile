@@ -41,7 +41,7 @@ const FetalMovementChartDayScene = () => {
     const barData = [
         {
             value: getData(first.getDate()),
-            label: `${first.getDate()}/${first.getMonth()}`,
+            label: `${first.getDate()}/${first.getMonth() + 1}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -51,7 +51,7 @@ const FetalMovementChartDayScene = () => {
         },
         {
             value: getData(second.getDate()),
-            label: `${second.getDate()}/${second.getMonth()}`,
+            label: `${second.getDate()}/${second.getMonth() + 1}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -61,7 +61,7 @@ const FetalMovementChartDayScene = () => {
         },
         {
             value: getData(third.getDate()),
-            label: `${third.getDate()}/${third.getMonth()}`,
+            label: `${third.getDate()}/${third.getMonth() + 1}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -71,7 +71,7 @@ const FetalMovementChartDayScene = () => {
         },
         {
             value: getData(fourth.getDate()),
-            label: `${fourth.getDate()}/${fourth.getMonth()}`,
+            label: `${fourth.getDate()}/${fourth.getMonth() + 1}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -81,7 +81,7 @@ const FetalMovementChartDayScene = () => {
         },
         {
             value: getData(fifth.getDate()),
-            label: `${fifth.getDate()}/${fifth.getMonth()}`,
+            label: `${fifth.getDate()}/${fifth.getMonth() + 1}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -91,7 +91,7 @@ const FetalMovementChartDayScene = () => {
         },
         {
             value: getData(sixth.getDate()),
-            label: `${sixth.getDate()}/${sixth.getMonth()}`,
+            label: `${sixth.getDate()}/${sixth.getMonth() + 1}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>

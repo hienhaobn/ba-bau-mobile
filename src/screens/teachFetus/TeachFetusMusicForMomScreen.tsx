@@ -37,7 +37,7 @@ const TeachFetusMusicForMomScreen = () => {
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'teachFetusMusicForMomStartScene', title: '3 tháng đầu' },
-        { key: 'teachFetusMusicForMomMidScene', title: '3 tháng giũa' },
+        { key: 'teachFetusMusicForMomMidScene', title: '3 tháng giữa' },
         { key: 'teachFetusMusicForMomEndScene', title: '3 tháng cuối' },
     ]);
 
@@ -49,7 +49,7 @@ const TeachFetusMusicForMomScreen = () => {
         return (
             <TouchableOpacity
                 style={{
-                    marginRight: scales(20),
+                    marginRight: scales(10),
                     paddingVertical: scales(16),
                 }}
                 onPress={() => {

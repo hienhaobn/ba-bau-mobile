@@ -104,7 +104,6 @@ const FoodDetailScreen = (props: IFoodDetailScreenProps) => {
 
     const renderContent = () => (
         <View style={styles.content}>
-            {/* <Image source={Images.Beef2} style={styles.headerImg} resizeMode="contain" /> */}
             <FastImage
                 source={foodCategory?.image ? { uri: foodCategory?.image } : Images.Beef}
                 style={styles.headerImg}
@@ -112,7 +111,7 @@ const FoodDetailScreen = (props: IFoodDetailScreenProps) => {
             />
             <Text style={styles.titleHeader}>{foodCategory?.name}</Text>
             <Text style={styles.desc}>{foodDetail?.[0]?.description}</Text>
-            <Text style={styles.tag}># Thuộc nhóm Thịt</Text>
+            <Text style={styles.tag}># Thuộc nhóm {foodCategory?.idRoot?.name}</Text>
 
             <View style={styles.line} />
             {renderTabview()}

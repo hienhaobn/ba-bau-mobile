@@ -155,7 +155,7 @@ const StackNavigator = () => {
       const linking = {
         prefixes: ['babau://'],
         getStateFromPath: (path, options) => {
-          if (path.includes('payment')) {
+          if (path?.includes('payment')) {
             const timer = GlobalVariables.activeRouteKey ? 0 : 3000;
             setTimeout(() => {
               resetStack('Splash', {
@@ -168,7 +168,7 @@ const StackNavigator = () => {
         async getInitialURL() {
           const url = await Linking.getInitialURL();
           const path = url?.replace(/babau:\/\//g, '');
-          if (path.includes('payment')) {
+          if (path?.includes('payment')) {
             setTimeout(() => {
                 resetStack('Splash', {
                 stateFromPath: path,

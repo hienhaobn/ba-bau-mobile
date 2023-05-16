@@ -19,7 +19,7 @@ declare namespace food {
 
     interface FoodCategory {
         createdAt: string;
-        idRoot: string;
+        idRoot: FoodCategoryRoot;
         image: string;
         monthlyData: FoodCategoryMonthly[];
         name: string;

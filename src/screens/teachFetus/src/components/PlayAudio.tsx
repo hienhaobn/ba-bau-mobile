@@ -35,24 +35,9 @@ function PlayAudio(props: IPlayAudioProps) {
     useEffect(() => {
         async function setup() {
             let isSetup = await setupPlayer();
-            const tracks: premium.Track[] = [];
+            await TrackPlayer.reset();
 
-            tracks.push({
-                id: `${Math.random()}`,
-                title: music.name,
-                duration: 46000,
-                artist: 'ABC',
-                url: music.audio,
-            });
-
-            const queue = await TrackPlayer.getQueue();
-            console.log('queue', queue);
-            if (isSetup && queue.length <= 0) {
-                await addTracks(tracks);
-            }
-
-            const track = await TrackPlayer.getTrack(0);
-            console.log('track', track);
+            await TrackPlayer.setVolume(1);
 
             setIsPlayerReady(isSetup);
         }
@@ -62,14 +47,24 @@ function PlayAudio(props: IPlayAudioProps) {
             TrackPlayer.reset();
             TrackPlayer.remove(0)
         }
+
     }, [music]);
 
     const handlePlayPress = async () => {
+
         if (await TrackPlayer.getState() == State.Playing) {
             TrackPlayer.pause();
             setPlaying(false);
         } else {
             setPlaying(true);
+            await TrackPlayer.add({
+                id: `${Math.random()}`,
+                title: music.name,
+                duration: 46000,
+                artist: 'ABC',
+                url: music.audio,
+            });
+
             TrackPlayer.play();
         }
     };
