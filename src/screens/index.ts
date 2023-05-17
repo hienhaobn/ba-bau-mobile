@@ -1,3 +1,6 @@
+import AccountInfo from 'screens/accountInfo/AccountInfoScreen';
+import FoodDetailSaved from 'screens/foods/FoodDetailSavedScreen';
+import FoodSave from 'screens/foods/FoodSaveScreen';
 import Account from './account/AccountScreen';
 import FetalHealthAnalysis from './fetalHealth/FetalHealthAnalysisScreen';
 import FetalHealthChart from './fetalHealth/FetalHealthChartScreen';
@@ -91,4 +94,7 @@ export const Screen = {
     AddPrenatalCareCheckupsStep2,
     PrenatalCareCheckupsItemHistory,
     FetalHealthChart,
+    FoodSave,
+    AccountInfo,
+    FoodDetailSaved,
 };

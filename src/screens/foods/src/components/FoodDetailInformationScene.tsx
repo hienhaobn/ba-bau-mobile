@@ -6,6 +6,7 @@ import SvgIcons from 'assets/svgs';
 import { useTheme } from 'hooks/useTheme';
 
 import { FoodDetailScreenRouteProps } from 'screens/foods/FoodDetailScreen';
+import { fetchFoodsOfCategoryById } from 'states/foods/fetchFoods';
 
 import { Fonts } from 'themes';
 
@@ -21,6 +22,7 @@ const FoodDetailInformationScene = (props: IFoodDetailInformationSceneProps) => 
     const styles = myStyles(theme);
     const { route } = props;
     const { foodCategory } = route;
+    console.log('foodCategory', foodCategory);
 
     const renderIconMonthly = (status: string) => {
         if (status === 'ERR') {

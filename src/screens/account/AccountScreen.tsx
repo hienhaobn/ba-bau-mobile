@@ -3,15 +3,11 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
-
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
-import { navigate, resetStack } from 'navigation/utils';
-
+import { resetStack } from 'navigation/utils';
+import { goToAccountInfo } from 'screens/accountInfo/src/utils';
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import Storages, { KeyStorage } from 'utils/storages';
@@ -35,7 +31,7 @@ const AccountScreen = () => {
 
     const renderItems = () => (
         <View style={styles.itemsContainer}>
-            <TouchableOpacity style={styles.itemContainer}>
+            <TouchableOpacity style={styles.itemContainer} onPress={goToAccountInfo}>
                 <View style={styles.itemLeftContainer}>
                     <Image source={Images.UserInfo} style={styles.itemIconLeft} resizeMode="contain" />
                     <Text style={styles.title}>Thông tin tài khoản</Text>

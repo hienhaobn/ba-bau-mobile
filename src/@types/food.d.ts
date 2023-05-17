@@ -41,4 +41,25 @@ declare namespace food {
         createdAt: string;
         updatedAt: string;
     }
+
+    interface FoodOfCategorySave {
+        _id: string;
+        name: string;
+        image: string;
+        making: string;
+        suitableFor: string;
+        description: string;
+        ingredient: string;
+        video: string;
+        timeCook: string;
+        idCategory: FoodCategory;
+        createdAt: string;
+        updatedAt: string;
+    }
+
+    interface FoodSave {
+        _id: string;
+        idUser: string;
+        idFood: FoodOfCategorySave;
+    }
 }

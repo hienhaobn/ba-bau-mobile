@@ -42,3 +42,64 @@ export const fetchFoodsOfCategory = async (categoryId: string) => {
         console.log(error);
     }
 }
+
+
+export const fetchFoodsOfCategoryById = async (foodsOfCategoryId: string) => {
+    try {
+        showLoading();
+        const res: food.FoodCategory = await axiosInstance.get(`/food-categories/${foodsOfCategoryId}`);
+        hideLoading();
+        return res;
+    } catch (error) {
+        hideLoading();
+        showCustomToast('Thất bại');
+        console.log(error);
+    }
+}
+
+export const saveFood = async (foodId: string) => {
+    try {
+        showLoading();
+        const res = await axiosInstance.post('/save-food', {
+            idFood: foodId,
+        });
+        hideLoading();
+        if (res) {
+            showCustomToast('Lưu món ăn thành công');
+        }
+        return res;
+    } catch (error) {
+        hideLoading();
+        showCustomToast('Lưu món ăn thất bại');
+        console.log(error);
+    }
+}
+
+export const removeSaveFood = async (foodId: string) => {
+    try {
+        showLoading();
+        const res = await axiosInstance.delete(`/save-food/${foodId}`);
+        hideLoading();
+        if (res) {
+            showCustomToast('Xoá món ăn thành công');
+        }
+        return res;
+    } catch (error) {
+        hideLoading();
+        showCustomToast('Xoá món ăn thất bại');
+        console.log(error);
+    }
+}
+export const fetchFoodSaved = async () => {
+    try {
+        showLoading();
+        const res: food.FoodSave[] = await axiosInstance.get(`/save-food`);
+        hideLoading();
+
+        return res;
+    } catch (error) {
+        hideLoading();
+        showCustomToast('get data failed');
+        console.log(error);
+    }
+};

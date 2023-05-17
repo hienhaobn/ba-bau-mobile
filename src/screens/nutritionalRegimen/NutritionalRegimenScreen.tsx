@@ -9,7 +9,7 @@ import Header from 'components/Header';
 import Input from 'components/Input';
 import TouchableOpacity from 'components/TouchableOpacity';
 import { useTheme } from 'hooks/useTheme';
-import { goToFoods } from 'screens/foods/src/utils';
+import { goToFoods, goToFoodSave } from 'screens/foods/src/utils';
 import { fetchFoodCategoryRoot } from 'states/foods/fetchFoods';
 import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
@@ -33,6 +33,7 @@ const NutritionalRegimenScreen = () => {
         <Header
             title="Chế độ dinh dưỡng"
             iconRight={<SvgIcons.IcSave width={scales(17)} height={scales(17)} color={getThemeColor().Text_Dark_1} />}
+            onPressRight={goToFoodSave}
         />
     );
 

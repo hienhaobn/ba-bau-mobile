@@ -109,6 +109,12 @@ const RootStack = () => {
             <Stack.Screen name="PrenatalCareCheckupsItemHistory" component={Screen.PrenatalCareCheckupsItemHistory} />
 
             <Stack.Screen name="FetalHealthChart" component={Screen.FetalHealthChart} />
+
+            <Stack.Screen name="FoodSave" component={Screen.FoodSave} />
+
+            <Stack.Screen name="AccountInfo" component={Screen.AccountInfo} />
+
+            <Stack.Screen name="FoodDetailSaved" component={Screen.FoodDetailSaved} />
         </Stack.Navigator>
     );
 };
