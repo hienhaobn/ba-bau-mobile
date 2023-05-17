@@ -1,9 +1,11 @@
 import { RouteProp } from '@react-navigation/native';
+import SvgIcons from 'assets/svgs';
 import { indexOf } from 'lodash';
 import React from 'react';
 import { Image, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { SceneMap, TabBar, TabBarItemProps, TabView } from 'react-native-tab-view';
+import { saveFood } from 'states/foods/fetchFoods';
 
 import DishDetailIngredientScene from './src/components/DishDetailIngredientScene';
 import DishDetailMakingScene from './src/components/DishDetailMakingScene';
@@ -52,7 +54,11 @@ const DishDetailScreen = (props: IDishDetailScreenProps) => {
         { key: 'dishDetailVideoScene', title: 'Video', foodOfCategory },
     ]);
 
-    const renderHeader = () => <Header title={foodOfCategory?.name} />;
+    const renderHeader = () => <Header title={foodOfCategory?.name} iconRight={<SvgIcons.IcSavePlus />} onPressRight={onSaveFood} />;
+
+    const onSaveFood = async () => {
+        await saveFood(foodOfCategory?._id);
+    };
 
     const renderTabItem = (tabProps: TabBarItemProps<DishDetailScreenRouteProps>) => {
         const { title } = tabProps.route;

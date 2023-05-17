@@ -1,69 +1,57 @@
 import { RouteProp } from '@react-navigation/native';
-import SvgIcons from 'assets/svgs';
-import { hideLoading, showLoading } from 'components/Loading';
 import { indexOf } from 'lodash';
 import { goBack } from 'navigation/utils';
-import React, { useEffect, useState } from 'react';
-import {  StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { SceneMap, TabBar, TabBarItemProps, TabView } from 'react-native-tab-view';
-import EventBus, { EventBusName, onPushEventBus } from 'services/event-bus';
+import { EventBusName, onPushEventBus } from 'services/event-bus';
+import { removeSaveFood, saveFood } from 'states/foods/fetchFoods';
 
-import FoodDetailDishScene from './src/components/FoodDetailDishScene';
-import FoodDetailInformationScene from './src/components/FoodDetailInformationScene';
+import DishDetailIngredientScene from './src/components/DishDetailIngredientScene';
+import DishDetailMakingScene from './src/components/DishDetailMakingScene';
+import DishDetailVideoScene from './src/components/DishDetailVideoScene';
 
 import Images from 'assets/images';
-
 import Header from 'components/Header';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
 
 import { RootNavigatorParamList } from 'navigation/types';
-
-import { fetchFoodsOfCategory, removeSaveFood, saveFood } from 'states/foods/fetchFoods';
 
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
-export interface FoodDetailSavedScreenRouteProps {
+export interface DishDetailScreenRouteProps {
     key: string;
     title?: string;
-    foodOfCategorySave?: food.FoodOfCategorySave;
+    foodOfCategory: food.FoodOfCategory;
 }
 
-interface IFoodDetailSavedScreenProps {
+const renderScene = SceneMap({
+    dishDetailIngredientScene: DishDetailIngredientScene,
+    dishDetailMakingScene: DishDetailMakingScene,
+    dishDetailVideoScene: DishDetailVideoScene,
+});
+
+interface IDishDetailScreenProps {
     route: RouteProp<RootNavigatorParamList, 'FoodDetailSaved'>;
 }
 
-const FoodDetailSavedScreen = (props: IFoodDetailSavedScreenProps) => {
+const FoodDetailSavedScreen = (props: IDishDetailScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const layout = useWindowDimensions();
     const { route } = props;
     const { foodSave } = route.params;
-    const layout = useWindowDimensions();
     const [index, setIndex] = React.useState(0);
-    const [foodDetail, setFoodDetail] = useState<food.FoodOfCategory[]>([]);
     const [routes] = React.useState([
-        { key: 'foodDetailInformationScene', title: 'Thông tin', foodCategory: foodSave?.idFood?.idCategory },
-        { key: 'foodDetailDishScene', title: 'Món ngon', foodCategory: foodSave?.idFood?.idCategory },
+        { key: 'dishDetailIngredientScene', title: 'Nguyên liệu', foodOfCategory: foodSave?.idFood },
+        { key: 'dishDetailMakingScene', title: 'Cách làm', foodOfCategory: foodSave?.idFood },
+        { key: 'dishDetailVideoScene', title: 'Video', foodOfCategory: foodSave?.idFood },
     ]);
-
-    const renderScene = SceneMap({
-        foodDetailInformationScene: FoodDetailInformationScene,
-        foodDetailDishScene: FoodDetailDishScene,
-    });
-
-    const getFoodDetail = async () => {
-        const response = await fetchFoodsOfCategory(foodSave?.idFood?.idCategory?._id);
-        setFoodDetail(response);
-    };
-
-    useEffect(() => {
-        getFoodDetail();
-    }, []);
 
     const renderHeader = () => <Header title={foodSave?.idFood?.name}  iconRight={<Text style={styles.titleRemove}>Xoá</Text>} onPressRight={onRemoveSaveFood}/>;
 
@@ -73,8 +61,11 @@ const FoodDetailSavedScreen = (props: IFoodDetailSavedScreenProps) => {
         goBack();
 
     };
+    const onSaveFood = async () => {
+        await saveFood(foodSave?.idFood?._id);
+    };
 
-    const renderTabItem = (tabProps: TabBarItemProps<FoodDetailSavedScreenRouteProps>) => {
+    const renderTabItem = (tabProps: TabBarItemProps<DishDetailScreenRouteProps>) => {
         const { title } = tabProps.route;
         const active = indexOf(routes, tabProps.route) === tabProps.navigationState.index;
         return (
@@ -115,14 +106,9 @@ const FoodDetailSavedScreen = (props: IFoodDetailSavedScreenProps) => {
 
     const renderContent = () => (
         <View style={styles.content}>
-            <FastImage
-                source={foodSave?.idFood?.image ? { uri: foodSave?.idFood?.image } : Images.Beef}
-                style={styles.headerImg}
-                resizeMode="contain"
-            />
+            <FastImage source={foodSave?.idFood?.image ? { uri: foodSave?.idFood?.image } : Images.Beef} style={styles.headerImg} />
             <Text style={styles.titleHeader}>{foodSave?.idFood?.name}</Text>
-            <Text style={styles.desc}>{foodDetail?.[0]?.description}</Text>
-            <Text style={styles.tag}># Thuộc nhóm {foodSave?.idFood?.idCategory?.name}</Text>
+            <Text style={styles.tag}>#duachua #thitbo</Text>
 
             <View style={styles.line} />
             {renderTabview()}
@@ -168,12 +154,6 @@ const myStyles = (theme: string) => {
             color: color.Text_Dark_1,
             lineHeight: scales(25),
         },
-        titleRemove: {
-            ...Fonts.inter600,
-            fontSize: scales(14),
-            color: color.Color_Primary,
-        },
-
         tag: {
             ...Fonts.inter400,
             fontSize: scales(12),
@@ -192,6 +172,11 @@ const myStyles = (theme: string) => {
         line: {
             borderBottomColor: getThemeColor().Color_Gray6,
             borderBottomWidth: 5,
+        },
+        titleRemove: {
+            ...Fonts.inter600,
+            fontSize: scales(14),
+            color: color.Color_Primary,
         },
     });
 };

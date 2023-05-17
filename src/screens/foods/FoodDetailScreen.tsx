@@ -53,8 +53,6 @@ const FoodDetailScreen = (props: IFoodDetailScreenProps) => {
         { key: 'foodDetailDishScene', title: 'Món ngon', foodCategory },
     ]);
 
-    console.log('foodCategory', foodCategory);
-
     const getFoodDetail = async () => {
         const response = await fetchFoodsOfCategory(foodCategory?._id);
 
@@ -66,11 +64,7 @@ const FoodDetailScreen = (props: IFoodDetailScreenProps) => {
         getFoodDetail();
     }, []);
 
-    const renderHeader = () => <Header title={foodCategory?.name}  iconRight={<SvgIcons.IcSavePlus />} onPressRight={onSaveFood}/>;
-
-    const onSaveFood = async () => {
-        await saveFood(foodDetail[0]?._id);
-    };
+    const renderHeader = () => <Header title={foodCategory?.name} />;
 
     const renderTabItem = (tabProps: TabBarItemProps<FoodDetailScreenRouteProps>) => {
         const { title } = tabProps.route;
