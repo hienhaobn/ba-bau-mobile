@@ -36,6 +36,7 @@ import IcTabPremiumActive from './tab_premium_active.svg';
 import IcVisibility from './visibility.svg';
 import IcVisibilityOff from './visibility_off.svg';
 import IcSavePlus from './save_plus.svg';
+import IcSave1 from './save1.svg';
 
 const SvgIcons = {
     IcBack,
@@ -76,6 +77,7 @@ const SvgIcons = {
     IcCheck,
     IcRemove,
     IcSavePlus,
+    IcSave1,
 };
 
 export default SvgIcons;

@@ -57,6 +57,16 @@ export const fetchFoodsOfCategoryById = async (foodsOfCategoryId: string) => {
     }
 }
 
+export const fetchFoodById = async (id: string) => {
+    try {
+        const res: food.FoodOfCategory = await axiosInstance.get(`/foods/${id}`);
+        return res;
+    } catch (error) {
+        showCustomToast('Thất bại');
+        console.log(error);
+    }
+}
+
 export const saveFood = async (foodId: string) => {
     try {
         showLoading();

@@ -7,6 +7,7 @@ import FastImage from 'react-native-fast-image';
 import { SceneMap, TabBar, TabBarItemProps, TabView } from 'react-native-tab-view';
 import { EventBusName, onPushEventBus } from 'services/event-bus';
 import { removeSaveFood, saveFood } from 'states/foods/fetchFoods';
+import SvgIcons from '../../assets/svgs';
 
 import DishDetailIngredientScene from './src/components/DishDetailIngredientScene';
 import DishDetailMakingScene from './src/components/DishDetailMakingScene';
@@ -52,17 +53,13 @@ const FoodDetailSavedScreen = (props: IDishDetailScreenProps) => {
         { key: 'dishDetailMakingScene', title: 'Cách làm', foodOfCategory: foodSave?.idFood },
         { key: 'dishDetailVideoScene', title: 'Video', foodOfCategory: foodSave?.idFood },
     ]);
-
-    const renderHeader = () => <Header title={foodSave?.idFood?.name}  iconRight={<Text style={styles.titleRemove}>Xoá</Text>} onPressRight={onRemoveSaveFood}/>;
+    const renderHeader = () => <Header title={foodSave?.idFood?.name}  iconRight={<SvgIcons.IcSave1 color={getThemeColor().Color_Primary} />} onPressRight={onRemoveSaveFood}/>;
 
     const onRemoveSaveFood = async () => {
         await removeSaveFood(foodSave?._id);
         onPushEventBus(EventBusName.REMOVE_FOOD_SAVE_SUCCESS);
         goBack();
 
-    };
-    const onSaveFood = async () => {
-        await saveFood(foodSave?.idFood?._id);
     };
 
     const renderTabItem = (tabProps: TabBarItemProps<DishDetailScreenRouteProps>) => {

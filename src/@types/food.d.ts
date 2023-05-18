@@ -40,6 +40,7 @@ declare namespace food {
         idCategory: string;
         createdAt: string;
         updatedAt: string;
+        isSave: boolean;
     }
 
     interface FoodOfCategorySave {
