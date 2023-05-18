@@ -18,10 +18,10 @@ export const fetchFetalHistory = async () => {
     }
 };
 
-export const createFetalHistory = async (body: { file: object; note: string; weeksOfPregnancy: string }) => {
+export const createFetalHistory = async (body: { file?: object; note: string; weeksOfPregnancy: string }) => {
     try {
         const bodyFormData = new FormData();
-        bodyFormData.append('image', body.file);
+        bodyFormData.append('image', body?.file);
         bodyFormData.append('note', body.note);
         bodyFormData.append('weeksOfPregnancy', body.weeksOfPregnancy);
         const token = GlobalVariables?.tokenInfo?.accessToken
@@ -38,16 +38,18 @@ export const createFetalHistory = async (body: { file: object; note: string; wee
     }
 };
 
-export const updateFetalHealthy = async (body: { file: object; note: string; weeksOfPregnancy: string }) => {
+export const updateFetalHealthy = async (body: { file?: object; note: string; weeksOfPregnancy: string }, fetalHealthyId: string) => {
     try {
         const bodyFormData = new FormData();
-        bodyFormData.append('image', body.file);
+        if (Object.keys(body?.file).length > 0) {
+            bodyFormData.append('image', body?.file);
+        }
         bodyFormData.append('note', body.note);
         bodyFormData.append('weeksOfPregnancy', body.weeksOfPregnancy);
         const token = GlobalVariables?.tokenInfo?.accessToken
             ? `Bearer ${GlobalVariables?.tokenInfo?.accessToken}`
             : '';
-        const response = await axios.patch(`${BASE_URL}/baby-diaries`, bodyFormData, {
+        const response = await axios.patch(`${BASE_URL}/baby-diaries/${fetalHealthyId}`, bodyFormData, {
             headers: { 'Content-Type': 'multipart/form-data', 'Authorization': token },
         });
 

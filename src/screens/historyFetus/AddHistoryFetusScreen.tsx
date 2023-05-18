@@ -1,6 +1,6 @@
 import { RouteProp } from '@react-navigation/native';
 import moment from 'moment';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import FastImage from 'react-native-fast-image';
@@ -23,7 +23,7 @@ import { goBack, pop } from 'navigation/utils';
 
 import { EventBusName, onPushEventBus } from 'services/event-bus';
 
-import { createFetalHistory, removeFetalHealthy } from 'states/fetal/fetchFetalHistory';
+import { createFetalHistory, removeFetalHealthy, updateFetalHealthy } from 'states/fetal/fetchFetalHistory';
 
 import { Fonts, Sizes } from 'themes';
 
@@ -31,6 +31,7 @@ import { getThemeColor } from 'utils/getThemeColor';
 import { formatImage } from 'utils/image';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
+import { formatImageToFile } from './src/utils';
 
 interface ImageChoose {
     creationDate: string;
@@ -59,15 +60,24 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
     const { route } = props;
     const { action, history } = route.params;
     const [selectDateVisible, setSelectDateVisible] = useState<boolean>(false);
-    const [date, setDate] = useState<Date>(action === 'EDIT' ? moment(history?.createdAt).toDate() : moment().toDate());
-    const [week, setWeek] = useState<string>(action === 'EDIT' ? history?.createdAt || '' : '');
+    const [date, setDate] = useState<Date>(action === 'EDIT' ? moment(history?.updatedAt).toDate() : moment().toDate());
+    const [week, setWeek] = useState<string>(action === 'EDIT' ? `${history?.weeksOfPregnancy}` : '');
     const [note, setNote] = useState<string>(action === 'EDIT' ? history?.note || '' : '');
-    const [imageChoose, setImageChoose] = useState<ImageChoose>(null);
+    const [imageChoose, setImageChoose] = useState<ImageChoose>( null);
     const bottomSheetRef = useRef<CustomBottomSheetRefType>(null);
 
     const onHistory = async () => {
+        let response;
         showLoading();
-        const response = await createFetalHistory({ file: formatImage(imageChoose), note, weeksOfPregnancy: week });
+        let body = { note, weeksOfPregnancy: week, file: {} }
+        if (imageChoose) {
+            body = { ...body, file: formatImage(imageChoose) }
+        }
+        if (action === 'EDIT') {
+            response = await updateFetalHealthy(body, history._id);
+        } else {
+            response = await createFetalHistory(body);
+        }
         hideLoading();
         if (response) {
             onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
@@ -127,7 +137,7 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
                 cropperCircleOverlay: true,
             });
             if (image) {
-                setImageChoose(imageCrop);
+                setImageChoose(image);
                 dismissBottomSheet();
                 // dispatch(userActionCreators.changeAvatar(formatImage(image)))
             }
@@ -203,11 +213,21 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
         setSelectDateVisible(false);
     };
 
+    const getImageUrl = () => {
+        if (action === 'EDIT' && history.image) {
+            return { uri: history.image }
+        } else if (action === 'CREATE' && imageChoose?.path) {
+            return { uri: imageChoose?.path }
+        } else {
+            return Images.Babe3;
+        }
+    }
+
     const renderContent = () => (
         <View style={styles.content}>
             <View style={styles.contentHeaderContainer}>
                 <FastImage
-                    source={imageChoose?.path ? { uri: imageChoose?.path } : Images.Babe3}
+                    source={getImageUrl()}
                     style={styles.image}
                 />
                 <TouchableOpacity style={styles.pencilContainer} onPress={showBottomSheet}>
