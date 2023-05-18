@@ -59,7 +59,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
         return count;
     };
 
-    const getOnlyElementChart = useCallback(() => {
+    const getOnlyElementChart = () => {
         let bloodPressure = 0;
         let commonDiseases = '';
         let createdAt = '';
@@ -104,7 +104,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
             weight,
             _id,
         };
-    }, [healthyIndex]);
+    };
 
     useEffect(() => {
         getData();

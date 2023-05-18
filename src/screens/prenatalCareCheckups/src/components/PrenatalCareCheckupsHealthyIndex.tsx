@@ -23,14 +23,27 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
     const styles = myStyles(theme);
     const { data } = props;
 
-    const renderEmptyComponent = () => (
-        <View style={styles.emptyContainer}>
-            <Image source={Images.NoData} style={styles.image} resizeMode="contain" />
-            <Text style={styles.noData}>Không có dữ liệu</Text>
-            <Button title="Nhập dữ liệu" customStyles={styles.buttonEnterData} />
-            <Text style={styles.fetchData}>Lấy dữ liệu khám định kỳ</Text>
-        </View>
-    );
+    const getStatus = (value: number, min: number, max: number) => {
+        if (BigNumber(value).lt(min)) {
+            return (
+                <View style={[styles.statusContainer, { backgroundColor: getThemeColor().Color_Blue }]}>
+                    <Text style={styles.statusTxt}>Thấp</Text>
+                </View>
+            )
+        } else if (BigNumber(value).gt(max)) {
+           return (
+               <View style={[styles.statusContainer, { backgroundColor: getThemeColor().red }]}>
+                   <Text style={styles.statusTxt}>Cao</Text>
+               </View>
+           )
+        } else if (BigNumber(value).lt(max) && BigNumber(value).gt(min)) {
+            return  (
+                <View style={[styles.statusContainer, { backgroundColor: getThemeColor().Color_Yellow_1 }]}>
+                    <Text style={styles.statusTxt}>Trung bình</Text>
+                </View>
+            )
+        }
+    }
 
     const getDotPosition = (min: number, max: number, value: number) => {
         const baseValue = BigNumber(max).minus(min);
@@ -60,9 +73,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Huyết áp</Text>
-                    <View style={styles.statusContainer}>
-                        <Text style={styles.statusTxt}>Thấp</Text>
-                    </View>
+                    {getStatus(data.bloodPressure, 70, 130)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
@@ -86,9 +97,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                 <Text style={styles.pointTxt}>Chỉ số đường huyết (mmol/L)</Text>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Lúc đói</Text>
-                    <View style={[styles.statusContainer, { backgroundColor: getThemeColor().red }]}>
-                        <Text style={styles.statusTxt}>Cao</Text>
-                    </View>
+                    {getStatus(data.fastingGlycemicIndex, 70, 130)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
@@ -109,9 +118,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Sau ăn 1h</Text>
-                    <View style={[styles.statusContainer, { backgroundColor: getThemeColor().red }]}>
-                        <Text style={styles.statusTxt}>Cao</Text>
-                    </View>
+                    {getStatus(data.eating1hGlycemicIndex, 70, 130)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
@@ -131,9 +138,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Sau ăn 2h</Text>
-                    <View style={[styles.statusContainer, { backgroundColor: getThemeColor().red }]}>
-                        <Text style={styles.statusTxt}>Cao</Text>
-                    </View>
+                    {getStatus(data.eating2hGlycemicIndex, 70, 130)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
