@@ -13,7 +13,14 @@ declare namespace user {
         phone: string;
         balance: number;
         activated: string;
+        fullname: string;
         role: string;
+        address: string;
+        childBirthday: string;
+        lastMenstrualPeriod: string;
+        avatar: string;
+        birthday: string;
+        childName: string;
         createdAt: string;
         updatedAt: string;
     }

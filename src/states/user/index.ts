@@ -8,6 +8,7 @@ import axiosInstance from 'services/api-requests';
 import { setMessage } from 'states/message';
 import Storages, { KeyStorage } from 'utils/storages';
 import { showCustomToast } from 'utils/toast';
+import { updateProfile } from './fetchProfile';
 
 const initialState: user.State = {
     profile: null,
@@ -46,7 +47,16 @@ export const fetchProfile = createAsyncThunk<user.Profile>('user/profile', async
             (error.message && error.response.data && error.response.data.message) || error.message || error.toString();
         showCustomToast(message);
     }
-})
+});
+
+export const fetchUpdate = (body: { avatar?: object, birthday: string, fullname: string, phone: string, address: string, childBirthday: string, lastMenstrualPeriod: string, childName: string }) => {
+    return async function fetchUpdateProfile(dispatch, getState) {
+        const response = await updateProfile(body);
+        if (response) {
+            dispatch(fetchProfile())
+        }
+    }
+}
 
 export const userSlice = createSlice({
     name: 'user',

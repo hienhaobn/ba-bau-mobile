@@ -18,6 +18,7 @@ import { Fonts } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
+import { goToRegisterUpdateInfo } from '../registerUpdateInfo/src/utils';
 
 interface VerifyOTPScreenProps {
     route: RouteProp<RootNavigatorParamList, 'VerifyOTP'>;
@@ -78,6 +79,7 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
                 }
                 setCode('');
                 resetStack('Login');
+
                 showCustomToast('Đăng ký thành công');
             } catch (error) {
                 showCustomToast(error.message);

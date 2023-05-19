@@ -11,6 +11,7 @@ import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import Storages, { KeyStorage } from 'utils/storages';
+import { goToRegisterUpdateInfo } from '../registerUpdateInfo/src/utils';
 
 const AccountScreen = () => {
     const { theme } = useTheme();
@@ -31,7 +32,7 @@ const AccountScreen = () => {
 
     const renderItems = () => (
         <View style={styles.itemsContainer}>
-            <TouchableOpacity style={styles.itemContainer} onPress={goToAccountInfo}>
+            <TouchableOpacity style={styles.itemContainer} onPress={goToRegisterUpdateInfo}>
                 <View style={styles.itemLeftContainer}>
                     <Image source={Images.UserInfo} style={styles.itemIconLeft} resizeMode="contain" />
                     <Text style={styles.title}>Thông tin tài khoản</Text>
@@ -47,14 +48,14 @@ const AccountScreen = () => {
                 <SvgIcons.IcForward width={scales(15)} height={scales(15)} color={getThemeColor().Text_Dark_1} />
             </TouchableOpacity>
             <View style={styles.line} />
-            <TouchableOpacity style={styles.itemContainer}>
-                <View style={styles.itemLeftContainer}>
-                    <Image source={Images.StartGroup} style={styles.itemIconLeft} resizeMode="contain" />
-                    <Text style={styles.title}>Đánh giá</Text>
-                </View>
-                <SvgIcons.IcForward width={scales(15)} height={scales(15)} color={getThemeColor().Text_Dark_1} />
-            </TouchableOpacity>
-            <View style={styles.line} />
+            {/*<TouchableOpacity style={styles.itemContainer}>*/}
+            {/*    <View style={styles.itemLeftContainer}>*/}
+            {/*        <Image source={Images.StartGroup} style={styles.itemIconLeft} resizeMode="contain" />*/}
+            {/*        <Text style={styles.title}>Đánh giá</Text>*/}
+            {/*    </View>*/}
+            {/*    <SvgIcons.IcForward width={scales(15)} height={scales(15)} color={getThemeColor().Text_Dark_1} />*/}
+            {/*</TouchableOpacity>*/}
+            {/*<View style={styles.line} />*/}
             <TouchableOpacity style={styles.itemContainer} onPress={onLogOut}>
                 <View style={styles.itemLeftContainer}>
                     <Image source={Images.LogOut} style={styles.itemIconLeft} resizeMode="contain" />

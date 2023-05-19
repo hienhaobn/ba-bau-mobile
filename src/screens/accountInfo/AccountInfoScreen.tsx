@@ -27,7 +27,7 @@ function AccountInfoScreen(props) {
         <View style={{ marginHorizontal: scales(15) }}>
             <View style={styles.inputContainer}>
                 <Text style={styles.title}>Email</Text>
-                <Input value={email} onChangeText={setEmail} placeholder="Vui lòng nhập email" />
+                <Input value={email} onChangeText={setEmail} placeholder="Vui lòng nhập email" editable={false}/>
             </View>
             <View style={styles.inputContainer}>
                 <Text style={styles.title}>Họ và tên</Text>
