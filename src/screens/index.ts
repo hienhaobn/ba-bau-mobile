@@ -2,6 +2,7 @@ import AccountInfo from 'screens/accountInfo/AccountInfoScreen';
 import FoodDetailSaved from 'screens/foods/FoodDetailSavedScreen';
 import FoodSave from 'screens/foods/FoodSaveScreen';
 import Account from './account/AccountScreen';
+import ChangePassword from './changePassword/ChangePasswordScreen';
 import FetalHealthAnalysis from './fetalHealth/FetalHealthAnalysisScreen';
 import FetalHealthChart from './fetalHealth/FetalHealthChartScreen';
 import FetalHealthInfo from './fetalHealth/FetalHealthInfoScreen';
@@ -97,4 +98,5 @@ export const Screen = {
     FoodSave,
     AccountInfo,
     FoodDetailSaved,
+    ChangePassword,
 };

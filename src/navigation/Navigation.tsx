@@ -115,6 +115,8 @@ const RootStack = () => {
             <Stack.Screen name="AccountInfo" component={Screen.AccountInfo} />
 
             <Stack.Screen name="FoodDetailSaved" component={Screen.FoodDetailSaved} />
+
+            <Stack.Screen name="ChangePassword" component={Screen.ChangePassword} />
         </Stack.Navigator>
     );
 };

@@ -13,6 +13,7 @@ import { scales } from 'utils/scales';
 import Storages, { KeyStorage } from 'utils/storages';
 import { useAppDispatch } from '../../states';
 import { userLogout } from '../../states/user';
+import { goToChangePassword } from '../changePassword/src/utils';
 
 const AccountScreen = () => {
     const { theme } = useTheme();
@@ -43,7 +44,7 @@ const AccountScreen = () => {
                 <SvgIcons.IcForward width={scales(15)} height={scales(15)} color={getThemeColor().Text_Dark_1} />
             </TouchableOpacity>
             <View style={styles.line} />
-            <TouchableOpacity style={styles.itemContainer}>
+            <TouchableOpacity style={styles.itemContainer} onPress={goToChangePassword}>
                 <View style={styles.itemLeftContainer}>
                     <Image source={Images.ChangePassword} style={styles.itemIconLeft} resizeMode="contain" />
                     <Text style={styles.title}>Đổi mật khẩu</Text>
