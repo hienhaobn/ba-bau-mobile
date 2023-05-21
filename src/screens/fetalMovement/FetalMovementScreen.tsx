@@ -133,6 +133,9 @@ const FetalMovementScreen = () => {
                 timeCount,
             })
         );
+
+        setIsPlay(false);
+        setMovement(0);
     };
 
     const onPlay = () => {

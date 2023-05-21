@@ -114,6 +114,23 @@ declare namespace user {
         updatedAt: string;
     }
 
+    interface FetalDevelopmentWeeklyItem {
+        min: number;
+        max: number;
+    }
+
+    interface FetalDevelopmentWeekly {
+        AC: FetalDevelopmentWeeklyItem;
+        BPD: FetalDevelopmentWeeklyItem;
+        CRL: FetalDevelopmentWeeklyItem;
+        FL: FetalDevelopmentWeeklyItem;
+        GSD: FetalDevelopmentWeeklyItem;
+        HC: FetalDevelopmentWeeklyItem;
+        createdAt: string;
+        updatedAt: string;
+        week: string;
+    }
+
     interface CheckupsScheduleChildResponse {
         _id: string;
         weight: number;
@@ -128,6 +145,7 @@ declare namespace user {
         updatedAt: string;
         width: number;
         pregnancyExam: Date;
+        fetalDevelopmentWeekly: FetalDevelopmentWeekly;
     }
 
     interface CheckupsScheduleHistoryResponse {

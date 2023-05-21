@@ -32,6 +32,30 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
     const { route } = props;
     const { child, momId } = route.params;
 
+    console.log('child', child);
+
+    const getStatus = (value: number, min: number, max: number) => {
+        if (BigNumber(value).lt(min)) {
+            return (
+                <View style={[styles.statusContainer, { backgroundColor: getThemeColor().Color_Blue }]}>
+                    <Text style={styles.statusTxt}>Thấp</Text>
+                </View>
+            )
+        } else if (BigNumber(value).gt(max)) {
+            return (
+                <View style={[styles.statusContainer, { backgroundColor: getThemeColor().red }]}>
+                    <Text style={styles.statusTxt}>Cao</Text>
+                </View>
+            )
+        } else if (BigNumber(value).lt(max) && BigNumber(value).gt(min)) {
+            return  (
+                <View style={[styles.statusContainer, { backgroundColor: getThemeColor().Color_Yellow_1 }]}>
+                    <Text style={styles.statusTxt}>Trung bình</Text>
+                </View>
+            )
+        }
+    }
+
     const getDotPosition = (min: number, max: number, value: number) => {
         const baseValue = BigNumber(max).minus(min);
         const value1 = BigNumber(max).minus(value);
@@ -64,9 +88,7 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
             <View style={styles.contentHeader}>
                 <Text style={styles.leftHeader}>Cân nặng</Text>
                 <Text style={styles.midHeader}>{child?.weight || 0} Gram</Text>
-                <View style={styles.statusContainer}>
-                    <Text style={styles.statusTxt}>Thấp</Text>
-                </View>
+                {getStatus(child?.weight, 70, 130)}
             </View>
             <View style={styles.weekContainer}>
                 <Text style={styles.txtWeek}>Tuần thai: </Text>
@@ -75,19 +97,22 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Chiều dài (CRL)</Text>
-                    <View style={styles.statusContainer}>
-                        <Text style={styles.statusTxt}>Thấp</Text>
-                    </View>
+                    {getStatus(child?.width, 70, 130)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#80F1A6', '#EFBA00', '#EFBA00']}
+                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
+                    {/*TODO: when server fix min max*/}
+                    {/*<Text style={[styles.dotValue, { left: getDotPosition(70, 130, child?.width) || 0 }]}>*/}
+                    {/*    min {child?.width || 0} mm*/}
+                    {/*</Text>*/}
+                    {/*<View style={[styles.dot, { left: getDotPosition(0, 70, 52) || 0 }]} />*/}
                     <Text style={[styles.dotValue, { left: getDotPosition(70, 130, child?.width) || 0 }]}>
                         {child?.width || 0} mm
                     </Text>
@@ -97,16 +122,14 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Đường kính lưỡng đỉnh (BPD)</Text>
-                    <View style={[styles.statusContainer, { backgroundColor: getThemeColor().Color_Green }]}>
-                        <Text style={styles.statusTxt}>Bình thường</Text>
-                    </View>
+                    {getStatus(child?.dualTopDiameter, 70, 130)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#80F1A6', '#EFBA00', '#EFBA00']}
+                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
@@ -119,16 +142,14 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Chiều dài xương đùi (FL)</Text>
-                    <View style={[styles.statusContainer, { backgroundColor: getThemeColor().red }]}>
-                        <Text style={styles.statusTxt}>Cao</Text>
-                    </View>
+                    {getStatus(child?.femurLength, 70, 130)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#80F1A6', '#EFBA00', '#EFBA00']}
+                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
@@ -142,16 +163,14 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Chu vi đầu (HC)</Text>
-                    <View style={[styles.statusContainer, { backgroundColor: getThemeColor().red }]}>
-                        <Text style={styles.statusTxt}>Cao</Text>
-                    </View>
+                    {getStatus(child?.headPerimeter, 70, 130)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#80F1A6', '#EFBA00', '#EFBA00']}
+                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>

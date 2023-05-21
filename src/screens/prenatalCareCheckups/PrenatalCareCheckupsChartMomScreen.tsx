@@ -47,7 +47,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
         }
     };
 
-    const getValueChart = (currentDate: number) => {
+    const getValueChart = useCallback((currentDate: number) => {
         let count = 0;
         let index = 0;
         if (data?.length) {
@@ -55,12 +55,12 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
                 const date = parseInt(element.createdAt.split('-')[2]);
                 if (currentDate === date) {
                     count += element.weight;
-                    index += i;
+                    index++;
                 }
             });
         }
-        return count;
-    };
+        return BigNumber(count).div(index).toNumber();
+    }, [data, healthyIndex]);
 
     const getValueChartValue = (currentDate: number) => {
         let count = 0;

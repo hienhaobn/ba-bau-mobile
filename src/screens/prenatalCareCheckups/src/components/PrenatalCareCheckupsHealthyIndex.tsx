@@ -80,7 +80,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#80F1A6', '#EFBA00', '#EFBA00']}
+                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
@@ -104,7 +104,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#80F1A6', '#EFBA00', '#EFBA00']}
+                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
@@ -125,7 +125,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#80F1A6', '#EFBA00', '#EFBA00']}
+                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
@@ -145,7 +145,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#80F1A6', '#EFBA00', '#EFBA00']}
+                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
