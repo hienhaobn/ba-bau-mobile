@@ -13,6 +13,7 @@ const initialState: fetal.State = {
         fetalMove: [],
         total_page: 1,
     },
+    dueDate: '0',
     isLoading: false,
 };
 
@@ -52,7 +53,11 @@ export const fetchMovementFromDateToDate = createAsyncThunk<fetal.FetalResponse>
 export const fetalSlice = createSlice({
     name: 'Fetal',
     initialState,
-    reducers: {},
+    reducers: {
+        updateDueDate: (state, action) => {
+            state.dueDate = action.payload;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(createFetalMovement.pending, (state, action) => {
@@ -91,5 +96,7 @@ export const fetalSlice = createSlice({
 
     },
 });
+
+export const { updateDueDate } = fetalSlice.actions;
 
 export default fetalSlice.reducer;

@@ -68,9 +68,9 @@ const DishDetailScreen = (props: IDishDetailScreenProps) => {
 
     const onSaveFood = async () => {
         if (foodDetail && !foodDetail?.isSave) {
-            await saveFood(foodOfCategory?._id);
+            await saveFood(foodDetail?._id);
         } else {
-            await removeSaveFood(foodOfCategory?._id);
+            await removeSaveFood(foodDetail?._id);
         }
         getFoodDetail();
     };

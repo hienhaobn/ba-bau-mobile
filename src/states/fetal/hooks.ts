@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { useAppDispatch } from 'states';
 import { fetchMovementByDateNow, fetchMovementFromDateToDate } from 'states/fetal/index';
-import { selectFetalMovements, selectIsLoading } from 'states/fetal/selectors';
+import { selectDueDate, selectFetalMovements, selectIsLoading } from 'states/fetal/selectors';
 
 export const useFetchMovementByDateNow = (date: Date) => {
     const dispatch = useAppDispatch();
@@ -25,4 +25,8 @@ export const useMovementSelector = () => {
 
 export const useMovementsIsLoadingSelector = () => {
     return useSelector(selectIsLoading);
+};
+
+export const useDueDateSelector = () => {
+    return useSelector(selectDueDate);
 };

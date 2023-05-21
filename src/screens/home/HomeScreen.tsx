@@ -24,22 +24,23 @@ import { fetchBalance } from 'states/premium/fetchPayment';
 import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import { useDueDateSelector } from '../../states/fetal/hooks';
 import Storages, { KeyStorage } from '../../utils/storages';
 
 const HomeScreen = (props) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const dueDateSelector = useDueDateSelector();
     const { route } = props;
     const stateFromPath = route.params?.stateFromPath;
     const refPaymentSuccess = useRef<IPaymentSuccessPopupRef>(null);
     const refPaymentFailedPopup = useRef<IPaymentFailedPopupRef>(null);
-    const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<string>(moment().format('YYYY-MM-DD'));
+    const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<string>(moment(dueDateSelector).format('YYYY-MM-DD'));
     const [week, setWeek] = useState<number>(0);
     const [calendar, setCalendar] = useState<Date>(null);
 
     const getDueDate = async () => {
         const dueDate = await Storages.get(KeyStorage.DueDate);
-
         setLastMenstrualPeriod(dueDate);
     };
 
@@ -51,7 +52,7 @@ const HomeScreen = (props) => {
         const weekNow = Math.floor(diffDays/7);
         setWeek(weekNow);
         setCalendar(moment(lastMenstrualPeriod).add('weeks', weekNow + 1).toDate())
-    }, [lastMenstrualPeriod])
+    }, [])
 
     useEffect(() => {
         getDueDate();

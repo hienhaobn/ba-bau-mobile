@@ -10,13 +10,20 @@ import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import Storages, { KeyStorage } from 'utils/storages';
+import { useAppDispatch } from '../../states';
+import { updateDueDate } from '../../states/fetal';
+import { useDueDateSelector } from '../../states/fetal/hooks';
 
 const PregnancyDueDateCalculatorScreen = () => {
     const { theme } = useTheme();
+    const dueDateSelector = useDueDateSelector();
     const styles = myStyles(theme);
     const [date, setDate] = useState(new Date());
     const refPregnancyDueDateCalculatorConfirmPopup = useRef<IPregnancyDueDateCalculatorConfirmPopupRef>()
-    const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<string>(moment().format('YYYY-MM-DD'));
+    const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<string>(moment(dueDateSelector).format('YYYY-MM-DD'));
+    const dueDate = moment(lastMenstrualPeriod).add(9, 'months').add(10, 'days').format('DD/MM/YYYY');
+
+    const dispatch = useAppDispatch();
 
     const getDueDateFromStore = async () => {
         const dueDate = await Storages.get(KeyStorage.DueDate);
@@ -25,9 +32,8 @@ const PregnancyDueDateCalculatorScreen = () => {
 
     useEffect(() => {
         getDueDateFromStore();
-    }, [lastMenstrualPeriod]);
+    }, []);
 
-    const dueDate = moment(lastMenstrualPeriod).add(9, 'months').add(10, 'days').format('DD/MM/YYYY');
     const handleOpenPopup = () => {
         refPregnancyDueDateCalculatorConfirmPopup?.current?.showModal();
     };
@@ -36,6 +42,7 @@ const PregnancyDueDateCalculatorScreen = () => {
         // save to async storage
         const currentDate = moment(date).format('YYYY-MM-DD');
         setLastMenstrualPeriod(currentDate);
+        dispatch(updateDueDate(dueDate));
         Storages.set(KeyStorage.DueDate, currentDate);
         refPregnancyDueDateCalculatorConfirmPopup?.current?.hideModal();
     };
@@ -73,7 +80,7 @@ const PregnancyDueDateCalculatorScreen = () => {
             {renderPregnancyDueDateCalculator()}
             {renderSelectDate()}
             {renderButton()}
-            <PregnancyDueDateCalculatorConfirmPopup ref={refPregnancyDueDateCalculatorConfirmPopup} onConfirm={handleConfirm} dueDate={moment(date, 'YYYY-MM-DD').add(9, 'months').add(10, 'days').format('DD/MM/YYYY')}/>
+            <PregnancyDueDateCalculatorConfirmPopup ref={refPregnancyDueDateCalculatorConfirmPopup} onConfirm={handleConfirm} dueDate={moment(moment(date).format('YYYY-MM-DD')).add(9, 'months').add(10, 'days').format('DD/MM/YYYY')}/>
         </View>
     );
 

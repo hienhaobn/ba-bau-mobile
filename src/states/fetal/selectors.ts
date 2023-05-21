@@ -8,3 +8,6 @@ export const selectFetalMovements = (state: GlobalState) => {
     return state.fetal?.data?.fetalMove;
 };
 
+export const selectDueDate = (state: GlobalState) => {
+    return state.fetal?.dueDate;
+};

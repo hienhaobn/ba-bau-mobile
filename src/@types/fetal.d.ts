@@ -20,6 +20,7 @@ declare namespace fetal {
     interface Info {
         data: FetalResponse;
         isLoading: boolean;
+        dueDate: string;
     }
 
     interface FetalHistory {
