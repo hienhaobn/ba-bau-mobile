@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import moment from 'moment';
+import React, { useEffect, useRef, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import Images from 'assets/images';
@@ -23,6 +24,7 @@ import { fetchBalance } from 'states/premium/fetchPayment';
 import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import Storages, { KeyStorage } from '../../utils/storages';
 
 const HomeScreen = (props) => {
     const { theme } = useTheme();
@@ -31,6 +33,29 @@ const HomeScreen = (props) => {
     const stateFromPath = route.params?.stateFromPath;
     const refPaymentSuccess = useRef<IPaymentSuccessPopupRef>(null);
     const refPaymentFailedPopup = useRef<IPaymentFailedPopupRef>(null);
+    const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<string>(moment().format('YYYY-MM-DD'));
+    const [week, setWeek] = useState<number>(0);
+    const [calendar, setCalendar] = useState<Date>(null);
+
+    const getDueDate = async () => {
+        const dueDate = await Storages.get(KeyStorage.DueDate);
+
+        setLastMenstrualPeriod(dueDate);
+    };
+
+    useEffect(() => {
+        const date1 = new Date().getTime();
+        const date2 = new Date(lastMenstrualPeriod).getTime();
+        const diffTime = Math.abs(date2 - date1);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const weekNow = Math.floor(diffDays/7);
+        setWeek(weekNow);
+        setCalendar(moment(lastMenstrualPeriod).add('weeks', weekNow + 1).toDate())
+    }, [lastMenstrualPeriod])
+
+    useEffect(() => {
+        getDueDate();
+    }, [])
 
     useEffect(() => {
         if (stateFromPath?.includes('payment-success')) {
@@ -54,14 +79,14 @@ const HomeScreen = (props) => {
         <View style={styles.contentHeaderContainer}>
             <View style={styles.fetusInfo}>
                 <Text style={styles.titleFetus}>Lich khám</Text>
-                <Text style={styles.valueFetus}>24/12</Text>
+                <Text style={styles.valueFetus}>{calendar ? moment(calendar).format('DD/MM') : 0}</Text>
             </View>
             <View>
                 <Image source={Images.GirlHome} style={styles.girlHome} />
             </View>
             <View style={styles.fetusInfo}>
                 <Text style={styles.titleFetus}>Tuần thai</Text>
-                <Text style={styles.valueFetus}>20</Text>
+                <Text style={styles.valueFetus}>{week}</Text>
             </View>
         </View>
     );
