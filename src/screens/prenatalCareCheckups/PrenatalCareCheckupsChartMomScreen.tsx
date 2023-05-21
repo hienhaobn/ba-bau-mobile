@@ -1,5 +1,6 @@
 /* eslint-disable complexity */
 import { RouteProp } from '@react-navigation/native';
+import BigNumber from 'bignumber.js';
 import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -48,11 +49,26 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
 
     const getValueChart = (currentDate: number) => {
         let count = 0;
+        let index = 0;
         if (data?.length) {
-            data?.map((element) => {
+            data?.map((element, i) => {
                 const date = parseInt(element.createdAt.split('-')[2]);
                 if (currentDate === date) {
                     count += element.weight;
+                    index += i;
+                }
+            });
+        }
+        return count;
+    };
+
+    const getValueChartValue = (currentDate: number) => {
+        let count = 0;
+        if (data?.length) {
+            data?.map((element, i) => {
+                const date = parseInt(moment(element.createdAt).format('YYYY/MM/DD').split('/')[2]);
+                if (parseInt(moment(currentDate).format('YYYY/MM/DD').split('/')[2]) === date) {
+                    count = element.weight;
                 }
             });
         }
@@ -112,42 +128,42 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
 
     const barData = [
         {
-            value: getValueChart(first.getDate()) || 0,
+            value: getValueChartValue(first.getDate()) || 0,
             label: `${first.getDate()}/${first.getMonth() + 1 || '0'}`  || '0',
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
-                    {getValueChart(first.getDate())}
+                    {getValueChartValue(first.getDate())}
                 </Text>
             ),
         },
         {
-            value: getValueChart(second.getDate()) || 0,
+            value: getValueChartValue(second.getDate()) || 0,
             label: `${second.getDate()}/${second.getMonth() + 1 || '0'}` || '0',
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
-                    {getValueChart(second.getDate())}
+                    {getValueChartValue(second.getDate())}
                 </Text>
             ),
         },
         {
-            value: getValueChart(third.getDate()) || 0,
+            value: getValueChartValue(third.getDate()) || 0,
             label: `${third.getDate()}/${third.getMonth() + 1 || '0'}` || '0',
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
-                    {getValueChart(third.getDate())}
+                    {getValueChartValue(third.getDate())}
                 </Text>
             ),
         },
         {
-            value: getValueChart(fourth.getDate()) || 0,
+            value: getValueChartValue(fourth.getDate()) || 0,
             label: `${fourth.getDate()}/${fourth.getMonth() + 1 || '0'}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
-                    {getValueChart(fourth.getDate())}
+                    {getValueChartValue(fourth.getDate())}
                 </Text>
             ),
         },

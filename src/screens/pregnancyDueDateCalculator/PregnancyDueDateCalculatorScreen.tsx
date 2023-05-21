@@ -27,7 +27,6 @@ const PregnancyDueDateCalculatorScreen = () => {
         getDueDateFromStore();
     }, [lastMenstrualPeriod]);
 
-
     const dueDate = moment(lastMenstrualPeriod).add(9, 'months').add(10, 'days').format('DD/MM/YYYY');
     const handleOpenPopup = () => {
         refPregnancyDueDateCalculatorConfirmPopup?.current?.showModal();
@@ -74,7 +73,7 @@ const PregnancyDueDateCalculatorScreen = () => {
             {renderPregnancyDueDateCalculator()}
             {renderSelectDate()}
             {renderButton()}
-            <PregnancyDueDateCalculatorConfirmPopup ref={refPregnancyDueDateCalculatorConfirmPopup} onConfirm={handleConfirm} dueDate={moment(date).add(9, 'months').add(10, 'days').format('DD/MM/YYYY')}/>
+            <PregnancyDueDateCalculatorConfirmPopup ref={refPregnancyDueDateCalculatorConfirmPopup} onConfirm={handleConfirm} dueDate={moment(date, 'YYYY-MM-DD').add(9, 'months').add(10, 'days').format('DD/MM/YYYY')}/>
         </View>
     );
 

@@ -11,14 +11,17 @@ import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import Storages, { KeyStorage } from 'utils/storages';
-import { goToRegisterUpdateInfo } from '../registerUpdateInfo/src/utils';
+import { useAppDispatch } from '../../states';
+import { userLogout } from '../../states/user';
 
 const AccountScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const dispatch = useAppDispatch();
 
     const onLogOut = () => {
         Storages.remove(KeyStorage.Token);
+        dispatch(userLogout());
         resetStack('Login');
     };
 
@@ -32,7 +35,7 @@ const AccountScreen = () => {
 
     const renderItems = () => (
         <View style={styles.itemsContainer}>
-            <TouchableOpacity style={styles.itemContainer} onPress={goToRegisterUpdateInfo}>
+            <TouchableOpacity style={styles.itemContainer} onPress={goToAccountInfo}>
                 <View style={styles.itemLeftContainer}>
                     <Image source={Images.UserInfo} style={styles.itemIconLeft} resizeMode="contain" />
                     <Text style={styles.title}>Thông tin tài khoản</Text>

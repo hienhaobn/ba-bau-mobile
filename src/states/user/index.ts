@@ -63,7 +63,9 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         userLogout: (state) => {
-            state = initialState;
+            state.isLogin = initialState.isLogin;
+            state.profile = initialState.profile;
+            state.jwt = initialState.jwt;
         },
     },
     extraReducers: (builder) => {

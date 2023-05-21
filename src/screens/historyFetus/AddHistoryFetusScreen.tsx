@@ -59,8 +59,9 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
     const styles = myStyles(theme);
     const { route } = props;
     const { action, history } = route.params;
+
     const [selectDateVisible, setSelectDateVisible] = useState<boolean>(false);
-    const [date, setDate] = useState<Date>(action === 'EDIT' ? moment(history?.updatedAt).toDate() : moment().toDate());
+    const [date, setDate] = useState<Date>(action === 'EDIT' ? moment(history?.datePhoto ? history?.datePhoto : moment().toDate()).toDate() : moment().toDate());
     const [week, setWeek] = useState<string>(action === 'EDIT' ? `${history?.weeksOfPregnancy}` : '');
     const [note, setNote] = useState<string>(action === 'EDIT' ? history?.note || '' : '');
     const [imageChoose, setImageChoose] = useState<ImageChoose>( null);
@@ -69,11 +70,12 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
     const onHistory = async () => {
         let response;
         showLoading();
-        let body = { note, weeksOfPregnancy: week, file: {} }
+        let body = { note, weeksOfPregnancy: week, file: {}, datePhoto: moment(date).toDate() }
         if (imageChoose) {
             body = { ...body, file: formatImage(imageChoose) }
         }
         if (action === 'EDIT') {
+            console.log('body, history._id', body, history._id);
             response = await updateFetalHealthy(body, history._id);
         } else {
             response = await createFetalHistory(body);
@@ -139,7 +141,6 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
             if (image) {
                 setImageChoose(image);
                 dismissBottomSheet();
-                // dispatch(userActionCreators.changeAvatar(formatImage(image)))
             }
         } catch (err) {
             if (err?.message?.includes?.('not grant camera permission')) {

@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { RouteProp } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
@@ -18,10 +19,9 @@ import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import BottomSheet, { CustomBottomSheetRefType } from '../../components/BottomSheet/BottomSheet';
-import { EventBusName, onPushEventBus } from '../../services/event-bus';
+import { RootNavigatorParamList } from '../../navigation/types';
 import { useAppDispatch } from '../../states';
-import { fetchUpdate } from '../../states/user';
-import { updateProfile } from '../../states/user/fetchProfile';
+import { fetchLogin, fetchUpdate } from '../../states/user';
 import { useSelectUserInfo } from '../../states/user/hooks';
 import { formatImage } from '../../utils/image';
 import { showCustomToast } from '../../utils/toast';
@@ -32,26 +32,32 @@ interface ImageChoose {
     type: string,
 }
 
-const RegisterUpdateInfoScreen = () => {
-    const userInfo = useSelectUserInfo();
+interface RegisterUpdateInfoScreenProps {
+    route: RouteProp<RootNavigatorParamList, 'RegisterUpdateInfo'>
+}
 
+const RegisterUpdateInfoScreen = (props: RegisterUpdateInfoScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const [email, setEmail] = useState<string>(userInfo?.email || '');
-    const [momName, setMomName] = useState<string>(userInfo?.fullname || '');
-    const [momAddress, setMomAddress] = useState<string>(userInfo?.address || '');
-    const [phone, setPhone] = useState<string>(userInfo?.phone || '');
-    const [babyName, setBabyName] = useState<string>(userInfo?.childName || '');
-    const [momDOB, setMomDOB] = useState<Date>(moment(userInfo?.birthday, 'DD-MM-YYYY').toDate() || moment().toDate());
-    const [dueDate, setDueDate] = useState<Date>(moment(userInfo?.childBirthday, 'DD-MM-YYYY').toDate() || moment().toDate());
-    const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<Date>(moment(userInfo?.lastMenstrualPeriod, 'DD-MM-YYYY').toDate() || moment().toDate());
+    const { route } = props;
+    const { email, password } = route.params;
+    const [emailMom, setEmailMom] = useState<string>('');
+    const [momName, setMomName] = useState<string>('');
+    const [momAddress, setMomAddress] = useState<string>('');
+    const [phone, setPhone] = useState<string>('');
+    const [babyName, setBabyName] = useState<string>('');
+    const [momDOB, setMomDOB] = useState<Date>(moment().toDate());
+    const [dueDate, setDueDate] = useState<Date>(moment().toDate());
+    const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<Date>(moment().toDate());
     const [selectDateVisible, setSelectDateVisible] = useState<boolean>(false);
     const [selectDateType, setSelectDateType] = useState<'momDOB' | 'lastMenstrualPeriod' | 'dueDate'>('momDOB');
     const [imageChoose, setImageChoose] = useState<ImageChoose>(null);
-    const [isEdit, setIsEdit] = useState<boolean>(false);
     const bottomSheetRef = useRef<CustomBottomSheetRefType>(null);
-
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(fetchLogin({ email, password }));
+    }, []);
 
     const showBottomSheet = () => {
         if (bottomSheetRef) {
@@ -144,9 +150,7 @@ const RegisterUpdateInfoScreen = () => {
     );
 
     const getImageUrl = () => {
-        if (userInfo?.avatar) {
-            return { uri: userInfo?.avatar };
-        } else if (imageChoose?.uri) {
+        if (imageChoose?.uri) {
             return { uri: imageChoose?.uri };
         } else {
             return Images.GirlHome;
@@ -156,18 +160,14 @@ const RegisterUpdateInfoScreen = () => {
     const renderContentHeader = () => (
         <View style={styles.contentHeaderContainer}>
             <FastImage source={getImageUrl()} style={styles.girlHome} />
-            {
-                isEdit ? (
-                    <TouchableOpacity
-                        style={styles.icPencil}
-                        activeOpacity={1}
-                        hitSlop={{ top: 10, bottom: 0, left: 0, right: 0 }}
-                        onPress={showBottomSheet}
-                    >
-                        <SvgIcons.IcPencil width={scales(15)} height={scales(15)} color={getThemeColor().Color_Primary} />
-                    </TouchableOpacity>
-                ) : null
-            }
+            <TouchableOpacity
+                style={styles.icPencil}
+                activeOpacity={1}
+                hitSlop={{ top: 10, bottom: 0, left: 0, right: 0 }}
+                onPress={showBottomSheet}
+            >
+                <SvgIcons.IcPencil width={scales(15)} height={scales(15)} color={getThemeColor().Color_Primary} />
+            </TouchableOpacity>
         </View>
     );
 
@@ -205,40 +205,40 @@ const RegisterUpdateInfoScreen = () => {
             childBirthday: moment(dueDate).format('DD-MM-YYYY'),
             lastMenstrualPeriod: moment(lastMenstrualPeriod).format('DD-MM-YYYY'),
         };
-        if (!imageChoose) {
-            dispatch(fetchUpdate(body));
-        } else {
-            body = { ...body, avatar: imageChoose };
-            dispatch(fetchUpdate(body));
-        }
+        // if (!imageChoose) {
+        //     dispatch(fetchUpdate(body));
+        // } else {
+        //     body = { ...body, avatar: imageChoose };
+        //     dispatch(fetchUpdate(body));
+        // }
         goBack();
     };
 
     const renderInputMomAddress = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Địa chỉ</Text>
-            <Input value={momAddress} onChangeText={setMomAddress} placeholder='Vui lòng nhập địa chỉ' editable={isEdit}/>
+            <Input value={momAddress} onChangeText={setMomAddress} placeholder='Vui lòng nhập địa chỉ'/>
         </View>
     );
 
     const renderInputMomName = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Họ và tên</Text>
-            <Input value={momName} onChangeText={setMomName} placeholder='Vui lòng nhập họ và tên' editable={isEdit} />
+            <Input value={momName} onChangeText={setMomName} placeholder='Vui lòng nhập họ và tên' />
         </View>
     );
 
     const renderInputMomEmail = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Email</Text>
-            <Input value={email} onChangeText={setEmail} placeholder='Vui lòng nhập email' editable={false} />
+            <Input value={emailMom} onChangeText={setEmailMom} placeholder='Vui lòng nhập email' />
         </View>
     );
 
     const renderInputMomDOB = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Ngày sinh</Text>
-            <TouchableOpacity style={styles.dobContainer} onPress={() => onShowSelectDate('momDOB')} disabled={!isEdit}>
+            <TouchableOpacity style={styles.dobContainer} onPress={() => onShowSelectDate('momDOB')}>
                 <Text style={styles.dobTxt}>{moment(momDOB).format('DD-MM-YYYY')}</Text>
             </TouchableOpacity>
         </View>
@@ -247,21 +247,21 @@ const RegisterUpdateInfoScreen = () => {
     const renderInputMomPhone = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Số điện thoại</Text>
-            <Input value={phone} onChangeText={setPhone} placeholder='Vui lòng nhập họ và tên' editable={isEdit}/>
+            <Input value={phone} onChangeText={setPhone} placeholder='Vui lòng nhập họ và tên' />
         </View>
     );
 
     const renderInputBabyName = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Họ và tên của bé</Text>
-            <Input value={babyName} onChangeText={setBabyName} placeholder='Vui lòng nhập họ và tên của bé' editable={isEdit}/>
+            <Input value={babyName} onChangeText={setBabyName} placeholder='Vui lòng nhập họ và tên của bé' />
         </View>
     );
 
     const renderInputDueDate = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Ngày dự sinh</Text>
-            <TouchableOpacity style={styles.dobContainer} onPress={() => onShowSelectDate('dueDate')} disabled={!isEdit}>
+            <TouchableOpacity style={styles.dobContainer} onPress={() => onShowSelectDate('dueDate')}>
                 <Text style={styles.dobTxt}>{moment(dueDate).format('DD-MM-YYYY')}</Text>
             </TouchableOpacity>
         </View>
@@ -270,7 +270,7 @@ const RegisterUpdateInfoScreen = () => {
     const renderInputLastMenstrualPeriod = () => (
         <View style={styles.inputContainer}>
             <Text style={styles.title}>Ngày đầu tiên của kỳ kinh nguyệt cuối cùng</Text>
-            <TouchableOpacity style={styles.dobContainer} onPress={() => onShowSelectDate('lastMenstrualPeriod')} disabled={!isEdit}>
+            <TouchableOpacity style={styles.dobContainer} onPress={() => onShowSelectDate('lastMenstrualPeriod')}>
                 <Text style={styles.dobTxt}>{moment(lastMenstrualPeriod).format('DD-MM-YYYY')}</Text>
             </TouchableOpacity>
         </View>
@@ -330,25 +330,9 @@ const RegisterUpdateInfoScreen = () => {
 
     const renderButton = () => <Button title='Cập nhật' customStyles={styles.button} onPress={onUpdate} />;
 
-    const renderRightHeader = () => (
-        <>
-            {
-                !isEdit ? (
-                    <View style={{
-                        padding: scales(5),
-                        borderRadius: 100,
-                        backgroundColor: getThemeColor().Color_Bg,
-                    }}>
-                        <SvgIcons.IcPencil width={scales(15)} height={scales(15)} color={getThemeColor().Color_Primary} />
-                    </View>
-                ) : null
-            }
-        </>
-    );
-
     return (
         <View style={styles.container}>
-            <Header containerStyle={{ backgroundColor: getThemeColor().Color_Primary2 }} iconRight={renderRightHeader()} onPressRight={() => setIsEdit(true)} />
+            <Header title='Cập nhật thông tin cá nhân' hideLeft />
             <KeyboardAwareScrollView
                 extraHeight={scales(125)}
                 keyboardShouldPersistTaps='handled'

@@ -13,7 +13,7 @@ export const fetchPayment = async () => {
                 rel: string;
             };
         } = await axiosInstance.post(`/accounts/payment`, {
-            money: 10000,
+            money: 0.5,
         });
         hideLoading();
         return res?.paymentLink;

@@ -1,7 +1,12 @@
 import { RouteProp } from '@react-navigation/native';
 import moment from 'moment';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Subscription } from 'rxjs';
+import Button from '../../components/Button/Button';
+import { goBack } from '../../navigation/utils';
+import EventBus, { BaseEvent, EventBusName, onPushEventBus } from '../../services/event-bus';
+import { fetchPrenatalCareCheckupsById, removePrenatalCareCheckups } from '../../states/user/fetchCheckups';
 
 import { goToAddPrenatalCareCheckupsStep1 } from './src/utils';
 
@@ -10,7 +15,7 @@ import SvgIcons from 'assets/svgs';
 import Header from 'components/Header';
 import { useTheme } from 'hooks/useTheme';
 import { RootNavigatorParamList } from 'navigation/types';
-import { Fonts } from 'themes';
+import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
@@ -22,7 +27,39 @@ const PrenatalCareCheckupsItemHistoryScreen = (props: IPrenatalCareCheckupsItemH
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const { route } = props;
+    // user.CheckupsScheduleChildResponse, momId: user.CheckupsScheduleMomResponse
     const { child, momId, fromScreen } = route.params;
+
+    const [childChart, setChildChart] = useState<user.CheckupsScheduleChildResponse>(child || null);
+    const [momChart, setMomChart] = useState<user.CheckupsScheduleMomResponse>(momId || null);
+    const subScription = new Subscription();
+
+    const getChartInfo = async () => {
+        const response = await fetchPrenatalCareCheckupsById(child._id);
+        if (response) {
+            setChildChart(response.data[0].child);
+            setMomChart(response.data[0].mom);
+        }
+    };
+
+    useEffect(() => {
+        onRegisterEventBus();
+        return () => {
+            subScription?.unsubscribe?.();
+        };
+    }, []);
+
+
+
+    const onRegisterEventBus = () => {
+        subScription.add(
+            EventBus.getInstance().events.subscribe((res: BaseEvent<string>) => {
+                if (res?.type === EventBusName.UPDATE_FETAL_HISTORY_SUCCESS) {
+                    getChartInfo();
+                }
+            })
+        );
+    };
 
     const renderContent = () => (
         <View style={styles.content}>
@@ -37,34 +74,34 @@ const PrenatalCareCheckupsItemHistoryScreen = (props: IPrenatalCareCheckupsItemH
                     </View>
                     <View style={styles.itemContainer}>
                         <Text style={styles.titleItem}>Cân nặng</Text>
-                        <Text style={styles.valueItem}>{momId.weight} kg</Text>
+                        <Text style={styles.valueItem}>{momChart?.weight} kg</Text>
                     </View>
                     <View style={styles.itemContainer}>
                         <Text style={styles.titleItem}>Huyết áp</Text>
-                        <Text style={styles.valueItem}>{momId.bloodPressure}/90 mmHg</Text>
+                        <Text style={styles.valueItem}>{momChart.bloodPressure}/90 mmHg</Text>
                     </View>
                     <View style={styles.itemContainer}>
                         <Text style={styles.titleItem}>Chỉ số đường huyết</Text>
                     </View>
                     <View style={styles.itemContainer}>
                         <Text style={styles.titleItem}>+ Lúc đói</Text>
-                        <Text style={styles.valueItem}>{momId.fastingGlycemicIndex} mmHg</Text>
+                        <Text style={styles.valueItem}>{momChart.fastingGlycemicIndex} mmHg</Text>
                     </View>
                     <View style={styles.itemContainer}>
                         <Text style={styles.titleItem}>+ Sau ăn 1h</Text>
-                        <Text style={styles.valueItem}>{momId.eating1hGlycemicIndex} mmHg</Text>
+                        <Text style={styles.valueItem}>{momChart.eating1hGlycemicIndex} mmHg</Text>
                     </View>
                     <View style={styles.itemContainer}>
                         <Text style={styles.titleItem}>+ Sau ăn 2h</Text>
-                        <Text style={styles.valueItem}>{momId.eating2hGlycemicIndex} mmHg</Text>
+                        <Text style={styles.valueItem}>{momChart.eating2hGlycemicIndex} mmHg</Text>
                     </View>
                     <View style={styles.itemContainer}>
                         <Text style={styles.titleItem}>Các bệnh lý khác</Text>
-                        <Text style={styles.valueItem}>{momId.commonDiseases}</Text>
+                        <Text style={styles.valueItem}>{momChart.commonDiseases}</Text>
                     </View>
                     <View style={styles.itemContainer}>
                         <Text style={styles.titleItem}>Kết quả khám</Text>
-                        <Text style={styles.valueItem}>{momId.note ? momId.note : 'Bình thường'}</Text>
+                        <Text style={styles.valueItem}>{momChart.note ? momChart.note : 'Bình thường'}</Text>
                     </View>
                 </View>
             ) : null}
@@ -76,23 +113,23 @@ const PrenatalCareCheckupsItemHistoryScreen = (props: IPrenatalCareCheckupsItemH
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Chiều dài (CRL)</Text>
-                    <Text style={styles.valueItem}>{child.femurLength}mm</Text>
+                    <Text style={styles.valueItem}>{childChart.femurLength}mm</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Đường kính lưỡng đỉnh (BPD)</Text>
-                    <Text style={styles.valueItem}>{child.dualTopDiameter}mm</Text>
+                    <Text style={styles.valueItem}>{childChart.dualTopDiameter}mm</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Chiều dài xương đùi (FL)</Text>
-                    <Text style={styles.valueItem}>{child.femurLength}mm</Text>
+                    <Text style={styles.valueItem}>{childChart.femurLength}mm</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Chu vi đầu (HC)</Text>
-                    <Text style={styles.valueItem}>{child.headPerimeter}mm</Text>
+                    <Text style={styles.valueItem}>{childChart.headPerimeter}mm</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Cân nặng ước tính</Text>
-                    <Text style={styles.valueItem}>{child.weight} gram</Text>
+                    <Text style={styles.valueItem}>{childChart.weight} gram</Text>
                 </View>
             </View>
         </View>
@@ -105,17 +142,28 @@ const PrenatalCareCheckupsItemHistoryScreen = (props: IPrenatalCareCheckupsItemH
     );
 
     const onPressRight = () => {
-        goToAddPrenatalCareCheckupsStep1('EDIT', child, momId);
+        goToAddPrenatalCareCheckupsStep1('EDIT', childChart, momChart);
     };
+
+    const onRemove = async () => {
+        await removePrenatalCareCheckups(child?._id, momId?._id);
+        onPushEventBus(EventBusName.REMOVE_FETAL_HISTORY_SUCCESS);
+        goBack();
+    }
+
+    const renderButtonRemove = () => (
+        <Button title='Xoá' customStyles={styles.buttonRemove} onPress={onRemove}/>
+    )
 
     return (
         <View style={styles.container}>
             <Header
-                title={`Ngày khám ${moment(momId.createdAt).format('DD/MM/YYYY')}`}
+                title={`Ngày khám ${moment(childChart.pregnancyExam).format('DD/MM/YYYY')}`}
                 iconRight={renderIconRight()}
                 onPressRight={onPressRight}
             />
             <ScrollView showsVerticalScrollIndicator={false}>{renderContent()}</ScrollView>
+            {renderButtonRemove()}
         </View>
     );
 };
@@ -193,5 +241,9 @@ const myStyles = (theme: string) => {
             paddingVertical: scales(5),
             borderRadius: 100,
         },
+        buttonRemove: {
+            marginBottom: Sizes.bottomSpace + scales(10),
+            marginHorizontal: scales(15),
+        }
     });
 };

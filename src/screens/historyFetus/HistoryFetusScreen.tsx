@@ -64,6 +64,7 @@ const HistoryFetusScreen = () => {
     );
 
     const renderItem = (item: fetal.FetalHistory) => {
+        console.log(item);
         return (
             <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={() => goToAddHistoryFetus('EDIT', item)}>
                 <FastImage source={item?.image ? { uri: item?.image } : Images.Babe3} style={styles.image} />
@@ -73,7 +74,7 @@ const HistoryFetusScreen = () => {
                     </View>
                     <Text style={styles.itemContentDesc}>{item?.note}</Text>
                     <Text style={styles.itemContentDesc}>
-                        Ngày chụp: {moment(item?.createdAt).format('DD/MM/YYYY')}
+                        Ngày chụp: {moment(item?.datePhoto ? item?.datePhoto : moment().toDate()).format('DD/MM/YYYY')}
                     </Text>
                 </View>
             </TouchableOpacity>

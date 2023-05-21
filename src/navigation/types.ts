@@ -19,7 +19,7 @@ export type RootNavigatorParamList = {
     HistoryFetus: undefined,
     TeachFetus: undefined,
     NutritionalRegimenDetail: undefined,
-    RegisterUpdateInfo: undefined,
+    RegisterUpdateInfo: { email: string, password: string },
     FetalMovementChart: undefined,
     RoutineCheckups: undefined,
     PrenatalCareCheckupsChartMom: undefined,

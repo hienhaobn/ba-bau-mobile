@@ -34,6 +34,17 @@ export const updateAddPrenatalCareCheckups = async (childId: string, momId: stri
     }
 };
 
+export const fetchPrenatalCareCheckupsById = async (id: string) => {
+    try {
+        const res: user.CheckupsScheduleHistoryResponse = await axiosInstance.get(`/child-chart/result-schedule/${id}`);
+        return res;
+    } catch (error) {
+        hideLoading();
+        showCustomToast('Thất bại');
+        console.log(error);
+    }
+};
+
 export const removePrenatalCareCheckups = async (childId: string, momId: string) => {
     try {
         showLoading();

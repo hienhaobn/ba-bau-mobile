@@ -28,6 +28,7 @@ declare namespace fetal {
         note: string;
         weeksOfPregnancy: string;
         idAccount: string;
+        datePhoto: string;
         createdAt: string;
         updatedAt: string;
     }

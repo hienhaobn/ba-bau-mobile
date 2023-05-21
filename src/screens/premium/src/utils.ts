@@ -1,3 +1,3 @@
 import { navigate } from 'navigation/utils';
 
-export const goToPremium = navigate('Premium');
+export const goToPremium = () => navigate('Premium');

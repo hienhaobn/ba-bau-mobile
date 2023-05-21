@@ -16,12 +16,17 @@ export interface IPrenatalCareCheckupsConfirmPremiumRef {
     hideModal?: () => void;
 }
 
+export interface IPrenatalCareCheckupsConfirmPremiumProps {
+    onConfirm?: () => void;
+}
+
 const PrenatalCareCheckupsConfirmPremium = (
-    props,
+    props: IPrenatalCareCheckupsConfirmPremiumProps,
     ref: React.Ref<IPrenatalCareCheckupsConfirmPremiumRef>
 ) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+    const { onConfirm } = props;
     const [isVisible, setIsVisible] = useState<boolean>(false);
 
     React.useImperativeHandle(ref, () => ({
@@ -39,6 +44,9 @@ const PrenatalCareCheckupsConfirmPremium = (
 
     const handleConfirm = () => {
         hideModal();
+        if (onConfirm) {
+            onConfirm();
+        }
     };
 
     return (

@@ -1,4 +1,5 @@
 import { RouteProp } from '@react-navigation/native';
+import moment from 'moment';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -49,11 +50,17 @@ const AddPrenatalCareCheckupsScreenStep2 = (props: IAddPrenatalCareCheckupsScree
                 dualTopDiameter: parseFloat(babyBPD),
                 femurLength: parseFloat(babyFL),
                 headPerimeter: parseFloat(babyHC),
+                pregnancyExam: momCheckups?.pregnancyExam || moment().toDate(),
             },
         } as user.CheckupsScheduleRequest;
         const response = action === 'EDIT' ? await updateAddPrenatalCareCheckups(child._id, momId._id, body) : await createBabyCheckups(body);
         if (response) {
-            onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
+            if (action === 'EDIT')
+            {
+                onPushEventBus(EventBusName.UPDATE_FETAL_HISTORY_SUCCESS);
+            } else {
+                onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
+            }
             pop(2);
         }
     };

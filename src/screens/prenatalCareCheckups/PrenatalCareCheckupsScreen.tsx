@@ -2,6 +2,10 @@ import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { Subscription } from 'rxjs';
+import { navigate } from '../../navigation/utils';
+import { useSelectUserInfo } from '../../states/user/hooks';
+import { goToFetalHealth } from '../fetalHealth/src/utils';
+import { goToPremium } from '../premium/src/utils';
 
 import PrenatalCareCheckupsConfirmPremium, {
     IPrenatalCareCheckupsConfirmPremiumRef,
@@ -36,6 +40,8 @@ const PrenatalCareCheckupsScreen = () => {
     const [history, setHistory] = useState<user.CheckupsScheduleHistoryResponse>(null);
     const subScription = new Subscription();
 
+    const userInfo = useSelectUserInfo();
+
     const getDataHistory = async () => {
         const response = await fetchBabyCheckupsHistory();
         if (response) {
@@ -67,7 +73,15 @@ const PrenatalCareCheckupsScreen = () => {
     };
 
     const onOpenConfirm = () => {
+        if (userInfo?.balance > 0) {
+            goToFetalHealth();
+            return;
+        }
         refPrenatalCareCheckupsConfirmPremium.current.showModal();
+    };
+
+    const onConfirmPremium = () => {
+        goToPremium();
     };
 
     const renderHeader = () => <Header title="Lịch khám thai" />;
@@ -113,7 +127,7 @@ const PrenatalCareCheckupsScreen = () => {
         <TouchableOpacity
             style={styles.itemContainer}
             onPress={() => goToPrenatalCareCheckupsItemHistory(element.child, element.momId, 'PRENATAL_CARE_CHECKUPS')}>
-            <Text style={styles.titleItem}>Ngày khám {moment(element.momId.createdAt).format('DD/MM/YYYY')}</Text>
+            <Text style={styles.titleItem}>Ngày khám {moment(element.child?.pregnancyExam || moment().toDate()).format('DD/MM/YYYY')}</Text>
             <View style={styles.row}>
                 <Text style={styles.titleLeft}>
                     Tuần thai: <Text style={styles.textBold}>{element.momId.weeksOfPregnacy} tuần</Text>
@@ -145,13 +159,14 @@ const PrenatalCareCheckupsScreen = () => {
             showsVerticalScrollIndicator={false}
         />
     );
+
     return (
         <View style={styles.container}>
             {renderHeader()}
             {renderContentHeader()}
             {renderHeaderPrenatalCareHistory()}
             {renderContent()}
-            <PrenatalCareCheckupsConfirmPremium ref={refPrenatalCareCheckupsConfirmPremium} />
+            <PrenatalCareCheckupsConfirmPremium ref={refPrenatalCareCheckupsConfirmPremium} onConfirm={onConfirmPremium} />
         </View>
     );
 };

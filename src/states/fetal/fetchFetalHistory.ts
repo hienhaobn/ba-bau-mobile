@@ -18,12 +18,13 @@ export const fetchFetalHistory = async () => {
     }
 };
 
-export const createFetalHistory = async (body: { file?: object; note: string; weeksOfPregnancy: string }) => {
+export const createFetalHistory = async (body: { file?: object; note: string; weeksOfPregnancy: string, datePhoto: Date }) => {
     try {
         const bodyFormData = new FormData();
         bodyFormData.append('image', body?.file);
         bodyFormData.append('note', body.note);
         bodyFormData.append('weeksOfPregnancy', body.weeksOfPregnancy);
+        bodyFormData.append('datePhoto', body.datePhoto);
         const token = GlobalVariables?.tokenInfo?.accessToken
             ? `Bearer ${GlobalVariables?.tokenInfo?.accessToken}`
             : '';
@@ -38,7 +39,7 @@ export const createFetalHistory = async (body: { file?: object; note: string; we
     }
 };
 
-export const updateFetalHealthy = async (body: { file?: object; note: string; weeksOfPregnancy: string }, fetalHealthyId: string) => {
+export const updateFetalHealthy = async (body: { file?: object; note: string; weeksOfPregnancy: string, datePhoto: Date }, fetalHealthyId: string) => {
     try {
         const bodyFormData = new FormData();
         if (Object.keys(body?.file).length > 0) {
@@ -46,6 +47,7 @@ export const updateFetalHealthy = async (body: { file?: object; note: string; we
         }
         bodyFormData.append('note', body.note);
         bodyFormData.append('weeksOfPregnancy', body.weeksOfPregnancy);
+        bodyFormData.append('datePhoto', body.datePhoto);
         const token = GlobalVariables?.tokenInfo?.accessToken
             ? `Bearer ${GlobalVariables?.tokenInfo?.accessToken}`
             : '';

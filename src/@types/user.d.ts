@@ -46,6 +46,7 @@ declare namespace user {
     interface VerifyOTPRoute {
         email: string;
         fromScreen?: 'ForgotPassword' | 'Register';
+        passwordFromRegister?: string;
     }
 
     interface UserForgotPasswordRequest {
@@ -63,6 +64,7 @@ declare namespace user {
         eating2hGlycemicIndex: number;
         note: string;
         commonDiseases: string;
+        pregnancyExam: Date;
     }
 
     interface MomCheckupsResponse {
@@ -88,6 +90,7 @@ declare namespace user {
         headPerimeter: number;
         width: number;
         note: string;
+        pregnancyExam: Date;
     }
 
     interface CheckupsScheduleRequest {
@@ -105,6 +108,7 @@ declare namespace user {
         eating2hGlycemicIndex: number;
         note: string;
         commonDiseases: string;
+        pregnancyExam: string;
         idAccount: string;
         createdAt: string;
         updatedAt: string;
@@ -123,12 +127,13 @@ declare namespace user {
         createdAt: string;
         updatedAt: string;
         width: number;
+        pregnancyExam: Date;
     }
 
     interface CheckupsScheduleHistoryResponse {
         data: {
             child: CheckupsScheduleChildResponse;
-            momId: CheckupsScheduleMomResponse;
+            mom: CheckupsScheduleMomResponse;
         }[];
     }
 }

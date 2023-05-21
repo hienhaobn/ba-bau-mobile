@@ -27,7 +27,7 @@ interface VerifyOTPScreenProps {
 const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const { email, fromScreen } = props.route.params;
+    const { email, fromScreen, passwordFromRegister } = props.route.params;
     const [code, setCode] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [securePassword, setSecurePassword] = useState<boolean>(true);
@@ -41,33 +41,29 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
 
     const onConfirmOTP = async () => {
         // TODO: re check when open logic
-        if (fromScreen === 'ForgotPassword') {
-            if (code.length === 4) {
-                try {
-                    showLoading();
-                    const response = await axios.post(`${BASE_URL}/accounts/password`, {
-                        code,
-                        email,
-                        password,
-                    });
-                    hideLoading();
-                    if (!response) {
-                        showCustomToast('Verify OTP error');
-                        return;
-                    }
-                    setCode('');
-                    setPassword('');
-                    resetStack('Login');
-                    setSecurePassword(true);
-                    showCustomToast('Change password successful');
-                } catch (error) {
-                    showCustomToast(error.message);
+        if (fromScreen === 'ForgotPassword' && code.length === 4) {
+            try {
+                showLoading();
+                const response = await axios.post(`${BASE_URL}/accounts/password`, {
+                    code,
+                    email,
+                    password,
+                });
+                hideLoading();
+                if (!response) {
+                    showCustomToast('Verify OTP error');
                     return;
                 }
+                setCode('');
+                setPassword('');
+                resetStack('Login');
+                setSecurePassword(true);
+                showCustomToast('Change password successful');
+            } catch (error) {
+                showCustomToast(error.message);
+                return;
             }
-            return;
-        }
-        if (code.length === 4) {
+        }  else if (code.length === 4 && fromScreen === 'Register') {
             try {
                 const response = await axios.post(`${BASE_URL}/accounts/confirm`, {
                     code,
@@ -79,8 +75,7 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
                 }
                 setCode('');
                 resetStack('Login');
-
-                showCustomToast('Đăng ký thành công');
+                // goToRegisterUpdateInfo(email, passwordFromRegister );
             } catch (error) {
                 showCustomToast(error.message);
                 return;

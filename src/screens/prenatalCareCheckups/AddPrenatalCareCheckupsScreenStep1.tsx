@@ -55,7 +55,8 @@ const AddPrenatalCareCheckupsScreenStep1 = (props: IAddPrenatalCareCheckupsScree
     const [momBloodPressureAfter2Hour, setMomBloodPressureAfter2Hour] = useState<string>(
         action === 'EDIT' ? `${momId?.eating2hGlycemicIndex || 0}` : ''
     );
-    const [dateCheckups, setDateCheckups] = useState<Date>(moment().toDate());
+
+    const [dateCheckups, setDateCheckups] = useState<Date>(action === 'EDIT' ? moment(child?.pregnancyExam).toDate() : moment().toDate());
     const [selectDateVisible, setSelectDateVisible] = useState<boolean>(false);
     const [checkBox1, setCheckBox1] = useState<boolean>(false);
     const [checkBox2, setCheckBox2] = useState<boolean>(false);
@@ -132,6 +133,7 @@ const AddPrenatalCareCheckupsScreenStep1 = (props: IAddPrenatalCareCheckupsScree
             eating2hGlycemicIndex: parseFloat(momBloodPressureAfter2Hour),
             note: result,
             weeksOfPregnacy: weeksOfPregnancy,
+            pregnancyExam: moment(dateCheckups).toDate() ||  moment().toDate(),
         } as user.MomCheckupsRequest;
 
         if (validate()) {
@@ -270,32 +272,32 @@ const AddPrenatalCareCheckupsScreenStep1 = (props: IAddPrenatalCareCheckupsScree
 
     const renderButton = () => <Button title="Tiếp" customStyles={styles.button} onPress={onUpdate} />;
 
-    const renderRightIcon = () => {
-        if (action === 'EDIT') {
-            return (
-                <View style={styles.iconRight}>
-                    <SvgIcons.IcRemove width={scales(17)} height={scales(17)} color={getThemeColor().white} />
-                </View>
-            );
-        }
-        return null;
-    };
-
-    const onPressRight = async () => {
-        if (action === 'EDIT') {
-            await removePrenatalCareCheckups(child?._id, momId?._id);
-            onPushEventBus(EventBusName.REMOVE_FETAL_HISTORY_SUCCESS);
-            pop(2);
-            return;
-        }
-    };
+    // const renderRightIcon = () => {
+    //     if (action === 'EDIT') {
+    //         return (
+    //             <View style={styles.iconRight}>
+    //                 <SvgIcons.IcRemove width={scales(17)} height={scales(17)} color={getThemeColor().white} />
+    //             </View>
+    //         );
+    //     }
+    //     return null;
+    // };
+    //
+    // const onPressRight = async () => {
+    //     if (action === 'EDIT') {
+    //         await removePrenatalCareCheckups(child?._id, momId?._id);
+    //         onPushEventBus(EventBusName.REMOVE_FETAL_HISTORY_SUCCESS);
+    //         pop(2);
+    //         return;
+    //     }
+    // };
 
     return (
         <View style={styles.container}>
             <Header
-                title="Thêm kết quả khám"
-                iconRight={renderRightIcon()}
-                onPressRight={onPressRight}
+                title={action === 'EDIT' ? 'Chỉnh sửa kết quả khám': "Thêm kết quả khám"}
+                // iconRight={renderRightIcon()}
+                // onPressRight={onPressRight}
             />
             <KeyboardAwareScrollView
                 extraHeight={scales(125)}
