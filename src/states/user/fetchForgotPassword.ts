@@ -20,5 +20,3 @@ const fetchForgotPassword = async (body: user.UserForgotPasswordRequest) => {
         showCustomToast(error.response.data.message);
     }
 };
-
-export default fetchForgotPassword;

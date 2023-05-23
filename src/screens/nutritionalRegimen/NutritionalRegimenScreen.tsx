@@ -14,11 +14,14 @@ import { fetchFoodCategoryRoot } from 'states/foods/fetchFoods';
 import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import { toLowerCaseNonAccentVietnamese } from '../../utils/string';
 
 const NutritionalRegimenScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const [foodCategoryRoot, setFoodCategoryRoot] = useState<food.FoodCategoryRoot[]>([]);
+    const [arraySearch, setArraySearch] = useState<food.FoodCategoryRoot[]>([]);
+    const [keyword, setKeyword] = useState<string>('');
 
     const getFoodCategoryRoot = async () => {
         const response: food.FoodCategoryRoot[] = await fetchFoodCategoryRoot();
@@ -28,6 +31,13 @@ const NutritionalRegimenScreen = () => {
     useEffect(() => {
         getFoodCategoryRoot();
     }, []);
+
+    useEffect(() => {
+        const arrSearch = foodCategoryRoot?.filter(element => {
+            return toLowerCaseNonAccentVietnamese(element.name).includes(keyword.toLowerCase())
+        });
+        setArraySearch(arrSearch);
+    }, [keyword])
 
     const renderHeader = () => (
         <Header
@@ -39,7 +49,7 @@ const NutritionalRegimenScreen = () => {
 
     const renderInputSearch = () => (
         <View style={styles.searchContainer}>
-            <Input placeholder="Tên thực phẩm, thành phần chính" />
+            <Input placeholder="Tên thực phẩm, thành phần chính" value={keyword} onChangeText={setKeyword} />
         </View>
     );
 
@@ -66,7 +76,7 @@ const NutritionalRegimenScreen = () => {
 
     const renderContent = () => (
         <FlatList
-            data={foodCategoryRoot}
+            data={ keyword ? arraySearch : foodCategoryRoot}
             scrollEnabled={false}
             style={styles.wrapperContent}
             showsVerticalScrollIndicator={false}

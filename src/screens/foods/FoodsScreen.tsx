@@ -1,25 +1,20 @@
 import { RouteProp } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import Video from 'react-native-video';
+import Input from '../../components/Input';
+import { toLowerCaseNonAccentVietnamese } from '../../utils/string';
 
 import { goToFoodDetail } from './src/utils';
 
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
-
 import Header from 'components/Header';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { RootNavigatorParamList } from 'navigation/types';
-
 import { fetchFoodCategoryByFoodCategoryRootId } from 'states/foods/fetchFoods';
-
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
@@ -33,6 +28,15 @@ const FoodsScreen = (props: IFoodsScreenProps) => {
     const { route } = props;
     const { foodCategoryRoot } = route.params;
     const [foodCategory, setFoodCategory] = useState<food.FoodCategory[]>([]);
+    const [arraySearch, setArraySearch] = useState<food.FoodCategory[]>([]);
+    const [keyword, setKeyword] = useState<string>('');
+
+    useEffect(() => {
+        const arrSearch = foodCategory?.filter(element => {
+            return toLowerCaseNonAccentVietnamese(element.name).includes(keyword.toLowerCase())
+        });
+        setArraySearch(arrSearch);
+    }, [keyword])
 
     const getFoodCategory = async () => {
         const response = await fetchFoodCategoryByFoodCategoryRootId(foodCategoryRoot?._id);
@@ -52,6 +56,12 @@ const FoodsScreen = (props: IFoodsScreenProps) => {
         </View>
     );
 
+    const renderInputSearch = () => (
+        <View style={styles.searchContainer}>
+            <Input placeholder="Tên thực phẩm" value={keyword} onChangeText={setKeyword} />
+        </View>
+    );
+
     const renderIconMonthly = (status: string) => {
         if (status === 'ERR') {
             return <SvgIcons.IcCloseRed />;
@@ -62,6 +72,35 @@ const FoodsScreen = (props: IFoodsScreenProps) => {
         }
     };
 
+    const renderItem = (item: food.FoodCategory) => (
+        <TouchableOpacity
+            key={item._id}
+            style={styles.itemContentContainer}
+            activeOpacity={0.9}
+            onPress={() => goToFoodDetail(item)}>
+            <View style={styles.row}>
+                <FastImage
+                    source={item?.image ? { uri: item?.image } : Images.Beef}
+                    style={styles.image}
+                />
+                <View style={styles.itemContent}>
+                    <Text style={styles.itemContentHeader}>{item.name}</Text>
+                    <Text style={styles.itemContentDesc}>
+                        Sắt, kẽm, natri, vitamin D, vitamin B6, vitamin B12, magie
+                    </Text>
+                </View>
+            </View>
+            <View style={styles.itemFooter}>
+                {item?.monthlyData?.map((monthly) => (
+                    <View style={styles.monthContainer}>
+                        {renderIconMonthly(monthly.status)}
+                        <Text style={styles.month}>{monthly.month}</Text>
+                    </View>
+                ))}
+            </View>
+        </TouchableOpacity>
+    )
+
     const renderContent = () => (
         <View>
             {foodCategory?.length > 0 ? (
@@ -69,50 +108,23 @@ const FoodsScreen = (props: IFoodsScreenProps) => {
                    {foodCategoryRoot?.description}
                 </Text>
             ) : null}
+            <FlatList
+                data={ keyword ? arraySearch : foodCategory}
+                style={styles.wrapperContent}
+                showsVerticalScrollIndicator={false}
+                renderItem={(item) => renderItem(item.item)}
+                ListEmptyComponent={renderEmptyComponent}
+                keyExtractor={(item) => item._id}
+            />
 
-            {foodCategory?.length > 0
-                ? foodCategory?.map((item) => (
-                      <TouchableOpacity
-                          key={item._id}
-                          style={styles.itemContentContainer}
-                          activeOpacity={0.9}
-                          onPress={() => goToFoodDetail(item)}>
-                          <View style={styles.row}>
-                              <FastImage
-                                  source={item?.image ? { uri: item?.image } : Images.Beef}
-                                  style={styles.image}
-                              />
-                              <View style={styles.itemContent}>
-                                  <Text style={styles.itemContentHeader}>{item.name}</Text>
-                                  <Text style={styles.itemContentDesc}>
-                                      Sắt, kẽm, natri, vitamin D, vitamin B6, vitamin B12, magie
-                                  </Text>
-                              </View>
-                          </View>
-                          <View style={styles.itemFooter}>
-                              {item?.monthlyData?.map((monthly) => (
-                                  <View style={styles.monthContainer}>
-                                      {renderIconMonthly(monthly.status)}
-                                      <Text style={styles.month}>{monthly.month}</Text>
-                                  </View>
-                              ))}
-                          </View>
-                      </TouchableOpacity>
-                  ))
-                : renderEmptyComponent()}
         </View>
     );
 
     return (
         <View style={styles.container}>
             {renderHeader()}
-            <ScrollView
-                style={styles.wrapperContent}
-                contentContainerStyle={styles.contentContainer}
-                keyboardShouldPersistTaps="handled"
-                showsVerticalScrollIndicator={false}>
-                {renderContent()}
-            </ScrollView>
+            {renderInputSearch()}
+            {renderContent()}
         </View>
     );
 };
@@ -128,17 +140,16 @@ const myStyles = (theme: string) => {
         },
         wrapperContent: {
             flexGrow: 1,
-            paddingHorizontal: scales(15),
-        },
-        contentContainer: {
-            paddingBottom: scales(30),
+            marginHorizontal: scales(15),
         },
         desc: {
             ...Fonts.inter400,
             fontSize: scales(12),
             color: color.Text_Dark_1,
             lineHeight: scales(17),
+            marginTop: scales(15),
             marginBottom: scales(15),
+            marginHorizontal: scales(15),
         },
         image: {
             width: scales(50),
@@ -148,7 +159,6 @@ const myStyles = (theme: string) => {
             backgroundColor: color.Color_Bg,
             borderRadius: scales(8),
             paddingVertical: scales(15),
-            paddingHorizontal: scales(12),
             marginBottom: scales(15),
 
             shadowColor: color.Text_Dark_1,
@@ -215,6 +225,9 @@ const myStyles = (theme: string) => {
             ...Fonts.inter400,
             fontSize: scales(12),
             color: color.Text_Dark_2,
+        },
+        searchContainer: {
+            marginHorizontal: scales(15),
         },
     });
 };

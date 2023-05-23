@@ -6,18 +6,11 @@ import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
 import { hideLoading, showLoading } from 'components/Loading';
-
-import { BASE_URL } from 'configs/api';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { goToLogin } from 'screens/login/src/utils';
 import { goToVerifyOTP } from 'screens/verifyOTP/src/utils';
-
 import { fetchSendOtpForgotPassword } from 'states/user/fetchForgotPassword';
-
 import { Fonts } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
@@ -29,6 +22,7 @@ const ForgotPasswordScreen = () => {
 
     const handlePress = async () => {
         // TODO: call api
+        console.log('press');
         showLoading();
         const { statusCode, message } = await fetchSendOtpForgotPassword(email);
         hideLoading();

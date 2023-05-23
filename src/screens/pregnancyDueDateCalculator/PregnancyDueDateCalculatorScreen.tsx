@@ -20,7 +20,7 @@ const PregnancyDueDateCalculatorScreen = () => {
     const styles = myStyles(theme);
     const [date, setDate] = useState(new Date());
     const refPregnancyDueDateCalculatorConfirmPopup = useRef<IPregnancyDueDateCalculatorConfirmPopupRef>()
-    const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<string>(moment(dueDateSelector).format('YYYY-MM-DD'));
+    const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<string>(moment().format('YYYY-MM-DD'));
     const dueDate = moment(lastMenstrualPeriod).add(9, 'months').add(10, 'days').format('DD/MM/YYYY');
 
     const dispatch = useAppDispatch();

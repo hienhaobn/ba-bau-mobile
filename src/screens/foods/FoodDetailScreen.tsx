@@ -2,7 +2,7 @@ import { RouteProp } from '@react-navigation/native';
 import SvgIcons from 'assets/svgs';
 import { indexOf } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { Image, KeyboardAvoidingView, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { SceneMap, TabBar, TabBarItemProps, TabView } from 'react-native-tab-view';
 

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Input from '../../../../components/Input';
+import { toLowerCaseNonAccentVietnamese } from '../../../../utils/string';
 
 import { goToDishDetail } from '../utils';
 
@@ -29,11 +32,20 @@ const FoodDetailDishScene = (props: IFoodDetailDishSceneSceneProps) => {
     const { route } = props;
     const { foodCategory } = route;
     const [foodFavorites, setFoodFavorites] = useState<food.FoodOfCategory[]>([]);
+    const [arraySearch, setArraySearch] = useState<food.FoodOfCategory[]>([]);
+    const [keyword, setKeyword] = useState<string>('');
 
     const getFoodFavorites = async () => {
         const response = await fetchFoodsOfCategory(foodCategory?._id);
         setFoodFavorites(response);
     };
+
+    useEffect(() => {
+        const arrSearch = foodFavorites?.filter(element => {
+            return toLowerCaseNonAccentVietnamese(element.name).includes(keyword.toLowerCase())
+        });
+        setArraySearch(arrSearch);
+    }, [keyword])
 
     useEffect(() => {
         getFoodFavorites();
@@ -46,33 +58,44 @@ const FoodDetailDishScene = (props: IFoodDetailDishSceneSceneProps) => {
         </View>
     );
 
-    const renderContent = () => (
-        <View>
-            {foodFavorites.length > 0 ? foodFavorites?.map((food) => (
-                <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={() => goToDishDetail(food)}>
-                    <FastImage
-                        source={food?.image ? { uri: food?.image } : Images.Beef}
-                        style={styles.image}
-                    />
-                    <View style={styles.itemContent}>
-                        <Text style={styles.itemContentHeader}>{food?.name}</Text>
-                        <Text style={styles.itemContentDesc} numberOfLines={1}>
-                            {food?.making}
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-            )) : renderEmptyComponent()}
+    const renderInputSearch = () => (
+        <View style={styles.searchContainer}>
+            <Input placeholder="Tên thực phẩm" value={keyword} onChangeText={setKeyword} />
         </View>
     );
 
-    return (
-        <ScrollView
+    const renderItem = (item: food.FoodOfCategory) => (
+        <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={() => goToDishDetail(item)}>
+            <FastImage
+                source={item?.image ? { uri: item?.image } : Images.Beef}
+                style={styles.image}
+            />
+            <View style={styles.itemContent}>
+                <Text style={styles.itemContentHeader}>{item?.name}</Text>
+                <Text style={styles.itemContentDesc} numberOfLines={1}>
+                    {item?.making}
+                </Text>
+            </View>
+        </TouchableOpacity>
+    )
+
+    const renderContent = () => (
+        <FlatList
+            data={ keyword ? arraySearch : foodFavorites}
             style={styles.wrapperContent}
-            contentContainerStyle={styles.contentContainer}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}>
+            showsVerticalScrollIndicator={false}
+            renderItem={(item) => renderItem(item.item)}
+            ListEmptyComponent={renderEmptyComponent}
+            keyExtractor={(item) => item._id}
+        />
+    );
+
+    return (
+        <>
+            {/*{renderInputSearch()}*/}
             {renderContent()}
-        </ScrollView>
+        </>
+
     );
 };
 
@@ -152,6 +175,9 @@ const myStyles = (theme: string) => {
             ...Fonts.inter400,
             fontSize: scales(12),
             color: color.Text_Dark_2,
+        },
+        searchContainer: {
+            marginHorizontal: scales(15),
         },
     });
 };

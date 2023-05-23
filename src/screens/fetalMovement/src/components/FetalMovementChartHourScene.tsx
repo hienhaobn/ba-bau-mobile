@@ -29,6 +29,7 @@ const FetalMovementChartHourScene = () => {
         if (movements?.length) {
             movements?.map(element => {
                 const hours = parseInt(element.timeStart.split(':')[0]);
+                const minute = parseInt(element.timeStart.split(':')[1]);
                 if (hours >= start && hours <= end) {
                     count += element.count;
                 }
@@ -39,7 +40,7 @@ const FetalMovementChartHourScene = () => {
 
     const barData = [
         {
-            value: getData(0, 4),
+            value: getData(0, 3),
             label: '0-4h',
             labelWidth: 50,
             topLabelComponent: () => (
@@ -47,7 +48,7 @@ const FetalMovementChartHourScene = () => {
             ),
         },
         {
-            value: getData(4, 8),
+            value: getData(4, 7),
             label: '4-8h',
             labelWidth: 50,
             topLabelComponent: () => (
@@ -55,7 +56,7 @@ const FetalMovementChartHourScene = () => {
             ),
         },
         {
-            value: getData(8, 12),
+            value: getData(8, 11),
             label: '8-12h',
             labelWidth: 50,
             topLabelComponent: () => (
@@ -63,7 +64,7 @@ const FetalMovementChartHourScene = () => {
             ),
         },
         {
-            value: getData(12, 16),
+            value: getData(12, 15),
             label: '12-16h',
             labelWidth: 50,
             topLabelComponent: () => (
@@ -71,7 +72,7 @@ const FetalMovementChartHourScene = () => {
             ),
         },
         {
-            value: getData(16, 20),
+            value: getData(16, 19),
             label: '16-20h',
             labelWidth: 50,
             topLabelComponent: () => (
@@ -79,7 +80,7 @@ const FetalMovementChartHourScene = () => {
             ),
         },
         {
-            value: getData(20, 0),
+            value: getData(20, 23),
             label: '20-24h',
             labelWidth: 50,
             topLabelComponent: () => (

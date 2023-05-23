@@ -1,5 +1,6 @@
+import { useFocusEffect } from '@react-navigation/native';
 import moment from 'moment';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import Images from 'assets/images';
@@ -38,6 +39,12 @@ const HomeScreen = (props) => {
     const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<string>(moment(dueDateSelector).format('YYYY-MM-DD'));
     const [week, setWeek] = useState<number>(0);
     const [calendar, setCalendar] = useState<Date>(null);
+
+    useFocusEffect(
+        useCallback(() => {
+            getDueDate();
+        }, [dueDateSelector]),
+    );
 
     const getDueDate = async () => {
         const dueDate = await Storages.get(KeyStorage.DueDate);
