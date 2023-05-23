@@ -1,54 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Input from '../../../../components/Input';
-import { toLowerCaseNonAccentVietnamese } from '../../../../utils/string';
 
 import { goToDishDetail } from '../utils';
 
 import Images from 'assets/images';
-
 import TouchableOpacity from 'components/TouchableOpacity';
-
+import Input from 'components/Input';
+import { toLowerCaseNonAccentVietnamese } from 'utils/string';
 import { useTheme } from 'hooks/useTheme';
-
-import { FoodDetailScreenRouteProps } from 'screens/foods/FoodDetailScreen';
-
-import { fetchFoodCategoryByFoodCategoryRootId, fetchFoodsOfCategory } from 'states/foods/fetchFoods';
-
+import { fetchFoodsOfCategory } from 'states/foods/fetchFoods';
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
 interface IFoodDetailDishSceneSceneProps {
-    route: FoodDetailScreenRouteProps;
+    foodCategory: food.FoodCategory;
 }
 
 const FoodDetailDishScene = (props: IFoodDetailDishSceneSceneProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const { route } = props;
-    const { foodCategory } = route;
-    const [foodFavorites, setFoodFavorites] = useState<food.FoodOfCategory[]>([]);
+    const { foodCategory } = props;
+    const [foodDish, setFoodDish] = useState<food.FoodOfCategory[]>([]);
     const [arraySearch, setArraySearch] = useState<food.FoodOfCategory[]>([]);
     const [keyword, setKeyword] = useState<string>('');
 
-    const getFoodFavorites = async () => {
+    const getFoodDish = async () => {
         const response = await fetchFoodsOfCategory(foodCategory?._id);
-        setFoodFavorites(response);
+        setFoodDish(response);
     };
 
     useEffect(() => {
-        const arrSearch = foodFavorites?.filter(element => {
-            return toLowerCaseNonAccentVietnamese(element.name).includes(keyword.toLowerCase())
+        const arrSearch = foodDish?.filter(element => {
+            return toLowerCaseNonAccentVietnamese(element.name).includes(toLowerCaseNonAccentVietnamese(keyword))
         });
         setArraySearch(arrSearch);
     }, [keyword])
 
     useEffect(() => {
-        getFoodFavorites();
+        getFoodDish();
     }, []);
 
     const renderEmptyComponent = () => (
@@ -64,35 +55,33 @@ const FoodDetailDishScene = (props: IFoodDetailDishSceneSceneProps) => {
         </View>
     );
 
-    const renderItem = (item: food.FoodOfCategory) => (
-        <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={() => goToDishDetail(item)}>
-            <FastImage
-                source={item?.image ? { uri: item?.image } : Images.Beef}
-                style={styles.image}
-            />
-            <View style={styles.itemContent}>
-                <Text style={styles.itemContentHeader}>{item?.name}</Text>
-                <Text style={styles.itemContentDesc} numberOfLines={1}>
-                    {item?.making}
-                </Text>
-            </View>
-        </TouchableOpacity>
-    )
-
-    const renderContent = () => (
-        <FlatList
-            data={ keyword ? arraySearch : foodFavorites}
-            style={styles.wrapperContent}
-            showsVerticalScrollIndicator={false}
-            renderItem={(item) => renderItem(item.item)}
-            ListEmptyComponent={renderEmptyComponent}
-            keyExtractor={(item) => item._id}
-        />
-    );
+    const renderContent = () => {
+        const dataRender = keyword ? arraySearch : foodDish;
+        return (
+            <>
+                {
+                    dataRender?.length > 0 ? dataRender?.map(food => (
+                        <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={() => goToDishDetail(food)} key={food._id}>
+                            <FastImage
+                                source={food?.image ? { uri: food?.image } : Images.Beef}
+                                style={styles.image}
+                            />
+                            <View style={styles.itemContent}>
+                                <Text style={styles.itemContentHeader}>{food?.name}</Text>
+                                <Text style={styles.itemContentDesc} numberOfLines={1}>
+                                    {food?.making}
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    )) : renderEmptyComponent()
+                }
+            </>
+        )
+    };
 
     return (
         <>
-            {/*{renderInputSearch()}*/}
+            {renderInputSearch()}
             {renderContent()}
         </>
 
@@ -177,7 +166,7 @@ const myStyles = (theme: string) => {
             color: color.Text_Dark_2,
         },
         searchContainer: {
-            marginHorizontal: scales(15),
+            marginBottom: scales(15),
         },
     });
 };

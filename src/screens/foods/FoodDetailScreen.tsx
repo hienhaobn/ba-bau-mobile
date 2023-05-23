@@ -1,62 +1,52 @@
 import { RouteProp } from '@react-navigation/native';
-import SvgIcons from 'assets/svgs';
-import { indexOf } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Image, KeyboardAvoidingView, Platform, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { SceneMap, TabBar, TabBarItemProps, TabView } from 'react-native-tab-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import FoodDetailDishScene from './src/components/FoodDetailDishScene';
 import FoodDetailInformationScene from './src/components/FoodDetailInformationScene';
 
 import Images from 'assets/images';
-
 import Header from 'components/Header';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { RootNavigatorParamList } from 'navigation/types';
-
-import { fetchFoodsOfCategory, saveFood } from 'states/foods/fetchFoods';
-
+import { fetchFoodsOfCategory } from 'states/foods/fetchFoods';
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-
-export interface FoodDetailScreenRouteProps {
-    key: string;
-    title?: string;
-    foodCategory?: food.FoodCategory;
-}
 
 interface IFoodDetailScreenProps {
     route: RouteProp<RootNavigatorParamList, 'FoodDetail'>;
 }
 
-const renderScene = SceneMap({
-    foodDetailInformationScene: FoodDetailInformationScene,
-    foodDetailDishScene: FoodDetailDishScene,
-});
+enum FoodDetailTab {
+    info = 'info',
+    dish = 'dish',
+}
+
+const TABS = [
+    {
+        key: FoodDetailTab.info,
+        title: 'Thông tin',
+    },
+    {
+        key: FoodDetailTab.dish,
+        title: 'Món ngon',
+    }
+]
 
 const FoodDetailScreen = (props: IFoodDetailScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const { route } = props;
     const { foodCategory } = route.params;
-    const layout = useWindowDimensions();
-    const [index, setIndex] = React.useState(0);
     const [foodDetail, setFoodDetail] = useState<food.FoodOfCategory[]>([]);
-    const [routes] = React.useState([
-        { key: 'foodDetailInformationScene', title: 'Thông tin', foodCategory },
-        { key: 'foodDetailDishScene', title: 'Món ngon', foodCategory },
-    ]);
+    const [currentTab, setCurrentTab] = useState<string>(FoodDetailTab.info);
 
     const getFoodDetail = async () => {
         const response = await fetchFoodsOfCategory(foodCategory?._id);
-
-        console.log('response', response);
         setFoodDetail(response);
     };
 
@@ -66,46 +56,37 @@ const FoodDetailScreen = (props: IFoodDetailScreenProps) => {
 
     const renderHeader = () => <Header title={foodCategory?.name} />;
 
-    const renderTabItem = (tabProps: TabBarItemProps<FoodDetailScreenRouteProps>) => {
-        const { title } = tabProps.route;
-        const active = indexOf(routes, tabProps.route) === tabProps.navigationState.index;
-        return (
-            <TouchableOpacity
-                style={{
-                    marginRight: scales(20),
-                    paddingVertical: scales(16),
-                }}
-                onPress={() => {
-                    setIndex(indexOf(routes, tabProps.route));
-                }}>
-                <Text
-                    style={[
-                        styles.labelTabText,
-                        active ? { color: getThemeColor().Color_Primary } : { color: getThemeColor().Text_Dark_1 },
-                    ]}>
-                    {title}
-                </Text>
-            </TouchableOpacity>
-        );
-    };
-
-    const renderTabBar = (tabbarProps) => (
-        <TabBar {...tabbarProps} style={styles.tabview} renderIndicator={() => null} renderTabBarItem={renderTabItem} />
+    const renderTabSelect = () => (
+        <View style={{ flexDirection: 'row' }}>
+            {
+                TABS.map((tab, index) => {
+                    const isFocus = tab.key === currentTab;
+                    return (
+                        <TouchableOpacity
+                            style={{
+                                marginRight: scales(20),
+                                paddingVertical: scales(16),
+                            }}
+                            onPress={() => {
+                                setCurrentTab(tab.key)
+                            }}
+                            key={index.toString()}
+                        >
+                            <Text
+                                style={[
+                                    styles.labelTabText,
+                                    isFocus ? { color: getThemeColor().Color_Primary } : { color: getThemeColor().Text_Dark_1 },
+                                ]}>
+                                {tab.title}
+                            </Text>
+                        </TouchableOpacity>
+                    )
+                })
+            }
+        </View>
     );
 
-    const renderTabview = () => (
-        <TabView
-            lazy
-            navigationState={{ index, routes }}
-            style={{ backgroundColor: getThemeColor().Color_Bg }}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            initialLayout={{ width: layout.width }}
-            renderTabBar={renderTabBar}
-        />
-    );
-
-    const renderContent = () => (
+    const renderListHeader = () => (
         <View style={styles.content}>
             <FastImage
                 source={foodCategory?.image ? { uri: foodCategory?.image } : Images.Beef}
@@ -115,17 +96,41 @@ const FoodDetailScreen = (props: IFoodDetailScreenProps) => {
             <Text style={styles.titleHeader}>{foodCategory?.name}</Text>
             <Text style={styles.desc}>{foodDetail?.[0]?.description}</Text>
             <Text style={styles.tag}># Thuộc nhóm {foodCategory?.idRoot?.name}</Text>
-
             <View style={styles.line} />
-            {renderTabview()}
             <View />
         </View>
+    );
+
+    const renderContentTab = () => (
+        <>
+            {currentTab === FoodDetailTab.info ? <FoodDetailInformationScene foodCategory={foodCategory} /> : <FoodDetailDishScene foodCategory={foodCategory} />}
+        </>
+    )
+
+    const renderListFooter = () => (
+        <>
+            {renderTabSelect()}
+            {renderContentTab()}
+        </>
     );
 
     return (
         <View style={styles.container}>
             {renderHeader()}
-            {renderContent()}
+            <KeyboardAwareScrollView
+                style={styles.wrapperContent}
+                contentContainerStyle={styles.contentContainer}
+                extraHeight={scales(125)}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+                enableOnAndroid
+            >
+
+                <ScrollView>
+                    {renderListHeader()}
+                    {renderListFooter()}
+                </ScrollView>
+            </KeyboardAwareScrollView>
         </View>
     );
 };
@@ -140,8 +145,15 @@ const myStyles = (theme: string) => {
             backgroundColor: color.Color_Bg,
         },
         content: {
-            marginHorizontal: scales(15),
             flex: 1,
+        },
+        wrapperContent: {
+            flexGrow: 1,
+            backgroundColor: color.Color_Bg,
+        },
+        contentContainer: {
+            paddingBottom: scales(30),
+            marginHorizontal: scales(15),
         },
         desc: {
             ...Fonts.inter400,

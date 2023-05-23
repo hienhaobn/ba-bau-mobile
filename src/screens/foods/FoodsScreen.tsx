@@ -33,7 +33,7 @@ const FoodsScreen = (props: IFoodsScreenProps) => {
 
     useEffect(() => {
         const arrSearch = foodCategory?.filter(element => {
-            return toLowerCaseNonAccentVietnamese(element.name).includes(keyword.toLowerCase())
+            return toLowerCaseNonAccentVietnamese(element.name).includes(toLowerCaseNonAccentVietnamese(keyword));
         });
         setArraySearch(arrSearch);
     }, [keyword])

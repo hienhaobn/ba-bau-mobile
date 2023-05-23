@@ -34,7 +34,7 @@ const NutritionalRegimenScreen = () => {
 
     useEffect(() => {
         const arrSearch = foodCategoryRoot?.filter(element => {
-            return toLowerCaseNonAccentVietnamese(element.name).includes(keyword.toLowerCase())
+            return toLowerCaseNonAccentVietnamese(element.name).includes(toLowerCaseNonAccentVietnamese(keyword))
         });
         setArraySearch(arrSearch);
     }, [keyword])
