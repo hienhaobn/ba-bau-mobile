@@ -7,6 +7,8 @@ import { GlobalVariables } from 'constants/index';
 import axiosInstance from 'services/api-requests';
 
 import { showCustomToast } from 'utils/toast';
+import { goBack } from '../../navigation/utils';
+import { EventBusName, onPushEventBus } from '../../services/event-bus';
 
 export const fetchFetalHistory = async () => {
     try {
@@ -20,11 +22,11 @@ export const fetchFetalHistory = async () => {
 
 export const createFetalHistory = async (body: { file?: object; note: string; weeksOfPregnancy: string, datePhoto: Date }) => {
     try {
+        console.log('body?.file', body?.file);
         const bodyFormData = new FormData();
         bodyFormData.append('image', body?.file);
         bodyFormData.append('note', body.note);
         bodyFormData.append('weeksOfPregnancy', body.weeksOfPregnancy);
-        bodyFormData.append('datePhoto', body.datePhoto);
         const token = GlobalVariables?.tokenInfo?.accessToken
             ? `Bearer ${GlobalVariables?.tokenInfo?.accessToken}`
             : '';
@@ -32,11 +34,8 @@ export const createFetalHistory = async (body: { file?: object; note: string; we
             headers: { 'Content-Type': 'multipart/form-data', 'Authorization': token },
         });
 
-        console.log('ACTIVE::', response);
-
         return response;
     } catch (error) {
-        console.log('error?.response', error);
         showCustomToast(error?.response?.data?.message);
         console.log('error', error?.response?.data);
     }
@@ -50,7 +49,6 @@ export const updateFetalHealthy = async (body: { file?: object; note: string; we
         }
         bodyFormData.append('note', body.note);
         bodyFormData.append('weeksOfPregnancy', body.weeksOfPregnancy);
-        bodyFormData.append('datePhoto', body.datePhoto);
         const token = GlobalVariables?.tokenInfo?.accessToken
             ? `Bearer ${GlobalVariables?.tokenInfo?.accessToken}`
             : '';
@@ -60,7 +58,9 @@ export const updateFetalHealthy = async (body: { file?: object; note: string; we
 
         return response;
     } catch (error) {
-        showCustomToast(error?.response?.data?.message);
+        // onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
+        // goBack();
+        // showCustomToast(error?.response?.data?.message);
         console.log('error', error?.response?.data);
     }
 };

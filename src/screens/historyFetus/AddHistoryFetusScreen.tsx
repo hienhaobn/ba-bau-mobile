@@ -1,55 +1,35 @@
 import { RouteProp } from '@react-navigation/native';
 import moment from 'moment';
-import React, { useEffect, useRef, useState } from 'react';
-import { Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import FastImage from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
-
 import BottomSheet, { CustomBottomSheetRefType } from 'components/BottomSheet/BottomSheet';
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
 import { hideLoading, showLoading } from 'components/Loading';
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { RootNavigatorParamList } from 'navigation/types';
-import { goBack, pop } from 'navigation/utils';
+import { goBack } from 'navigation/utils';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useHeaderHeight } from 'react-native-screens/native-stack';
-
 import { EventBusName, onPushEventBus } from 'services/event-bus';
-
 import { createFetalHistory, removeFetalHealthy, updateFetalHealthy } from 'states/fetal/fetchFetalHistory';
-
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { formatImage } from 'utils/image';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
-import { formatImageToFile } from './src/utils';
 
 interface ImageChoose {
-    creationDate: string;
-    cropRect: { y: number; width: number; height: number; x: number };
-    data: string;
-    duration: string;
-    exif: string;
-    filename: string;
-    height: number;
-    localIdentifier: string;
-    mime: string;
-    modificationDate: string;
-    path: string;
-    size: number;
-    sourceURL: string;
-    width: number;
+    uri: string;
+    name: string;
+    type: string;
 }
 
 interface AddHistoryFetusScreenProps {
@@ -69,26 +49,41 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
     const [imageChoose, setImageChoose] = useState<ImageChoose>( null);
     const bottomSheetRef = useRef<CustomBottomSheetRefType>(null);
 
-    const onHistory = async () => {
-        let response;
+    const onCreateFetalHistory = async () => {
+        let body = { note, weeksOfPregnancy: week, file: {}, datePhoto: moment(date).toDate() };
+        if (imageChoose) {
+            body = { ...body, file: imageChoose }
+        }
         showLoading();
-        let body = { note, weeksOfPregnancy: week, file: {}, datePhoto: moment(date).toDate() }
+        const response = await createFetalHistory(body);
+        hideLoading();
+
+        if (response) {
+            onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
+            goBack();
+        }
+    };
+
+    const onUpdateFetalHistory = async () => {
+        let body = { note, weeksOfPregnancy: week, file: {}, datePhoto: moment(date).toDate() };
         if (imageChoose) {
             body = { ...body, file: formatImage(imageChoose) }
         }
-        if (action === 'EDIT') {
-            console.log('body, history._id', body, history._id);
-            response = await updateFetalHealthy(body, history._id);
-        } else {
-            response = await createFetalHistory(body);
-            console.log('RESPONSE !______: ', response);
+        showLoading();
+        const response = await updateFetalHealthy(body, history._id);
+        hideLoading();
+        if (response) {
+            onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
+            goBack();
         }
-        console.log('RESPONSE::', response);
-        // hideLoading();
-        // if (response) {
-        //     onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
-        //     goBack();
-        // }
+    };
+
+    const onHistory = async () => {
+        if (action === 'EDIT') {
+            await onUpdateFetalHistory();
+        } else {
+            await onCreateFetalHistory();
+        }
     };
 
     const showBottomSheet = () => {
@@ -122,7 +117,7 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
                 cropperCircleOverlay: true,
             });
             if (imageCrop) {
-                setImageChoose(imageCrop);
+                setImageChoose(formatImage(imageCrop));
                 dismissBottomSheet();
             }
         } catch (err) {
@@ -143,7 +138,7 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
                 cropperCircleOverlay: true,
             });
             if (image) {
-                setImageChoose(image);
+                setImageChoose(formatImage(image));
                 dismissBottomSheet();
             }
         } catch (err) {

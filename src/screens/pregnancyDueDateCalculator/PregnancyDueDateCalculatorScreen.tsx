@@ -6,7 +6,6 @@ import PregnancyDueDateCalculatorConfirmPopup, { IPregnancyDueDateCalculatorConf
 import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import Storages, { KeyStorage } from 'utils/storages';
 import { useAppDispatch } from 'states';
 import { updateDueDate } from 'states/fetal';
 import { useDueDateSelector } from 'states/fetal/hooks';
@@ -21,7 +20,7 @@ const PregnancyDueDateCalculatorScreen = () => {
     const styles = myStyles(theme);
     const [date, setDate] = useState(new Date());
     const refPregnancyDueDateCalculatorConfirmPopup = useRef<IPregnancyDueDateCalculatorConfirmPopupRef>()
-    const dueDate = moment(dueDateSelector).add(9, 'months').add(10, 'days').format('DD/MM/YYYY');
+    const dueDate = moment(dueDateSelector !== '0' ? dueDateSelector : moment().toDate()).add(9, 'months').add(10, 'days').format('DD/MM/YYYY');
     const dispatch = useAppDispatch();
 
     const handleOpenPopup = () => {
@@ -50,8 +49,8 @@ const PregnancyDueDateCalculatorScreen = () => {
                 <DatePicker
                     mode="calendar"
                     onSelectedChange={setDate}
-                    selected={dueDateSelector}
-                    current={dueDateSelector}
+                    selected={dueDateSelector !== '0' ? dueDateSelector : moment().format('YYYY-MM-DD')}
+                    current={dueDateSelector !== '0' ? dueDateSelector : moment().format('YYYY-MM-DD')}
                 />
             </View>
         )
