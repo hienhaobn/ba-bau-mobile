@@ -63,7 +63,8 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
                 showCustomToast(error.message);
                 return;
             }
-        }  else if (code.length === 4 && fromScreen === 'Register') {
+        }
+        if (code.length === 4) {
             try {
                 const response = await axios.post(`${BASE_URL}/accounts/confirm`, {
                     code,
@@ -74,6 +75,7 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
                     return;
                 }
                 setCode('');
+                showCustomToast('Đăng ký thành công');
                 resetStack('Login');
                 // goToRegisterUpdateInfo(email, passwordFromRegister );
             } catch (error) {
