@@ -1,7 +1,7 @@
 import { RouteProp } from '@react-navigation/native';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import FastImage from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -20,6 +20,8 @@ import { useTheme } from 'hooks/useTheme';
 
 import { RootNavigatorParamList } from 'navigation/types';
 import { goBack, pop } from 'navigation/utils';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useHeaderHeight } from 'react-native-screens/native-stack';
 
 import { EventBusName, onPushEventBus } from 'services/event-bus';
 
@@ -79,12 +81,14 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
             response = await updateFetalHealthy(body, history._id);
         } else {
             response = await createFetalHistory(body);
+            console.log('RESPONSE !______: ', response);
         }
-        hideLoading();
-        if (response) {
-            onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
-            goBack();
-        }
+        console.log('RESPONSE::', response);
+        // hideLoading();
+        // if (response) {
+        //     onPushEventBus(EventBusName.CREATE_FETAL_HISTORY_SUCCESS);
+        //     goBack();
+        // }
     };
 
     const showBottomSheet = () => {
@@ -292,7 +296,17 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
     return (
         <View style={styles.container}>
             {renderHeader()}
-            {renderContent()}
+
+            <KeyboardAwareScrollView
+                style={styles.wrapperContent}
+                contentContainerStyle={styles.contentContainer}
+                extraHeight={scales(125)}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+                enableOnAndroid
+            >
+                {renderContent()}
+            </KeyboardAwareScrollView>
             {renderButton()}
             {renderChooseImage()}
             {renderDatePicker()}
@@ -312,6 +326,12 @@ const myStyles = (theme: string) => {
         content: {
             marginHorizontal: scales(15),
             marginTop: scales(20),
+        },
+        wrapperContent: {
+            flexGrow: 1,
+        },
+        contentContainer: {
+            paddingBottom: scales(50),
         },
         image: {
             width: scales(120),

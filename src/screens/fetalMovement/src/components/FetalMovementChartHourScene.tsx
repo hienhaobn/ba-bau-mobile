@@ -29,7 +29,6 @@ const FetalMovementChartHourScene = () => {
         if (movements?.length) {
             movements?.map(element => {
                 const hours = parseInt(element.timeStart.split(':')[0]);
-                const minute = parseInt(element.timeStart.split(':')[1]);
                 if (hours >= start && hours <= end) {
                     count += element.count;
                 }

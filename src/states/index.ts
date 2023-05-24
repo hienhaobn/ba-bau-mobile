@@ -7,12 +7,12 @@ import FoodsReducer from './foods';
 import UserReducer from './user';
 import FetalReducer from './fetal';
 
-const PERSISTED_KEYS: string[] = ['user', 'transactions'];
+const PERSISTED_KEYS: string[] = ['user', 'fetal'];
 
 const persistConfig = {
     key: 'primary',
     whitelist: PERSISTED_KEYS,
-    blacklist: ['profile'],
+    blacklist: ['profile', 'dueDate'],
     storage: AsyncStorage,
     version: 1,
 };

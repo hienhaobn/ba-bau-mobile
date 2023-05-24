@@ -146,6 +146,7 @@ const myStyles = (theme: string) => {
             shadowOffset: { width: -1, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 3,
+            elevation: 3,
         },
         itemContent: {
             flex: 1,

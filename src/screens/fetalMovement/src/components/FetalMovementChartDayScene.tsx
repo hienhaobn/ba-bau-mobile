@@ -1,20 +1,22 @@
 import moment from 'moment';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 
 import { useTheme } from 'hooks/useTheme';
 
-import { useFetchMovementFromDateToDate, useMovementSelector } from 'states/fetal/hooks';
+import { useMovementSelector } from 'states/fetal/hooks';
 
 import { Fonts, Sizes } from 'themes';
 
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
+import { fetchMovementFromDateToDate } from '../../../../states/fetal/fetchFetalMovement';
 
 const FetalMovementChartDayScene = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
+
     const first = moment().subtract(5, 'days').toDate();
     const second = moment().subtract(4, 'days').toDate();
     const third = moment().subtract(3, 'days').toDate();
@@ -22,8 +24,17 @@ const FetalMovementChartDayScene = () => {
     const fifth = moment().subtract(1, 'days').toDate();
     const sixth = moment().toDate();
 
-    useFetchMovementFromDateToDate({ from: first, to: sixth });
-    const movements = useMovementSelector();
+    const [dateSelected, setDateSelected] = useState<string>(sixth.getDate().toString());
+    const [movements, setMovements] = useState<fetal.FetalMovement[]>([]);
+
+    const getMovements = async () => {
+        const response = await fetchMovementFromDateToDate({ from: first, to: sixth })
+        setMovements(response);
+    };
+
+    useEffect(() => {
+        getMovements();
+    }, []);
 
     const getData = (currentDate: number) => {
         let count = 0;
@@ -120,11 +131,24 @@ const FetalMovementChartDayScene = () => {
                 fontSize: scales(12),
             }}
             rotateLabel
+            onPress={(element) => {
+                const splitDateSelect = element.label.split('/');
+                setDateSelected(splitDateSelect[0]);
+            }}
         />
     );
 
+    const getDataHistory = ()  => {
+        const movementInDate = movements?.
+        filter(element => element?.date
+            .split('/')[0]
+            .includes(dateSelected))
+            .slice(0, 6);
+        return movementInDate;
+    };
+
     const renderMovementHistory = () => {
-        const historyData = movements?.length > 6 ? movements?.slice(0, 6) : movements;
+        const historyData = getDataHistory();
         if (!historyData?.length) {
             return (
                 <View style={styles.movementHistoryContainer}>

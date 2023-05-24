@@ -40,29 +40,24 @@ const HomeScreen = (props) => {
     const [week, setWeek] = useState<number>(0);
     const [calendar, setCalendar] = useState<Date>(null);
 
-    useFocusEffect(
-        useCallback(() => {
-            getDueDate();
-        }, [dueDateSelector]),
-    );
-
-    const getDueDate = async () => {
-        const dueDate = await Storages.get(KeyStorage.DueDate);
-        setLastMenstrualPeriod(dueDate);
-    };
-
-    useEffect(() => {
+    const calculatorCalendar = () => {
         const date1 = new Date().getTime();
-        const date2 = new Date(lastMenstrualPeriod).getTime();
+        const date2 = new Date(dueDateSelector).getTime();
         const diffTime = Math.abs(date2 - date1);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         const weekNow = Math.floor(diffDays/7);
         setWeek(weekNow);
-        setCalendar(moment(lastMenstrualPeriod).add('weeks', weekNow + 1).toDate())
-    }, [])
+        setCalendar(moment(dueDateSelector).add('weeks', weekNow + 1).toDate())
+    };
+
+    useFocusEffect(
+        useCallback(() => {
+            calculatorCalendar();
+        }, [dueDateSelector]),
+    );
 
     useEffect(() => {
-        getDueDate();
+        calculatorCalendar();
     }, [])
 
     useEffect(() => {

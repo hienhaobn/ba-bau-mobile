@@ -1,6 +1,3 @@
-import Button from 'components/Button/Button';
-import Header from 'components/Header';
-import { useTheme } from 'hooks/useTheme';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -10,40 +7,30 @@ import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import Storages, { KeyStorage } from 'utils/storages';
-import { useAppDispatch } from '../../states';
-import { updateDueDate } from '../../states/fetal';
-import { useDueDateSelector } from '../../states/fetal/hooks';
+import { useAppDispatch } from 'states';
+import { updateDueDate } from 'states/fetal';
+import { useDueDateSelector } from 'states/fetal/hooks';
+import Button from 'components/Button/Button';
+import Header from 'components/Header';
+import { useTheme } from 'hooks/useTheme';
 
 const PregnancyDueDateCalculatorScreen = () => {
     const { theme } = useTheme();
     const dueDateSelector = useDueDateSelector();
+
     const styles = myStyles(theme);
     const [date, setDate] = useState(new Date());
     const refPregnancyDueDateCalculatorConfirmPopup = useRef<IPregnancyDueDateCalculatorConfirmPopupRef>()
-    const [lastMenstrualPeriod, setLastMenstrualPeriod] = useState<string>(moment().format('YYYY-MM-DD'));
-    const dueDate = moment(lastMenstrualPeriod).add(9, 'months').add(10, 'days').format('DD/MM/YYYY');
-
+    const dueDate = moment(dueDateSelector).add(9, 'months').add(10, 'days').format('DD/MM/YYYY');
     const dispatch = useAppDispatch();
-
-    const getDueDateFromStore = async () => {
-        const dueDate = await Storages.get(KeyStorage.DueDate);
-        setLastMenstrualPeriod(dueDate);
-    };
-
-    useEffect(() => {
-        getDueDateFromStore();
-    }, []);
 
     const handleOpenPopup = () => {
         refPregnancyDueDateCalculatorConfirmPopup?.current?.showModal();
     };
 
     const handleConfirm = () => {
-        // save to async storage
         const currentDate = moment(date).format('YYYY-MM-DD');
-        setLastMenstrualPeriod(currentDate);
-        dispatch(updateDueDate(dueDate));
-        Storages.set(KeyStorage.DueDate, currentDate);
+        dispatch(updateDueDate(currentDate));
         refPregnancyDueDateCalculatorConfirmPopup?.current?.hideModal();
     };
 
@@ -56,17 +43,19 @@ const PregnancyDueDateCalculatorScreen = () => {
         </View>
     );
 
-    const renderSelectDate = () => (
-        <View style={styles.selectDateContainer}>
-            <Text style={styles.titleSelectDate}>Chọn ngày đầu tiên của kỳ kinh cuối cùng</Text>
-            <DatePicker
-                mode="calendar"
-                onSelectedChange={setDate}
-                selected={lastMenstrualPeriod}
-                current={lastMenstrualPeriod}
-            />
-        </View>
-    );
+    const renderSelectDate = () => {
+        return (
+            <View style={styles.selectDateContainer}>
+                <Text style={styles.titleSelectDate}>Chọn ngày đầu tiên của kỳ kinh cuối cùng</Text>
+                <DatePicker
+                    mode="calendar"
+                    onSelectedChange={setDate}
+                    selected={dueDateSelector}
+                    current={dueDateSelector}
+                />
+            </View>
+        )
+    };
 
     const renderButton = () => (
         <View style={styles.buttonContainer}>
@@ -134,6 +123,12 @@ const myStyles = (theme: string) => {
         },
         button: {
             marginHorizontal: scales(15),
+        },
+
+        viewCalendar: {
+            backgroundColor: color.white,
+            borderRadius: scales(12),
+            paddingBottom: scales(4),
         },
     });
 };

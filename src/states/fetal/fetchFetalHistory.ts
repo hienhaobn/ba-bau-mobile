@@ -32,8 +32,11 @@ export const createFetalHistory = async (body: { file?: object; note: string; we
             headers: { 'Content-Type': 'multipart/form-data', 'Authorization': token },
         });
 
+        console.log('ACTIVE::', response);
+
         return response;
     } catch (error) {
+        console.log('error?.response', error);
         showCustomToast(error?.response?.data?.message);
         console.log('error', error?.response?.data);
     }
