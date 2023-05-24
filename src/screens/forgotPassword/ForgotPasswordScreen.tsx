@@ -9,7 +9,7 @@ import { hideLoading, showLoading } from 'components/Loading';
 import { useTheme } from 'hooks/useTheme';
 import { goToLogin } from 'screens/login/src/utils';
 import { goToVerifyOTP } from 'screens/verifyOTP/src/utils';
-import { fetchSendOtpForgotPassword } from 'states/user/fetchForgotPassword';
+import { apiSendOtpForgotPassword } from 'states/user/fetchForgotPassword';
 import { Fonts } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
@@ -21,15 +21,12 @@ const ForgotPasswordScreen = () => {
     const [email, setEmail] = useState<string>('');
 
     const handlePress = async () => {
-        // TODO: call api
-        console.log('press');
         showLoading();
-        const { statusCode, message } = await fetchSendOtpForgotPassword(email);
+        const { success, message } = await apiSendOtpForgotPassword(email);
         hideLoading();
-        // TODO: go to confirm OTP
-        if (statusCode === 200) {
+        if (success) {
             showCustomToast(message);
-            goToVerifyOTP(email, 'ForgotPassword');
+            goToVerifyOTP(email, 'ForgotPassword', () => apiSendOtpForgotPassword(email));
         }
     };
 

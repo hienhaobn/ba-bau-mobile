@@ -117,6 +117,8 @@ const RootStack = () => {
             <Stack.Screen name="FoodDetailSaved" component={Screen.FoodDetailSaved} />
 
             <Stack.Screen name="ChangePassword" component={Screen.ChangePassword} />
+
+            <Stack.Screen name="ResetPassword" component={Screen.ResetPassword} />
         </Stack.Navigator>
     );
 };
@@ -157,13 +159,14 @@ const StackNavigator = () => {
         screens: {
             Payment: 'payment-success',
             Splash: 'payment-failed',
+            ResetPassword: 'reset-password/:token',
         },
       };
 
       const linking = {
         prefixes: ['babau://'],
         getStateFromPath: (path, options) => {
-          if (path?.includes('payment')) {
+          if (path?.includes('payment') || path?.includes('reset-password')) {
             const timer = GlobalVariables.activeRouteKey ? 0 : 3000;
             setTimeout(() => {
               resetStack('Splash', {
@@ -171,12 +174,13 @@ const StackNavigator = () => {
               });
             }, timer);
           }
+
         },
         config,
         async getInitialURL() {
           const url = await Linking.getInitialURL();
           const path = url?.replace(/babau:\/\//g, '');
-          if (path?.includes('payment')) {
+          if (path?.includes('payment') || path?.includes('reset-password')) {
             setTimeout(() => {
                 resetStack('Splash', {
                 stateFromPath: path,

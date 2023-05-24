@@ -33,6 +33,17 @@ const LaunchScreen = (props) => {
     const { route } = props;
     const stateFromPath = route.params?.stateFromPath;
 
+    const handleFromLinking = (url) => {
+        if (!url) return;
+        const arrUrl = url.split("/");
+        if (url.includes("reset-password")) {
+            const token = arrUrl[arrUrl.length - 1];
+            resetStack('ResetPassword', {
+                token,
+            });
+        }
+    };
+
     const initLocale = React.useCallback(() => {
         const currentLocale = 'en'; // Todo
         i18n.changeLanguage(currentLocale);
@@ -56,6 +67,11 @@ const LaunchScreen = (props) => {
                 ...tokenInfo,
             };
             screenName = 'Main';
+        }
+
+        if (stateFromPath) {
+            handleFromLinking(stateFromPath);
+            return;
         }
 
         setTimeout(() => {

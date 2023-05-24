@@ -1,9 +1,9 @@
 import axiosInstance from 'services/api-requests';
 import { showCustomToast } from 'utils/toast';
 
-export const fetchSendOtpForgotPassword = async (email: string) => {
+export const apiSendOtpForgotPassword = async (email: string) => {
     try {
-        const response: { statusCode: number, message: string } = await axiosInstance.post('/accounts/otp', { email });
+        const response: { success: boolean, message: string } = await axiosInstance.post('/accounts/otp', { email });
         return response;
     } catch (error) {
         console.log(error);

@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { BASE_URL } from '../../configs/api';
-import { GlobalVariables } from '../../constants';
-import axiosInstance from '../../services/api-requests';
-import { showCustomToast } from '../../utils/toast';
+import { BASE_URL } from 'configs/api';
+import { GlobalVariables } from 'constants/index';
+import axiosInstance from 'services/api-requests';
+import { showCustomToast } from 'utils/toast';
 
 export const updateProfile= async (body: { avatar?: object, birthday: string, fullname: string, phone: string, address: string, childBirthday: string, lastMenstrualPeriod: string, childName: string }) => {
     try {
@@ -45,3 +45,16 @@ export const changePassword = async (password: string, newPassword: string) => {
     }
 };
 
+export const resetPassword = async (email: string, password: string, code: string) => {
+    try {
+        const response: user.Profile = await axiosInstance.post('/accounts/password', {
+            code,
+            email,
+            password,
+        });
+        showCustomToast('Đổi mật khẩu thành công');
+        return response;
+    } catch (error) {
+        showCustomToast(error.response.data.message);
+    }
+};

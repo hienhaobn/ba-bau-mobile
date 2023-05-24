@@ -20,16 +20,16 @@ const PregnancyDueDateCalculatorScreen = () => {
     const styles = myStyles(theme);
     const [date, setDate] = useState(new Date());
     const refPregnancyDueDateCalculatorConfirmPopup = useRef<IPregnancyDueDateCalculatorConfirmPopupRef>()
-    const dueDate = moment(dueDateSelector !== '0' ? dueDateSelector : moment().toDate()).add(9, 'months').add(10, 'days').format('DD/MM/YYYY');
+    const dueDate = dueDateSelector !== '0' ? moment(dueDateSelector,'YYYY/MM/DD').add(9, 'months').add(10, 'days').format('DD/MM/YYYY') : moment().toDate();
     const dispatch = useAppDispatch();
 
+    console.log('dueDate', dueDate);
     const handleOpenPopup = () => {
         refPregnancyDueDateCalculatorConfirmPopup?.current?.showModal();
     };
 
     const handleConfirm = () => {
-        const currentDate = moment(date).format('YYYY-MM-DD');
-        dispatch(updateDueDate(currentDate));
+        dispatch(updateDueDate(date));
         refPregnancyDueDateCalculatorConfirmPopup?.current?.hideModal();
     };
 
@@ -38,7 +38,7 @@ const PregnancyDueDateCalculatorScreen = () => {
     const renderPregnancyDueDateCalculator = () => (
         <View style={styles.pregnancyDueDateCalculatorContainer}>
             <Text style={styles.titlePregnancyDueDateCalculator}>Ngày dự sinh: </Text>
-            <Text style={styles.datePregnancyDueDateCalculator}>{dueDate}</Text>
+            <Text style={styles.datePregnancyDueDateCalculator}>{dueDate.toString()}</Text>
         </View>
     );
 
@@ -49,8 +49,8 @@ const PregnancyDueDateCalculatorScreen = () => {
                 <DatePicker
                     mode="calendar"
                     onSelectedChange={setDate}
-                    selected={dueDateSelector !== '0' ? dueDateSelector : moment().format('YYYY-MM-DD')}
-                    current={dueDateSelector !== '0' ? dueDateSelector : moment().format('YYYY-MM-DD')}
+                    selected={dueDateSelector !== '0' ? moment(dueDateSelector,'YYYY/MM/DD').format('YYYY/MM/DD') : moment().format('YYYY-MM-DD')}
+                    current={dueDateSelector !== '0' ? moment(dueDateSelector,'YYYY/MM/DD').format('YYYY/MM/DD') : moment().format('YYYY-MM-DD')}
                 />
             </View>
         )

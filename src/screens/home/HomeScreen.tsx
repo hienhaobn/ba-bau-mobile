@@ -5,13 +5,9 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import Images from 'assets/images';
 import SvgIcons from 'assets/svgs';
-
 import TouchableOpacity from 'components/TouchableOpacity';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { navigate } from 'navigation/utils';
-
 import { goToFetalMovement } from 'screens/fetalMovement/src/utils';
 import { goToNutritionalRegimen } from 'screens/nutritionalRegimen/src/utils';
 import { goToPregnancyDueDateCalculator } from 'screens/pregnancyDueDateCalculator/src/utils';
@@ -20,13 +16,11 @@ import { goToPregnancyWeekByWeek } from 'screens/pregnancyWeekByWeek/src/utils';
 import PaymentFailedPopup, { IPaymentFailedPopupRef } from 'screens/premium/src/components/PaymentFailedPopup';
 import PaymentSuccessPopup, { IPaymentSuccessPopupRef } from 'screens/premium/src/components/PaymentSuccessPopup';
 import { goToPrenatalCareCheckups } from 'screens/prenatalCareCheckups/src/utils';
-
 import { fetchBalance } from 'states/premium/fetchPayment';
 import { Fonts, Sizes } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
-import { useDueDateSelector } from '../../states/fetal/hooks';
-import Storages, { KeyStorage } from '../../utils/storages';
+import { useDueDateSelector } from 'states/fetal/hooks';
 
 const HomeScreen = (props) => {
     const { theme } = useTheme();
@@ -39,15 +33,14 @@ const HomeScreen = (props) => {
     const [week, setWeek] = useState<number>(0);
     const [calendar, setCalendar] = useState<Date>(null);
 
-
     const calculatorCalendar = () => {
         const date1 = new Date().getTime();
-        const date2 = new Date(dueDateSelector !== '0' ? dueDateSelector : moment().toDate()).getTime();
+        const date2 = dueDateSelector !== '0' ? new Date(moment(dueDateSelector,'YYYY/MM/DD').toDate()).getTime() : new Date(moment().toDate()).getTime();
         const diffTime = Math.abs(date2 - date1);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         const weekNow = Math.floor(diffDays/7);
         setWeek(weekNow);
-        setCalendar(moment(dueDateSelector !== '0' ? dueDateSelector : moment().toDate()).add('weeks', weekNow + 1).toDate())
+        setCalendar(moment(dueDateSelector,'YYYY/MM/DD').add('weeks', weekNow  + 1).toDate())
     };
 
     useFocusEffect(

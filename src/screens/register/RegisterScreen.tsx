@@ -9,7 +9,7 @@ import Input from 'components/Input';
 import { hideLoading, showLoading } from 'components/Loading';
 import { useTheme } from 'hooks/useTheme';
 import { goToVerifyOTP } from 'screens/verifyOTP/src/utils';
-import fetchRegister from 'states/user/fetchRegister';
+import { apiSendOtpRegister } from 'states/user/fetchRegister';
 import { Fonts } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
@@ -30,15 +30,14 @@ const RegisterScreen = () => {
                 return;
             }
             showLoading();
-            const response = await fetchRegister({ email, password, phone });
+            const response = await apiSendOtpRegister({ email, password, phone });
             hideLoading();
-            // success
             if (response && response?.statusCode === 201) {
                 setEmail('');
                 setPassword('');
                 setConfirmPassword('');
                 setPhone('');
-                goToVerifyOTP(email);
+                goToVerifyOTP(email, 'Register', () => apiSendOtpRegister({ email, password, phone }));
             }
         } catch (error) {
             hideLoading();

@@ -37,16 +37,21 @@ declare namespace user {
         jwt: string;
     }
 
-    interface UserRegisterRequest {
+    interface SendOtpRegisterRequest {
         email: string;
         password: string;
         phone: string;
     }
 
+    interface ConfirmRegisterRequest {
+        code: string;
+        email: string;
+    }
+
     interface VerifyOTPRoute {
         email: string;
         fromScreen?: 'ForgotPassword' | 'Register';
-        passwordFromRegister?: string;
+        callbackSendOtp: () => { message: string; success: boolean };
     }
 
     interface UserForgotPasswordRequest {

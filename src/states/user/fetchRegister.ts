@@ -1,11 +1,13 @@
+import axios from 'axios';
 import axiosInstance from 'services/api-requests';
 import { showCustomToast } from 'utils/toast';
+import { resetStack } from 'navigation/utils';
 
-const fetchRegister = async (user: user.UserRegisterRequest) => {
+export const apiSendOtpRegister = async (user: user.SendOtpRegisterRequest) => {
     try {
         const res: { statusCode: number, message: string } = await axiosInstance.post('/accounts', user);
         if (res && res?.statusCode === 201) {
-            // showCustomToast('Đăng ký thành công');
+            showCustomToast(res?.message);
         }
         return res;
     } catch (error) {
@@ -14,4 +16,21 @@ const fetchRegister = async (user: user.UserRegisterRequest) => {
     }
 };
 
-export default fetchRegister;
+export const apiRegister = async (user: user.ConfirmRegisterRequest) => {
+    try {
+        const response: { statusCode: number, message: string} = await axiosInstance.post('/accounts/confirm', {
+            code: user.code,
+            email: user.email,
+        });
+        if (response?.message) {
+            showCustomToast(response?.message);
+            return;
+        }
+        showCustomToast('Đăng ký thành công');
+        resetStack('Login');
+    } catch (error) {
+        showCustomToast(error.message);
+        return;
+    }
+};
+

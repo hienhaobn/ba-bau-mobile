@@ -48,4 +48,5 @@ export type RootNavigatorParamList = {
     AccountInfo: undefined,
     FoodDetailSaved: { foodSave: food.FoodSave },
     ChangePassword: undefined,
+    ResetPassword: { email: string, otp: string },
 };

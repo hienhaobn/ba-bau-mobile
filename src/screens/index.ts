@@ -39,6 +39,7 @@ import RoutineCheckups from './prenatalCareCheckups/RoutineCheckupsScreen';
 import Register from './register/RegisterScreen';
 import RegisterSuccess from './registerSuccess/RegisterSuccessScreen';
 import RegisterUpdateInfo from './registerUpdateInfo/RegisterUpdateInfoScreen';
+import ResetPassword from './resetPassword/ResetPasswordScreen';
 import TeachFetusMomReadDetail from './teachFetus/TeachFetusMomReadDetailScreen';
 import TeachFetusMomRead from './teachFetus/TeachFetusMomReadScreen';
 import TeachFetusMusicForMom from './teachFetus/TeachFetusMusicForMomScreen';
@@ -99,4 +100,5 @@ export const Screen = {
     AccountInfo,
     FoodDetailSaved,
     ChangePassword,
+    ResetPassword,
 };

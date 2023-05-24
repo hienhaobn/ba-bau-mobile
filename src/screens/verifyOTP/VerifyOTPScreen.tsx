@@ -1,6 +1,5 @@
 import { RouteProp } from '@react-navigation/native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import axios from 'axios';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -8,17 +7,16 @@ import SvgIcons from 'assets/svgs';
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
 import Input from 'components/Input';
-import { hideLoading, showLoading } from 'components/Loading';
 import TouchableOpacity from 'components/TouchableOpacity';
-import { BASE_URL } from 'configs/api';
 import { useTheme } from 'hooks/useTheme';
 import { RootNavigatorParamList } from 'navigation/types';
-import { resetStack } from 'navigation/utils';
 import { Fonts } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 import { showCustomToast } from 'utils/toast';
-import { goToRegisterUpdateInfo } from '../registerUpdateInfo/src/utils';
+import { hideLoading, showLoading } from '../../components/Loading';
+import { apiRegister } from '../../states/user/fetchRegister';
+import { goToResetPassword } from '../resetPassword/src/utils';
 
 interface VerifyOTPScreenProps {
     route: RouteProp<RootNavigatorParamList, 'VerifyOTP'>;
@@ -27,7 +25,7 @@ interface VerifyOTPScreenProps {
 const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const { email, fromScreen, passwordFromRegister } = props.route.params;
+    const { email, fromScreen, callbackSendOtp } = props.route.params;
     const [code, setCode] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [securePassword, setSecurePassword] = useState<boolean>(true);
@@ -40,47 +38,28 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
     );
 
     const onConfirmOTP = async () => {
-        // TODO: re check when open logic
         if (fromScreen === 'ForgotPassword' && code.length === 4) {
+            goToResetPassword(email, code);
+            setCode('');
+        }
+        if (fromScreen === 'Register' && code.length === 4) {
             try {
-                showLoading();
-                const response = await axios.post(`${BASE_URL}/accounts/password`, {
-                    code,
-                    email,
-                    password,
-                });
-                hideLoading();
-                if (!response) {
-                    showCustomToast('Verify OTP error');
-                    return;
-                }
+                await apiRegister({ code, email })
                 setCode('');
-                setPassword('');
-                resetStack('Login');
-                setSecurePassword(true);
-                showCustomToast('Change password successful');
             } catch (error) {
                 showCustomToast(error.message);
                 return;
             }
         }
-        if (code.length === 4) {
-            try {
-                const response = await axios.post(`${BASE_URL}/accounts/confirm`, {
-                    code,
-                    email,
-                });
-                if (!response) {
-                    showCustomToast('Verify OTP error');
-                    return;
-                }
-                setCode('');
-                showCustomToast('Đăng ký thành công');
-                resetStack('Login');
-                // goToRegisterUpdateInfo(email, passwordFromRegister );
-            } catch (error) {
-                showCustomToast(error.message);
-                return;
+    };
+
+    const onResendOtp = async () => {
+        if (callbackSendOtp) {
+            showLoading();
+            const response: { message: string; success: boolean } = await callbackSendOtp();
+            hideLoading();
+            if (response?.success) {
+                showCustomToast(response?.message)
             }
         }
     };
@@ -112,7 +91,7 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
 
     const renderButtonResend = () => {
         return (
-            <TouchableOpacity style={{ alignSelf: 'flex-end' }} activeOpacity={1}>
+            <TouchableOpacity style={{ alignSelf: 'flex-end' }} activeOpacity={1} onPress={onResendOtp}>
                 <Text style={styles.textResend}>Gửi lại?</Text>
             </TouchableOpacity>
         );
@@ -131,7 +110,7 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
                     onCodeChanged={setCode}
                 />
             </View>
-            {fromScreen === 'ForgotPassword' && renderInputPassword()}
+            {/*{fromScreen === 'ForgotPassword' && renderInputPassword()}*/}
             {renderButton()}
             {renderButtonResend()}
         </View>
