@@ -62,13 +62,15 @@ const PregnancyDueDateCalculatorScreen = () => {
         </View>
     );
 
+    console.log('date', moment(moment(date, 'YYYY-MM-DD')).add(9, 'months').add(10, 'days').format('DD/MM/YYYY'));
+
     const renderContent = () => (
         <View style={styles.content}>
             {renderHeader()}
             {renderPregnancyDueDateCalculator()}
             {renderSelectDate()}
             {renderButton()}
-            <PregnancyDueDateCalculatorConfirmPopup ref={refPregnancyDueDateCalculatorConfirmPopup} onConfirm={handleConfirm} dueDate={moment(moment(date).format('YYYY-MM-DD')).add(9, 'months').add(10, 'days').format('DD/MM/YYYY')}/>
+            <PregnancyDueDateCalculatorConfirmPopup ref={refPregnancyDueDateCalculatorConfirmPopup} onConfirm={handleConfirm} dueDate={moment(moment(date, 'YYYY-MM-DD')).add(9, 'months').add(10, 'days').format('DD/MM/YYYY')}/>
         </View>
     );
 

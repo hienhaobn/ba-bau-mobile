@@ -50,7 +50,7 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
     const bottomSheetRef = useRef<CustomBottomSheetRefType>(null);
 
     const onCreateFetalHistory = async () => {
-        let body = { note, weeksOfPregnancy: week, file: {}, datePhoto: moment(date).toDate() };
+        let body = { note, weeksOfPregnancy: week, file: {}, datePhoto: moment(date).toDate().toDateString() };
         if (imageChoose) {
             body = { ...body, file: imageChoose }
         }
@@ -65,7 +65,7 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
     };
 
     const onUpdateFetalHistory = async () => {
-        let body = { note, weeksOfPregnancy: week, file: {}, datePhoto: moment(date).toDate() };
+        let body = { note, weeksOfPregnancy: week, file: {}, datePhoto: moment(date).toDate().toDateString() };
         if (imageChoose) {
             body = { ...body, file: formatImage(imageChoose) }
         }
@@ -216,8 +216,8 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
     const getImageUrl = () => {
         if (action === 'EDIT' && history.image) {
             return { uri: history.image }
-        } else if (action === 'CREATE' && imageChoose?.path) {
-            return { uri: imageChoose?.path }
+        } else if (action === 'CREATE' && imageChoose?.uri) {
+            return { uri: imageChoose?.uri }
         } else {
             return Images.Babe3;
         }
