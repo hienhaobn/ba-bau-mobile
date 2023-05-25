@@ -1,5 +1,6 @@
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
+import { useFetchFetalDevelopmentWeekly } from '../../states/fetal/hooks';
 
 import MyTabBar from './MyTabBar';
 
@@ -12,6 +13,9 @@ const Tab = createBottomTabNavigator<RootNavigatorParamList>();
 const Main = (props) => {
     const { route } = props;
     const stateFromPath = route.params?.stateFromPath;
+
+    useFetchFetalDevelopmentWeekly();
+
     const renderTabBar = (bottomTabBarProps: BottomTabBarProps) => {
         return <MyTabBar {...bottomTabBarProps} />;
     };

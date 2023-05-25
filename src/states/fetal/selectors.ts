@@ -11,3 +11,7 @@ export const selectFetalMovements = (state: GlobalState) => {
 export const selectDueDate = (state: GlobalState) => {
     return state.fetal?.dueDate;
 };
+
+export const selectFetalDevelopmentWeekly = (state: GlobalState) => {
+    return state.fetal?.fetalDevelopmentWeekly?.vifetalDevelopmentWeekliesdeos;
+};

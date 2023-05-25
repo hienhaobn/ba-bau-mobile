@@ -15,6 +15,14 @@ const initialState: fetal.State = {
         total_page: 1,
     },
     dueDate: '0',
+    fetalDevelopmentWeekly: {
+        current_page: '',
+        total_page: 0,
+        count: 0,
+        vifetalDevelopmentWeekliesdeos: [],
+        createdAt: '',
+        updatedAt: '',
+    },
     isLoading: false,
 };
 
@@ -32,7 +40,7 @@ export const createFetalMovement = createAsyncThunk('fetal/createFetalMovement',
 export const fetchMovementByDateNow = createAsyncThunk<fetal.FetalResponse>('fetal/fetchMovementByDateNow', async (date: Date) => {
    try {
        showLoading();
-       const response = await axiosInstance.get(`${BASE_URL}/fetal-movements?date=${moment(date).format('DD/MM/YYYY')}`);
+       const response: fetal.FetalResponse = await axiosInstance.get(`${BASE_URL}/fetal-movements?date=${moment(date).format('DD/MM/YYYY')}`);
        hideLoading();
        return response;
    } catch (error) {
@@ -41,6 +49,16 @@ export const fetchMovementByDateNow = createAsyncThunk<fetal.FetalResponse>('fet
        console.log(error);
    }
 });
+
+export const fetchFetalDevelopmentWeekly = createAsyncThunk<fetal.FetalDevelopmentWeeklyResponse>('fetal/fetchFetalDevelopmentWeekly', async () => {
+    try {
+        const response: fetal.FetalDevelopmentWeeklyResponse = await axiosInstance.get(`${BASE_URL}/fetal-development-weekly?page=1&size=50`);
+        return response;
+    } catch (error) {
+        showCustomToast('Lấy dữ liệu thất bại')
+        console.log(error);
+    }
+})
 
 export const fetalSlice = createSlice({
     name: 'Fetal',
@@ -71,6 +89,23 @@ export const fetalSlice = createSlice({
             })
             .addCase(fetchMovementByDateNow.fulfilled, (state, action) => {
                 state.data = action.payload;
+                state.isLoading = false;
+            })
+            .addCase(fetchFetalDevelopmentWeekly.pending, (state, action) => {
+                state.fetalDevelopmentWeekly = initialState.fetalDevelopmentWeekly;
+                state.isLoading = true;
+            })
+            .addCase(fetchFetalDevelopmentWeekly.rejected, (state, action) => {
+                state.fetalDevelopmentWeekly = initialState.fetalDevelopmentWeekly;
+                state.isLoading = false;
+            })
+            .addCase(fetchFetalDevelopmentWeekly.fulfilled, (state, action) => {
+                state.fetalDevelopmentWeekly.vifetalDevelopmentWeekliesdeos = action.payload.vifetalDevelopmentWeekliesdeos;
+                state.fetalDevelopmentWeekly.current_page = action.payload.current_page;
+                state.fetalDevelopmentWeekly.total_page =  action.payload.total_page;
+                state.fetalDevelopmentWeekly.count = action.payload.count;
+                state.fetalDevelopmentWeekly.createdAt = action.payload.createdAt;
+                state.fetalDevelopmentWeekly.updatedAt = action.payload.updatedAt;
                 state.isLoading = false;
             })
     },

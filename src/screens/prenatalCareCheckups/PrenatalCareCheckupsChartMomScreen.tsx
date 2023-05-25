@@ -74,9 +74,10 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
         let weeksOfPregnacy = '';
         let weight = 0;
         let _id = '';
+        let pregnancyExam = '';
         if (data?.length) {
             data?.map((element, index) => {
-                if (element.createdAt.includes(healthyIndex)) {
+                if (moment(element.createdAt).format('YYYY-MM-DD').includes(healthyIndex)) {
                     _id = element._id;
                     updatedAt = element.updatedAt;
                     commonDiseases = element.commonDiseases;
@@ -89,6 +90,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
                     eating1hGlycemicIndex += element.eating1hGlycemicIndex;
                     eating2hGlycemicIndex += element.eating2hGlycemicIndex;
                     fastingGlycemicIndex += element.fastingGlycemicIndex;
+                    pregnancyExam = element.pregnancyExam
                 }
             });
         }
@@ -105,6 +107,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
             weeksOfPregnacy,
             weight,
             _id,
+            pregnancyExam,
         };
     };
 
@@ -201,7 +204,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
                         if (el.label.includes(element.label)) {
                             const splitDay = el.label.split('/');
                             const elementDate = moment()
-                                .set('days', parseInt(splitDay[0]))
+                                .set('days', parseInt(splitDay[0]) + 10)
                                 .set('months', parseInt(splitDay[1]) - 1)
                                 .format('YYYY-MM-DD');
                             setHealthyIndex(elementDate);
@@ -231,7 +234,12 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
     return (
         <View style={styles.container}>
             <Header title="Biểu đồ của mẹ" />
-            <ScrollView>
+            <ScrollView
+                style={styles.wrapperContent}
+                contentContainerStyle={styles.contentContainer}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+            >
                 {renderContent()}
                 <PrenatalCareCheckupsHealthyIndex data={getOnlyElementChart()} />
             </ScrollView>
@@ -250,6 +258,12 @@ const myStyles = (theme: string) => {
         },
         content: {
             marginHorizontal: scales(15),
+        },
+        wrapperContent: {
+            flexGrow: 1,
+        },
+        contentContainer: {
+            paddingBottom: scales(30),
         },
         chartContainer: {
             marginTop: scales(10),

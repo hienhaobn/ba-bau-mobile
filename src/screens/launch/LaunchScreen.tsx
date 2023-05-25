@@ -23,7 +23,6 @@ import Storages, { KeyStorage } from 'utils/storages';
 import 'i18n';
 
 import { useAppDispatch } from 'states';
-import PaymentFailedPopup, { IPaymentFailedPopupRef } from 'screens/premium/src/components/PaymentFailedPopup';
 
 const LaunchScreen = (props) => {
     const { theme } = useTheme();

@@ -1,16 +1,10 @@
 import BigNumber from 'bignumber.js';
-import React, { useEffect } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-import Images from 'assets/images';
-
-import Button from 'components/Button/Button';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
@@ -38,8 +32,8 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
            )
         } else if (BigNumber(value).lt(max) && BigNumber(value).gt(min)) {
             return  (
-                <View style={[styles.statusContainer, { backgroundColor: getThemeColor().Color_Yellow_1 }]}>
-                    <Text style={styles.statusTxt}>Trung bình</Text>
+                <View style={[styles.statusContainer, { backgroundColor: getThemeColor().Color_Blue2 }]}>
+                    <Text style={styles.statusTxt}>Bình thường</Text>
                 </View>
             )
         }
@@ -73,21 +67,41 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Huyết áp</Text>
-                    {getStatus(data.bloodPressure, 70, 130)}
+                    {getStatus(data.bloodPressure, 80, 130)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
+                        colors={['#F67EA4', '#F67EA4', '#F67EA4']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
-                    <Text style={[styles.dotValue, { left: getDotPosition(70, 130, data.bloodPressure) }]}>
+                    <>
+                        <Text style={[styles.dotValue, { left: getDotPosition(0, 130 + 30, 130) || 0 }]}>
+                            Max
+                        </Text>
+                        <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, 130 + 30, 130) || 0 }]}>
+                            180
+                        </Text>
+                        <View style={[styles.dot, { left: getDotPosition(0, 130 + 30, 130) || 0 }]} />
+
+                    </>
+                    <View>
+                        <Text style={[styles.dotValue, { left: getDotPosition(0, 130 + 30, 80) || 0 }]}>
+                            Min
+                        </Text>
+                        <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, 130 + 30, 80) || 0 }]}>
+                            80
+                        </Text>
+                        <View style={[styles.dot, { left: getDotPosition(0, 130 + 30, 80) || 0 }]} />
+
+                    </View>
+                    <Text style={[styles.dotValue, { left: getDotPosition(80, 130, data.bloodPressure) }]}>
                         {data.bloodPressure} mm
                     </Text>
-                    <View style={[styles.dot, { left: getDotPosition(70, 130, data.bloodPressure) }]} />
+                    <View style={[styles.dot, { left: getDotPosition(80, 130, data.bloodPressure) }]} />
                 </View>
             </View>
             <View>
@@ -97,62 +111,93 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                 <Text style={styles.pointTxt}>Chỉ số đường huyết (mmol/L)</Text>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Lúc đói</Text>
-                    {getStatus(data.fastingGlycemicIndex, 70, 130)}
+                    {getStatus(data.fastingGlycemicIndex, 0, 130)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
+                        colors={['#F67EA4', '#F67EA4', '#F67EA4']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
-                    <Text style={[styles.dotValue, { left: getDotPosition(70, 130, data.fastingGlycemicIndex) }]}>
+                    <View>
+                        <Text style={[styles.dotValue, { left: getDotPosition(0, 130 + 30, 130) || 0 }]}>
+                            Max
+                        </Text>
+                        <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, 130 + 30, 130) || 0 }]}>
+                            130
+                        </Text>
+                        <View style={[styles.dot, { left: getDotPosition(0, 130 + 30, 130) || 0 }]} />
+
+                    </View>
+                    <Text style={[styles.dotValue, { left: getDotPosition(0, 130, data.fastingGlycemicIndex) }]}>
                         {data.fastingGlycemicIndex} mm
                     </Text>
-                    <View style={[styles.dot, { left: getDotPosition(70, 130, data.fastingGlycemicIndex) }]} />
+                    <View style={[styles.dot, { left: getDotPosition(0, 130, data.fastingGlycemicIndex) }]} />
                 </View>
             </View>
 
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Sau ăn 1h</Text>
-                    {getStatus(data.eating1hGlycemicIndex, 70, 130)}
+                    {getStatus(data.eating1hGlycemicIndex, 0, 180)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
+                        colors={['#F67EA4', '#F67EA4', '#F67EA4']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
-                    <Text style={[styles.dotValue, { left: getDotPosition(70, 130, data.eating1hGlycemicIndex) }]}>
+
+                    <View>
+                        <Text style={[styles.dotValue, { left: getDotPosition(0, 180 + 30, 180) || 0 }]}>
+                            Max
+                        </Text>
+                        <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, 180 + 30, 180) || 0 }]}>
+                            180
+                        </Text>
+                        <View style={[styles.dot, { left: getDotPosition(0, 180 + 30, 180) || 0 }]} />
+
+                    </View>
+                    <Text style={[styles.dotValue, { left: getDotPosition(0, 180, data.eating1hGlycemicIndex) }]}>
                         {data.eating1hGlycemicIndex} mm
                     </Text>
-                    <View style={[styles.dot, { left: getDotPosition(70, 130, data.eating1hGlycemicIndex) }]} />
+                    <View style={[styles.dot, { left: getDotPosition(0, 180, data.eating1hGlycemicIndex) }]} />
                 </View>
             </View>
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Sau ăn 2h</Text>
-                    {getStatus(data.eating2hGlycemicIndex, 70, 130)}
+                    {getStatus(data.eating2hGlycemicIndex, 0, 153)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
+                        colors={['#F67EA4', '#F67EA4', '#F67EA4']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
-                    <Text style={[styles.dotValue, { left: getDotPosition(70, 130, data.eating2hGlycemicIndex) }]}>
+                    <View>
+                        <Text style={[styles.dotValue, { left: getDotPosition(0, 153 + 30, 153) || 0 }]}>
+                            Max
+                        </Text>
+                        <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, 153 + 30, 153) || 0 }]}>
+                            153
+                        </Text>
+                        <View style={[styles.dot, { left: getDotPosition(0, 153 + 30, 153) || 0 }]} />
+
+                    </View>
+                    <Text style={[styles.dotValue, { left: getDotPosition(0, 153, data.eating2hGlycemicIndex) }]}>
                         {data.eating2hGlycemicIndex} mm
                     </Text>
-                    <View style={[styles.dot, { left: getDotPosition(70, 130, data.eating2hGlycemicIndex) }]} />
+                    <View style={[styles.dot, { left: getDotPosition(0, 153, data.eating2hGlycemicIndex) }]} />
                 </View>
             </View>
         </View>
@@ -275,13 +320,17 @@ const myStyles = (theme: string) => {
             left: 0,
             width: scales(10),
             height: scales(10),
-            backgroundColor: color.red,
+            backgroundColor: color.green,
             borderRadius: scales(10),
         },
         dotValue: {
             position: 'absolute',
             bottom: scales(10),
             left: 0,
+        },
+        dotValueMinMax: {
+            position: 'absolute',
+            top: scales(10),
         },
         progress: {
             marginTop: scales(20),

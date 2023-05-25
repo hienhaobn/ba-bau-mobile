@@ -21,6 +21,7 @@ declare namespace fetal {
         data: FetalResponse;
         isLoading: boolean;
         dueDate: string;
+        fetalDevelopmentWeekly: FetalDevelopmentWeeklyResponse;
     }
 
     interface FetalHistory {
@@ -39,5 +40,56 @@ declare namespace fetal {
         total_page: number,
         count: number,
         babyDiaries: FetalHistory[]
+    }
+
+    interface FetalDevelopmentWeeklyResponse {
+        current_page: string;
+        total_page: number;
+        count: number;
+        vifetalDevelopmentWeekliesdeos: FetalDevelopmentWeekly[];
+        createdAt: string;
+        updatedAt: string;
+    }
+
+    interface FetalDevelopmentWeekly {
+        week: number
+        GSD: Gsd
+        CRL: Crl
+        BPD: Bpd
+        FL: Fl
+        HC: Hc
+        AC: Ac
+        createdAt: string
+        updatedAt: string
+    }
+
+    interface Gsd {
+        min: number
+        max: number
+    }
+
+    interface Crl {
+        min: number
+        max: number
+    }
+
+    interface Bpd {
+        min: number
+        max: number
+    }
+
+    interface Fl {
+        min: number
+        max: number
+    }
+
+    interface Hc {
+        min: number
+        max: number
+    }
+
+    interface Ac {
+        min: number
+        max: number
     }
 }

@@ -82,6 +82,7 @@ declare namespace user {
         eating2hGlycemicIndex: number;
         note: string;
         commonDiseases: string;
+        pregnancyExam: string;
         idAccount: string;
         createdAt: string;
         updatedAt: string;

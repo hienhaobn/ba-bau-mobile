@@ -3,22 +3,16 @@ import BigNumber from 'bignumber.js';
 import React, { useCallback } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { useFetalDevelopmentWeeklySelector } from '../../states/fetal/hooks';
 
 import { goToFetalHealthAnalysis } from './src/utils';
 
 import Images from 'assets/images';
-
 import Button from 'components/Button/Button';
 import Header from 'components/Header';
-
 import { useTheme } from 'hooks/useTheme';
-
 import { RootNavigatorParamList } from 'navigation/types';
-
-import { goToAddPrenatalCareCheckupsStep1 } from 'screens/prenatalCareCheckups/src/utils';
-
 import { Fonts, Sizes } from 'themes';
-
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
@@ -32,7 +26,9 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
     const { route } = props;
     const { child, momId } = route.params;
 
-    console.log('child', child);
+    const fetalDevelopmentWeekly = useFetalDevelopmentWeeklySelector();
+
+    const fetalDevelopmentWeeklyCurrent = fetalDevelopmentWeekly?.find(item => item?.week === parseInt(child?.weeksOfPregnacy));
 
     const getStatus = (value: number, min: number, max: number) => {
         if (BigNumber(value).lt(min)) {
@@ -50,7 +46,7 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
         } else if (BigNumber(value).lt(max) && BigNumber(value).gt(min)) {
             return  (
                 <View style={[styles.statusContainer, { backgroundColor: getThemeColor().Color_Yellow_1 }]}>
-                    <Text style={styles.statusTxt}>Trung bình</Text>
+                    <Text style={styles.statusTxt}>Bình thường</Text>
                 </View>
             )
         }
@@ -73,6 +69,8 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
 
     const renderHeader = () => <Header title="Sức khỏe thai nhi" />;
 
+    console.log('child?.fetalDevelopmentWeekly', child?.fetalDevelopmentWeekly);
+
     const renderEmptyComponent = () => (
         <View style={styles.emptyContainer}>
             <Image source={Images.NoData} style={styles.image} resizeMode="contain" />
@@ -88,7 +86,8 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
             <View style={styles.contentHeader}>
                 <Text style={styles.leftHeader}>Cân nặng</Text>
                 <Text style={styles.midHeader}>{child?.weight || 0} Gram</Text>
-                {getStatus(child?.weight, 70, 130)}
+                {/*TODO: re check with backend*/}
+                {getStatus(child?.weight, child?.fetalDevelopmentWeekly?.GSD.min, child?.fetalDevelopmentWeekly?.GSD.max)}
             </View>
             <View style={styles.weekContainer}>
                 <Text style={styles.txtWeek}>Tuần thai: </Text>
@@ -97,87 +96,174 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Chiều dài (CRL)</Text>
-                    {getStatus(child?.width, 70, 130)}
+                    {getStatus(child?.width, child?.fetalDevelopmentWeekly?.CRL?.min, child?.fetalDevelopmentWeekly?.CRL?.max)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
+                        colors={['#F67EA4', '#F67EA4', '#F67EA4']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
-                    {/*TODO: when server fix min max*/}
-                    {/*<Text style={[styles.dotValue, { left: getDotPosition(70, 130, child?.width) || 0 }]}>*/}
-                    {/*    min {child?.width || 0} mm*/}
-                    {/*</Text>*/}
-                    {/*<View style={[styles.dot, { left: getDotPosition(0, 70, 52) || 0 }]} />*/}
-                    <Text style={[styles.dotValue, { left: getDotPosition(70, 130, child?.width) || 0 }]}>
+                    {
+                        child?.fetalDevelopmentWeekly?.CRL?.min > 0 && (
+                            <View>
+                                <Text style={[styles.dotValue, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.CRL?.max + 30, child?.fetalDevelopmentWeekly?.CRL?.min) || 0 }]}>
+                                    Min
+                                </Text>
+                                <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, child?.fetalDevelopmentWeekly?.CRL?.max + 30, child?.fetalDevelopmentWeekly?.CRL?.min) || 0 }]}>
+                                    {child?.fetalDevelopmentWeekly?.CRL?.min || 0}
+                                </Text>
+                                <View style={[styles.dot, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.CRL?.max + 30, child?.fetalDevelopmentWeekly?.CRL?.min) || 0 }]} />
+                            </View>
+                        )
+                    }
+                    <View>
+                        <Text style={[styles.dotValue, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.CRL?.max + 30, child?.fetalDevelopmentWeekly?.CRL?.max) || 0 }]}>
+                            Max
+                        </Text>
+                        <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, child?.fetalDevelopmentWeekly?.CRL?.max + 30, child?.fetalDevelopmentWeekly?.CRL?.max) || 0 }]}>
+                            {child?.fetalDevelopmentWeekly?.CRL?.max || 0}
+                        </Text>
+                        <View style={[styles.dot, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.CRL?.max + 30, child?.fetalDevelopmentWeekly?.CRL?.max) || 0 }]} />
+
+                    </View>
+                    <Text style={[styles.dotValue, { left: getDotPosition(child?.fetalDevelopmentWeekly?.CRL?.min, child?.fetalDevelopmentWeekly?.CRL?.max, child?.width) || 0 }]}>
                         {child?.width || 0} mm
                     </Text>
-                    <View style={[styles.dot, { left: getDotPosition(70, 130, child?.width) || 0 }]} />
+                    <View style={[styles.dot, { left: getDotPosition(child?.fetalDevelopmentWeekly?.CRL?.min, child?.fetalDevelopmentWeekly?.CRL?.max, child?.width) || 0 }]} />
                 </View>
             </View>
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Đường kính lưỡng đỉnh (BPD)</Text>
-                    {getStatus(child?.dualTopDiameter, 70, 130)}
+                    {getStatus(child?.dualTopDiameter, child?.fetalDevelopmentWeekly?.BPD?.min, child?.fetalDevelopmentWeekly?.BPD?.max)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
+                        colors={['#F67EA4', '#F67EA4', '#F67EA4']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
-                    <Text style={[styles.dotValue, { left: getDotPosition(70, 130, child?.dualTopDiameter) || 0 }]}>
+                    {
+                        child?.fetalDevelopmentWeekly?.BPD?.min > 0 && (
+                            <View>
+                                <Text style={[styles.dotValue, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.BPD?.max + 30, child?.fetalDevelopmentWeekly?.BPD?.min) || 0 }]}>
+                                    Min
+                                </Text>
+                                <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, child?.fetalDevelopmentWeekly?.BPD?.max + 30, child?.fetalDevelopmentWeekly?.BPD?.min) || 0 }]}>
+                                    {child?.fetalDevelopmentWeekly?.BPD?.min || 0}
+                                </Text>
+                                <View style={[styles.dot, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.BPD?.max + 30, child?.fetalDevelopmentWeekly?.BPD?.min) || 0 }]} />
+                            </View>
+                        )
+                    }
+                    <View>
+                        <Text style={[styles.dotValue, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.BPD?.max + 30, child?.fetalDevelopmentWeekly?.BPD?.max) || 0 }]}>
+                            Max
+                        </Text>
+                        <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, child?.fetalDevelopmentWeekly?.BPD?.max + 30, child?.fetalDevelopmentWeekly?.BPD?.max) || 0 }]}>
+                            {child?.fetalDevelopmentWeekly?.BPD?.max || 0}
+                        </Text>
+                        <View style={[styles.dot, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.BPD?.max + 30, child?.fetalDevelopmentWeekly?.BPD?.max) || 0 }]} />
+
+                    </View>
+                    <Text style={[styles.dotValue, { left: getDotPosition(child?.fetalDevelopmentWeekly?.BPD?.min, child?.fetalDevelopmentWeekly?.BPD?.max, child?.dualTopDiameter) || 0 }]}>
                         {child?.dualTopDiameter || 0} mm
                     </Text>
-                    <View style={[styles.dot, { left: getDotPosition(70, 130, child?.dualTopDiameter) || 0 }]} />
+                    <View style={[styles.dot, { left: getDotPosition(child?.fetalDevelopmentWeekly?.BPD?.min, child?.fetalDevelopmentWeekly?.BPD?.max, child?.dualTopDiameter) || 0 }]} />
                 </View>
             </View>
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Chiều dài xương đùi (FL)</Text>
-                    {getStatus(child?.femurLength, 70, 130)}
+                    {getStatus(child?.femurLength, child?.fetalDevelopmentWeekly?.FL?.min, child?.fetalDevelopmentWeekly?.FL?.max)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
+                        colors={['#F67EA4', '#F67EA4', '#F67EA4']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
-                    <Text style={[styles.dotValue, { left: getDotPosition(70, 130, child?.femurLength) || 0 }]}>
+                    {
+                        child?.fetalDevelopmentWeekly?.FL?.min > 0 && (
+                            <View>
+                                <Text style={[styles.dotValue, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.FL?.max + 30, child?.fetalDevelopmentWeekly?.FL?.min) || 0 }]}>
+                                    Min
+                                </Text>
+                                <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, child?.fetalDevelopmentWeekly?.FL?.max + 30, child?.fetalDevelopmentWeekly?.FL?.min) || 0 }]}>
+                                    {child?.fetalDevelopmentWeekly?.FL?.min || 0}
+                                </Text>
+                                <View style={[styles.dot, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.FL?.max + 30, child?.fetalDevelopmentWeekly?.FL?.min) || 0 }]} />
+                            </View>
+                        )
+                    }
+                    <View>
+                        <Text style={[styles.dotValue, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.FL?.max + 30, child?.fetalDevelopmentWeekly?.FL?.max) || 0 }]}>
+                            Max
+                        </Text>
+                        <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, child?.fetalDevelopmentWeekly?.FL?.max + 30, child?.fetalDevelopmentWeekly?.FL?.max) || 0 }]}>
+                            {child?.fetalDevelopmentWeekly?.FL?.max || 0}
+                        </Text>
+                        <View style={[styles.dot, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.FL?.max + 30, child?.fetalDevelopmentWeekly?.FL?.max) || 0 }]} />
+
+                    </View>
+                    <Text style={[styles.dotValue, { left: getDotPosition(child?.fetalDevelopmentWeekly?.FL?.min, child?.fetalDevelopmentWeekly?.FL?.max, child?.femurLength) || 0 }]}>
                         {child?.femurLength} mm
                     </Text>
-                    <View style={[styles.dot, { left: getDotPosition(70, 130, child?.femurLength) || 0 }]} />
+                    <View style={[styles.dot, { left: getDotPosition(child?.fetalDevelopmentWeekly?.FL?.min, child?.fetalDevelopmentWeekly?.FL?.max, child?.femurLength) || 0 }]} />
                 </View>
             </View>
 
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Chu vi đầu (HC)</Text>
-                    {getStatus(child?.headPerimeter, 70, 130)}
+                    {getStatus(child?.headPerimeter, child?.fetalDevelopmentWeekly?.HC?.min, child?.fetalDevelopmentWeekly?.HC?.max)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
                         useAngle
                         angle={90}
                         start={{ x: 0, y: 1 }}
-                        colors={['#EFBA00', '#EFBA00', '#EFBA00']}
+                        colors={['#F67EA4', '#F67EA4', '#F67EA4']}
                         style={styles.linearGradient}>
                         <Text />
                     </LinearGradient>
-                    <Text style={[styles.dotValue, { left: getDotPosition(70, 130, child?.headPerimeter) || 0 }]}>
+                    {
+                        child?.fetalDevelopmentWeekly?.HC?.min > 0 && (
+                            <View>
+                                <Text style={[styles.dotValue, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.HC?.max + 30, child?.fetalDevelopmentWeekly?.HC?.min) || 0 }]}>
+                                    Min
+                                </Text>
+                                <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, child?.fetalDevelopmentWeekly?.HC?.max + 30, child?.fetalDevelopmentWeekly?.HC?.min) || 0 }]}>
+                                    {child?.fetalDevelopmentWeekly?.HC?.min || 0}
+                                </Text>
+                                <View style={[styles.dot, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.HC?.max + 30, child?.fetalDevelopmentWeekly?.HC?.min) || 0 }]} />
+                            </View>
+                        )
+                    }
+                    <View>
+                        <Text style={[styles.dotValue, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.HC?.max + 30, child?.fetalDevelopmentWeekly?.HC?.max) || 0 }]}>
+                            Max {child?.fetalDevelopmentWeekly?.HC?.max || 0} mm
+                        </Text>
+                        <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, child?.fetalDevelopmentWeekly?.HC?.max + 30, child?.fetalDevelopmentWeekly?.HC?.max) || 0 }]}>
+                            {child?.fetalDevelopmentWeekly?.HC?.max || 0}
+                        </Text>
+                        <View style={[styles.dot, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.HC?.max + 30, child?.fetalDevelopmentWeekly?.HC?.max) || 0 }]} />
+
+                    </View>
+                    <Text style={[styles.dotValue, { left: getDotPosition(child?.fetalDevelopmentWeekly?.HC?.min, child?.fetalDevelopmentWeekly?.HC?.max, child?.headPerimeter) || 0 }]}>
                         {child?.headPerimeter || 0} mm
                     </Text>
-                    <View style={[styles.dot, { left: getDotPosition(70, 130, child?.headPerimeter) || 0 }]} />
+                    <View style={[styles.dot, { left: getDotPosition(child?.fetalDevelopmentWeekly?.HC?.min, child?.fetalDevelopmentWeekly?.HC?.max, child?.headPerimeter) || 0 }]} />
                 </View>
             </View>
         </View>
@@ -194,7 +280,14 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
     return (
         <View style={styles.container}>
             {renderHeader()}
-            <ScrollView>{renderContent()}</ScrollView>
+            <ScrollView
+                style={styles.wrapperContent}
+                contentContainerStyle={styles.contentContainer}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+            >
+                {renderContent()}
+            </ScrollView>
             {renderButton()}
         </View>
     );
@@ -211,6 +304,12 @@ const myStyles = (theme: string) => {
         },
         content: {
             marginHorizontal: scales(15),
+        },
+        wrapperContent: {
+            flexGrow: 1,
+        },
+        contentContainer: {
+            paddingBottom: scales(30),
         },
         image: {
             width: scales(200),
@@ -323,6 +422,10 @@ const myStyles = (theme: string) => {
         },
         progress: {
             marginTop: scales(20),
+        },
+        dotValueMinMax: {
+            position: 'absolute',
+            top: scales(10),
         },
     });
 };
