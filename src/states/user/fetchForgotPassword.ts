@@ -3,7 +3,7 @@ import { showCustomToast } from 'utils/toast';
 
 export const apiSendOtpForgotPassword = async (email: string) => {
     try {
-        const response: { success: boolean, message: string } = await axiosInstance.post('/accounts/otp', { email });
+        const response: { message: string; success: boolean } = await axiosInstance.post('/accounts/otp', { email });
         return response;
     } catch (error) {
         console.log(error);

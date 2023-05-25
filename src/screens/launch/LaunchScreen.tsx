@@ -68,11 +68,11 @@ const LaunchScreen = (props) => {
             };
             screenName = 'Main';
         }
-
-        if (stateFromPath) {
-            handleFromLinking(stateFromPath);
-            return;
-        }
+        //
+        // if (stateFromPath) {
+        //     handleFromLinking(stateFromPath);
+        //     return;
+        // }
 
         setTimeout(() => {
             resetStack(screenName, {

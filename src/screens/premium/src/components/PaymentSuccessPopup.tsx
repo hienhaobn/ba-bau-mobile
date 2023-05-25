@@ -49,8 +49,6 @@ const PaymentSuccessPopup = (props: IPaymentSuccessPopupProps, ref: React.Ref<IP
     return (
         <RNModal
             isVisible={isVisible}
-            onBackdropPress={hideModal}
-            onBackButtonPress={hideModal}
             backdropTransitionInTiming={0}
             hideModalContentWhileAnimating
             backdropTransitionOutTiming={0}

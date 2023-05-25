@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import FetalMovementConfirmPopup, { IFetalMovementConfirmPopupRef } from './src/components/FetalMovementConfirmPopup';
@@ -181,10 +181,16 @@ const FetalMovementScreen = () => {
 
     const renderContent = useCallback(() => (
         <View style={styles.content}>
-            {isPlay ? renderFetalMovementCountdown() : renderProgressCircle()}
-            {renderTimeAndMovement()}
-            {renderUserManual()}
-            {renderButtons()}
+            <ScrollView
+                style={styles.wrapperContent}
+                contentContainerStyle={styles.contentContainer}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}>
+                {isPlay ? renderFetalMovementCountdown() : renderProgressCircle()}
+                {renderTimeAndMovement()}
+                {renderUserManual()}
+                {renderButtons()}
+            </ScrollView>
         </View>
     ), [isPlay, movement]);
 
@@ -216,6 +222,12 @@ const myStyles = (theme: string) => {
         },
         content: {
             marginHorizontal: scales(15),
+        },
+        wrapperContent: {
+            flexGrow: 1,
+        },
+        contentContainer: {
+            paddingBottom: scales(30),
         },
         progressCircleContainer: {
             backgroundColor: getThemeColor().Color_Primary,

@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 
 import { useTheme } from 'hooks/useTheme';
@@ -213,8 +213,15 @@ const FetalMovementChartDayScene = () => {
     };
     return (
         <View style={styles.container}>
-            {renderChartView()}
-            {renderMovementHistory()}
+            <ScrollView
+                style={styles.wrapperContent}
+                contentContainerStyle={styles.contentContainer}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}>
+                {renderChartView()}
+                {renderMovementHistory()}
+            </ScrollView>
+
         </View>
     );
 };
@@ -228,6 +235,12 @@ const myStyles = (theme: string) => {
             flex: 1,
             backgroundColor: color.Color_Bg,
             marginHorizontal: scales(15),
+        },
+        wrapperContent: {
+            flexGrow: 1,
+        },
+        contentContainer: {
+            paddingBottom: scales(30),
         },
         movementHistoryContainer: {
             marginTop: scales(80),

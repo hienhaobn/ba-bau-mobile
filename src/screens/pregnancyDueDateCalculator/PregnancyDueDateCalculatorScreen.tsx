@@ -20,7 +20,7 @@ const PregnancyDueDateCalculatorScreen = () => {
     const styles = myStyles(theme);
     const [date, setDate] = useState(new Date());
     const refPregnancyDueDateCalculatorConfirmPopup = useRef<IPregnancyDueDateCalculatorConfirmPopupRef>()
-    const dueDate = dueDateSelector !== '0' ? moment(dueDateSelector,'YYYY/MM/DD').add(9, 'months').add(10, 'days').format('DD/MM/YYYY') : moment().toDate();
+    const dueDate = dueDateSelector !== '0' ? moment(dueDateSelector,'YYYY/MM/DD').add(9, 'months').add(10, 'days').format('DD/MM/YYYY') : moment(moment().toDate(),'YYYY/MM/DD').add(9, 'months').add(10, 'days').format('DD/MM/YYYY');
     const dispatch = useAppDispatch();
 
     console.log('dueDate', dueDate);

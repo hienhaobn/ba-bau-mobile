@@ -55,6 +55,7 @@ export const resetPassword = async (email: string, password: string, code: strin
         showCustomToast('Đổi mật khẩu thành công');
         return response;
     } catch (error) {
+        console.log(error);
         showCustomToast(error.response.data.message);
     }
 };

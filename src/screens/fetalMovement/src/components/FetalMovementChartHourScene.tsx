@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-gifted-charts';
 
 import TouchableOpacity from 'components/TouchableOpacity';
@@ -31,6 +31,9 @@ const FetalMovementChartHourScene = () => {
                 const hours = parseInt(element.timeStart.split(':')[0]);
                 if (hours >= start && hours <= end) {
                     count += element.count;
+                    if (hours >= 20 && hours <= 23) {
+                        console.log('20-23', count);
+                    }
                 }
             });
         }
@@ -43,7 +46,7 @@ const FetalMovementChartHourScene = () => {
             label: '0-4h',
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(0, 4)}</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(0, 3)}</Text>
             ),
         },
         {
@@ -51,7 +54,7 @@ const FetalMovementChartHourScene = () => {
             label: '4-8h',
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(4, 8)}</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(4, 7)}</Text>
             ),
         },
         {
@@ -59,7 +62,7 @@ const FetalMovementChartHourScene = () => {
             label: '8-12h',
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(8, 12)}</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(8, 11)}</Text>
             ),
         },
         {
@@ -67,7 +70,7 @@ const FetalMovementChartHourScene = () => {
             label: '12-16h',
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(12, 16)}</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(12, 15)}</Text>
             ),
         },
         {
@@ -75,7 +78,7 @@ const FetalMovementChartHourScene = () => {
             label: '16-20h',
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(16, 20)}</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(16, 19)}</Text>
             ),
         },
         {
@@ -83,7 +86,7 @@ const FetalMovementChartHourScene = () => {
             label: '20-24h',
             labelWidth: 50,
             topLabelComponent: () => (
-                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(20, 0)}</Text>
+                <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>{getData(20, 23)}</Text>
             ),
         },
     ];
@@ -238,9 +241,15 @@ const FetalMovementChartHourScene = () => {
     };
     return (
         <View style={styles.container}>
-            {renderFilterDay()}
-            {renderChartView()}
-            {renderMovementHistory()}
+            <ScrollView
+                style={styles.wrapperContent}
+                contentContainerStyle={styles.contentContainer}
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}>
+                {renderFilterDay()}
+                {renderChartView()}
+                {renderMovementHistory()}
+            </ScrollView>
         </View>
     );
 };
@@ -254,6 +263,12 @@ const myStyles = (theme: string) => {
             flex: 1,
             backgroundColor: color.Color_Bg,
             marginHorizontal: scales(15),
+        },
+        wrapperContent: {
+            flexGrow: 1,
+        },
+        contentContainer: {
+            paddingBottom: scales(30),
         },
         movementHistoryContainer: {
             marginTop: scales(80),

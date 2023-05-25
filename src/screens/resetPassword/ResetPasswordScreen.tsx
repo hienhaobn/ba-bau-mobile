@@ -24,6 +24,7 @@ function ResetPasswordScreen(props: IResetPasswordScreenProps) {
     const styles = myStyles(theme);
     const { route } = props;
     const { email, otp } = route.params;
+    console.log('email, otp', email, otp);
     const [securePassword, setSecurePassword] = useState<boolean>(true);
     const [password, setPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
