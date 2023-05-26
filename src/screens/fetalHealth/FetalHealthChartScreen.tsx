@@ -252,7 +252,10 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
                     }
                     <View>
                         <Text style={[styles.dotValue, { left: getDotPosition(0, child?.fetalDevelopmentWeekly?.HC?.max + 30, child?.fetalDevelopmentWeekly?.HC?.max) || 0 }]}>
-                            Max {child?.fetalDevelopmentWeekly?.HC?.max || 0} mm
+                            Max
+                        </Text>
+                        <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, child?.fetalDevelopmentWeekly?.HC?.max + 30, child?.fetalDevelopmentWeekly?.HC?.max) || 0 }]}>
+                            {child?.fetalDevelopmentWeekly?.HC?.max || 0}
                         </Text>
                         <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, child?.fetalDevelopmentWeekly?.HC?.max + 30, child?.fetalDevelopmentWeekly?.HC?.max) || 0 }]}>
                             {child?.fetalDevelopmentWeekly?.HC?.max || 0}
