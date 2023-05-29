@@ -13,12 +13,14 @@ import { scales } from 'utils/scales';
 import Storages, { KeyStorage } from 'utils/storages';
 import { useAppDispatch } from '../../states';
 import { userLogout } from '../../states/user';
+import { useSelectUserInfo } from '../../states/user/hooks';
 import { goToChangePassword } from '../changePassword/src/utils';
 
 const AccountScreen = () => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const dispatch = useAppDispatch();
+    const userInfo = useSelectUserInfo();
 
     const onLogOut = () => {
         Storages.remove(KeyStorage.Token);
@@ -32,7 +34,7 @@ const AccountScreen = () => {
         </View>
     );
 
-    const renderUsername = () => <Text style={styles.username}>Saka</Text>;
+    const renderUsername = () => <Text style={styles.username}>{userInfo?.fullname}</Text>;
 
     const renderItems = () => (
         <View style={styles.itemsContainer}>
