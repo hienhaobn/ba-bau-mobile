@@ -56,7 +56,7 @@ const FoodDetailSavedScreen = (props: IDishDetailScreenProps) => {
     const renderHeader = () => <Header title={foodSave?.idFood?.name}  iconRight={<SvgIcons.IcSave1 color={getThemeColor().Color_Primary} />} onPressRight={onRemoveSaveFood}/>;
 
     const onRemoveSaveFood = async () => {
-        await removeSaveFood(foodSave?._id);
+        await removeSaveFood(foodSave?.idFood?._id);
         onPushEventBus(EventBusName.REMOVE_FOOD_SAVE_SUCCESS);
         goBack();
 
