@@ -67,7 +67,7 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
     const onUpdateFetalHistory = async () => {
         let body = { note, weeksOfPregnancy: week, file: {}, datePhoto: moment(date).toDate().toDateString() };
         if (imageChoose) {
-            body = { ...body, file: formatImage(imageChoose) }
+            body = { ...body, file: imageChoose }
         }
         showLoading();
         const response = await updateFetalHealthy(body, history._id);

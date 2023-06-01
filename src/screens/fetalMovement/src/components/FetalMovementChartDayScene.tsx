@@ -40,8 +40,8 @@ const FetalMovementChartDayScene = () => {
         let count = 0;
         if (movements?.length) {
             movements?.map((element) => {
-                const date = parseInt(element.date.split(':')[0]);
-                if (currentDate === date) {
+                const date = moment(element.date).format('YYYY-MM-DD').split('-')[2];
+                if (currentDate === parseInt(date)) {
                     count += element.count;
                 }
             });
@@ -138,8 +138,6 @@ const FetalMovementChartDayScene = () => {
         />
     );
 
-    console.log('movements', movements);
-
     const getDataHistory = ()  => {
         const movementInDate = movements?.
         filter(element => element?.date
@@ -179,11 +177,11 @@ const FetalMovementChartDayScene = () => {
                 <View style={styles.itemMovementHistoryContainer}>
                     <Text style={styles.movementHistoryTitle}>Ngày</Text>
                     {historyData?.map((element) => {
-                        const value = element.date.split('/');
+                        const value = moment(element.date).format('DD/MM');
                         return (
                             <Text
                                 style={styles.movementHistoryValue}
-                                key={element._id}>{`${value[0]}/${value[1]}`}</Text>
+                                key={element._id}>{value}</Text>
                         );
                     })}
                 </View>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { Fonts } from 'themes';
@@ -9,11 +9,19 @@ interface IDropdownComponentProps {
     data: { label: string; value: string }[];
     searchPlaceholder: string;
     placeholder: string;
+    callback?: (id: string) => void;
 }
 
 const DropdownComponent = (props: IDropdownComponentProps) => {
-    const { data, searchPlaceholder, placeholder } = props;
-    const [value, setValue] = useState(null);
+    const { data, searchPlaceholder, placeholder, callback } = props;
+    const [value, setValue] = useState<string>(data[0]?.value);
+
+    const handleSelectItem = (value: string) => {
+        if (callback) {
+            callback(value);
+        }
+        setValue(value)
+    };
 
     const renderItem = (item) => {
         return (
@@ -38,9 +46,7 @@ const DropdownComponent = (props: IDropdownComponentProps) => {
             placeholder={placeholder}
             searchPlaceholder={searchPlaceholder}
             value={value}
-            onChange={(item) => {
-                setValue(item.value);
-            }}
+            onChange={(item) => handleSelectItem(item.value)}
             renderItem={renderItem}
         />
     );

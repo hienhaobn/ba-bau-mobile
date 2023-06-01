@@ -92,4 +92,25 @@ declare namespace fetal {
         min: number
         max: number
     }
+
+    interface Post {
+        content: string;
+        _id: string;
+        week: number;
+        image: string;
+        contentBaby: string;
+        contentchangeMom: string;
+        contentAdvice: string;
+        createdAt: string;
+        updatedAt: string;
+    }
+
+    interface PostResponse {
+        current_page: string;
+        total_page: number;
+        count: number;
+        posts: Post[];
+        createdAt: string;
+        updatedAt: string;
+    }
 }

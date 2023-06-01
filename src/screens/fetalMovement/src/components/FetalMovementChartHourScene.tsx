@@ -213,8 +213,8 @@ const FetalMovementChartHourScene = () => {
                     <Text style={styles.movementHistoryTitle}>Ngày</Text>
                     {
                         historyData?.map(element => {
-                            const value = element.date.split('/');
-                            return <Text style={styles.movementHistoryValue} key={element._id}>{`${value[0]}/${value[1]}`}</Text>
+                            const value = moment(element.date).format('DD/MM');
+                            return <Text style={styles.movementHistoryValue} key={element._id}>{value}</Text>
                         })
                     }
                 </View>
