@@ -39,12 +39,12 @@ export const createFetalMovement = createAsyncThunk('fetal/createFetalMovement',
 
 export const fetchMovementByDateNow = createAsyncThunk<fetal.FetalResponse>('fetal/fetchMovementByDateNow', async (date: Date) => {
    try {
-       showLoading();
+       // showLoading();
        const response: fetal.FetalResponse = await axiosInstance.get(`${BASE_URL}/fetal-movements?date=${moment(date).format('DD/MM/YYYY')}`);
-       hideLoading();
+       // hideLoading();
        return response;
    } catch (error) {
-       hideLoading();
+       // hideLoading();
        showCustomToast('Lấy dữ liệu thất bại')
        console.log(error);
    }

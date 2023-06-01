@@ -138,6 +138,8 @@ const FetalMovementChartDayScene = () => {
         />
     );
 
+    console.log('movements', movements);
+
     const getDataHistory = ()  => {
         const movementInDate = movements?.
         filter(element => element?.date
@@ -148,7 +150,8 @@ const FetalMovementChartDayScene = () => {
     };
 
     const renderMovementHistory = () => {
-        const historyData = getDataHistory();
+        // const historyData = getDataHistory();
+        const historyData = movements;
         if (!historyData?.length) {
             return (
                 <View style={styles.movementHistoryContainer}>

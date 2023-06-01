@@ -215,6 +215,9 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
 
     const getImageUrl = () => {
         if (action === 'EDIT' && history.image) {
+            if (imageChoose?.uri) {
+                return { uri: imageChoose?.uri };
+            }
             return { uri: history.image }
         } else if (action === 'CREATE' && imageChoose?.uri) {
             return { uri: imageChoose?.uri }

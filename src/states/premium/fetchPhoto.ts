@@ -6,16 +6,16 @@ import { showCustomToast } from 'utils/toast';
 
 export const fetchPhotoPremium = async (gender: 'male' | 'female') => {
     try {
-        showLoading();
-        const res: premium.PhotoPremiumResponse = await axiosInstance.get(`/image-children`, {
+        // showLoading();
+        const res: premium.PhotoPremiumResponse = await axiosInstance.get(`/image-children?page=1&size=100`, {
             params: {
                 gender,
             },
         });
-        hideLoading();
+        // hideLoading();
         return res;
     } catch (error) {
-        hideLoading();
+        // hideLoading();
         showCustomToast(error?.response?.data?.message);
         console.log(error);
     }

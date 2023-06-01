@@ -90,7 +90,7 @@ const FetalHealthScreen = () => {
         momId: user.CheckupsScheduleMomResponse;
     }) => (
         <View style={styles.itemContainer}>
-            <Text style={styles.titleItem}>Ngày khám {moment(element.child.createdAt).format('DD/MM/YYYY')}</Text>
+            <Text style={styles.titleItem}>Ngày khám {moment(element.child.pregnancyExam).format('DD/MM/YYYY')}</Text>
             <View style={styles.row}>
                 <Text style={styles.titleLeft}>
                     Tuần thai: <Text style={styles.textBold}>{element.child.weeksOfPregnacy} tuần</Text>

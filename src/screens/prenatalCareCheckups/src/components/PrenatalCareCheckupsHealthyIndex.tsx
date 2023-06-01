@@ -24,19 +24,26 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                     <Text style={styles.statusTxt}>Thấp</Text>
                 </View>
             )
-        } else if (BigNumber(value).gt(max)) {
+        }
+        if (BigNumber(value).gt(max)) {
            return (
                <View style={[styles.statusContainer, { backgroundColor: getThemeColor().red }]}>
                    <Text style={styles.statusTxt}>Cao</Text>
                </View>
            )
-        } else if (BigNumber(value).lt(max) && BigNumber(value).gt(min)) {
+        }
+        if (BigNumber(value).lt(max) && BigNumber(value).gt(min)) {
             return  (
                 <View style={[styles.statusContainer, { backgroundColor: getThemeColor().Color_Blue2 }]}>
                     <Text style={styles.statusTxt}>Bình thường</Text>
                 </View>
             )
         }
+        return  (
+            <View style={[styles.statusContainer, { backgroundColor: getThemeColor().Color_Blue }]}>
+                <Text style={styles.statusTxt}>Thấp</Text>
+            </View>
+        )
     }
 
     const getDotPosition = (min: number, max: number, value: number) => {
@@ -59,6 +66,29 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
             <Text style={styles.pointTxt}>Tuần thai: </Text>
             <Text style={styles.week}>{data.weeksOfPregnacy} tuần</Text>
         </View>
+    );
+
+    const renderDot = () => (
+        <>
+            <View style={{
+                width: scales(10),
+                height: scales(10),
+                backgroundColor: getThemeColor().Color_Red_3,
+                borderRadius: 100,
+                zIndex: 1000,
+            }} />
+            <View
+                style={{
+                    width: scales(20),
+                    height: scales(20),
+                    backgroundColor: getThemeColor().Color_Red_4,
+                    position: 'absolute',
+                    left: scales(-5),
+                    top: scales(-5),
+                    borderRadius: 100,
+                }}
+            />
+        </>
     );
 
     const renderContent = () => (
@@ -85,8 +115,9 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, 130 + 30, 130) || 0 }]}>
                             180
                         </Text>
-                        <View style={[styles.dot, { left: getDotPosition(0, 130 + 30, 130) || 0 }]} />
-
+                        <View style={[styles.dot, { left: getDotPosition(0, 130 + 30, 130) || 0 }]}>
+                            {renderDot()}
+                        </View>
                     </>
                     <View>
                         <Text style={[styles.dotValue, { left: getDotPosition(0, 130 + 30, 80) || 0 }]}>
@@ -95,13 +126,16 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, 130 + 30, 80) || 0 }]}>
                             80
                         </Text>
-                        <View style={[styles.dot, { left: getDotPosition(0, 130 + 30, 80) || 0 }]} />
-
+                        <View style={[styles.dot, { left: getDotPosition(0, 130 + 30, 80) || 0 }]} >
+                            {renderDot()}
+                        </View>
                     </View>
                     <Text style={[styles.dotValue, { left: getDotPosition(80, 130, data.bloodPressure) }]}>
                         {data.bloodPressure} mm
                     </Text>
-                    <View style={[styles.dot, { left: getDotPosition(80, 130, data.bloodPressure) }]} />
+                    <View style={[styles.dot, { left: getDotPosition(80, 130, data.bloodPressure) }]} >
+                        {renderDot()}
+                    </View>
                 </View>
             </View>
             <View>
@@ -129,13 +163,17 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, 130 + 30, 130) || 0 }]}>
                             130
                         </Text>
-                        <View style={[styles.dot, { left: getDotPosition(0, 130 + 30, 130) || 0 }]} />
+                        <View style={[styles.dot, { left: getDotPosition(0, 130 + 30, 130) || 0 }]}>
+                            {renderDot()}
+                        </View>
 
                     </View>
                     <Text style={[styles.dotValue, { left: getDotPosition(0, 130, data.fastingGlycemicIndex) }]}>
                         {data.fastingGlycemicIndex} mm
                     </Text>
-                    <View style={[styles.dot, { left: getDotPosition(0, 130, data.fastingGlycemicIndex) }]} />
+                    <View style={[styles.dot, { left: getDotPosition(0, 130, data.fastingGlycemicIndex) }]}>
+                        {renderDot()}
+                    </View>
                 </View>
             </View>
 
@@ -161,13 +199,16 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, 180 + 30, 180) || 0 }]}>
                             180
                         </Text>
-                        <View style={[styles.dot, { left: getDotPosition(0, 180 + 30, 180) || 0 }]} />
-
+                        <View style={[styles.dot, { left: getDotPosition(0, 180 + 30, 180) || 0 }]}>
+                            {renderDot()}
+                        </View>
                     </View>
                     <Text style={[styles.dotValue, { left: getDotPosition(0, 180, data.eating1hGlycemicIndex) }]}>
                         {data.eating1hGlycemicIndex} mm
                     </Text>
-                    <View style={[styles.dot, { left: getDotPosition(0, 180, data.eating1hGlycemicIndex) }]} />
+                    <View style={[styles.dot, { left: getDotPosition(0, 180, data.eating1hGlycemicIndex) }]}>
+                        {renderDot()}
+                    </View>
                 </View>
             </View>
             <View>
@@ -191,13 +232,16 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         <Text style={[styles.dotValueMinMax, {  left: getDotPosition(0, 153 + 30, 153) || 0 }]}>
                             153
                         </Text>
-                        <View style={[styles.dot, { left: getDotPosition(0, 153 + 30, 153) || 0 }]} />
-
+                        <View style={[styles.dot, { left: getDotPosition(0, 153 + 30, 153) || 0 }]}>
+                            {renderDot()}
+                        </View>
                     </View>
                     <Text style={[styles.dotValue, { left: getDotPosition(0, 153, data.eating2hGlycemicIndex) }]}>
                         {data.eating2hGlycemicIndex} mm
                     </Text>
-                    <View style={[styles.dot, { left: getDotPosition(0, 153, data.eating2hGlycemicIndex) }]} />
+                    <View style={[styles.dot, { left: getDotPosition(0, 153, data.eating2hGlycemicIndex) }]}>
+                        {renderDot()}
+                    </View>
                 </View>
             </View>
         </View>
@@ -315,17 +359,17 @@ const myStyles = (theme: string) => {
         },
         dot: {
             position: 'absolute',
-            bottom: 0,
-            top: -scales(2),
+            bottom: -scales(2),
+            // top: scales(-2),
             left: 0,
             width: scales(10),
             height: scales(10),
-            backgroundColor: color.green,
+            backgroundColor: color.Color_Red_3,
             borderRadius: scales(10),
         },
         dotValue: {
             position: 'absolute',
-            bottom: scales(10),
+            bottom: scales(15),
             left: 0,
         },
         dotValueMinMax: {
@@ -333,7 +377,7 @@ const myStyles = (theme: string) => {
             top: scales(10),
         },
         progress: {
-            marginTop: scales(20),
+            marginVertical: scales(20),
         },
     });
 };

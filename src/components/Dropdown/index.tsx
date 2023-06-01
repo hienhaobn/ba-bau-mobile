@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import { Fonts } from 'themes';
 import { getThemeColor } from 'utils/getThemeColor';
 import { scales } from 'utils/scales';
 
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     dropdown: {
         margin: 16,
         height: 50,
-        backgroundColor: getThemeColor().white,
+        backgroundColor: getThemeColor().Color_Bg,
         borderRadius: 12,
         paddingHorizontal: scales(12),
         shadowColor: '#000',
@@ -76,12 +77,15 @@ const styles = StyleSheet.create({
     textItem: {
         flex: 1,
         fontSize: 16,
+        ...Fonts.inter600
     },
     placeholderStyle: {
         fontSize: 16,
+        ...Fonts.inter600,
     },
     selectedTextStyle: {
         fontSize: 16,
+        ...Fonts.inter600
     },
     iconStyle: {
         width: 20,

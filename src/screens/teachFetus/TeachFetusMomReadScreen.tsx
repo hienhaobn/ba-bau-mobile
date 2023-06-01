@@ -104,6 +104,7 @@ const myStyles = (theme: string) => {
         image: {
             width: scales(50),
             height: scales(50),
+            borderRadius: scales(8),
         },
         itemContentContainer: {
             flexDirection: 'row',
@@ -111,7 +112,6 @@ const myStyles = (theme: string) => {
             borderRadius: scales(8),
             paddingVertical: scales(15),
             paddingHorizontal: scales(12),
-            marginBottom: scales(15),
 
             shadowColor: color.Text_Dark_1,
             shadowOffset: { width: -1, height: 4 },

@@ -6,14 +6,14 @@ import { showCustomToast } from '../../utils/toast';
 
 export const fetchMovementFromDateToDate = async (params: { from: Date, to: Date}) => {
     try {
-        showLoading();
+        // showLoading();
         const fromDate = moment(params.from).format('DD/MM/YYYY');
         const toDate = moment(params.to).format('DD/MM/YYYY')
         const response: fetal.FetalResponse = await axiosInstance.get(`${BASE_URL}/fetal-movements?startDate=${fromDate}&endDate=${toDate}`);
-        hideLoading();
+        // hideLoading();
         return response.fetalMove;
     } catch (error) {
-        hideLoading();
+        // hideLoading();
         showCustomToast('Lấy dữ liệu thất bại')
         console.log(error);
     }
