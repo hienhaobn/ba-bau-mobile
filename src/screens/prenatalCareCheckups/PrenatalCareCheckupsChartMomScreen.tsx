@@ -30,7 +30,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
     const styles = myStyles(theme);
     const { route } = props;
     const [data, setData] = useState<user.MomCheckupsResponse[]>([]);
-    const [healthyIndex, setHealthyIndex] = useState<string>(moment().format('YYYY-MM-DD'));
+    const [healthyIndex, setHealthyIndex] = useState<string>('');
 
     const first = moment().subtract(5, 'days').toDate();
     const second = moment().subtract(4, 'days').toDate();
@@ -77,7 +77,8 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
         let pregnancyExam = '';
         if (data?.length) {
             data?.map((element, index) => {
-                if (moment(element.createdAt).format('YYYY-MM-DD').includes(healthyIndex)) {
+                console.log('checked', element.createdAt, healthyIndex, element.createdAt.includes(healthyIndex));
+                if (moment(element.createdAt).format('YYYY/MM/DD').includes(healthyIndex)) {
                     _id = element._id;
                     updatedAt = element.updatedAt;
                     commonDiseases = element.commonDiseases;
@@ -118,7 +119,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
     const barData = [
         {
             value: getValueChart(first.getDate()) || 0,
-            label: `${first.getDate()}/${first.getMonth() + 1 || '0'}`  || '0',
+            label: `${first.getDate()}-${first.getMonth() + 1 || '0'}`  || '0',
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -128,7 +129,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
         },
         {
             value: getValueChart(second.getDate()) || 0,
-            label: `${second.getDate()}/${second.getMonth() + 1 || '0'}` || '0',
+            label: `${second.getDate()}-${second.getMonth() + 1 || '0'}` || '0',
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -138,7 +139,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
         },
         {
             value: getValueChart(third.getDate()) || 0,
-            label: `${third.getDate()}/${third.getMonth() + 1 || '0'}` || '0',
+            label: `${third.getDate()}-${third.getMonth() + 1 || '0'}` || '0',
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -148,7 +149,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
         },
         {
             value: getValueChart(fourth.getDate()) || 0,
-            label: `${fourth.getDate()}/${fourth.getMonth() + 1 || '0'}`,
+            label: `${fourth.getDate()}-${fourth.getMonth() + 1 || '0'}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -158,7 +159,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
         },
         {
             value: getValueChart(fifth.getDate()) || 0,
-            label: `${fifth.getDate()}/${fifth.getMonth() + 1 || '0'}`,
+            label: `${fifth.getDate()}-${fifth.getMonth() + 1 || '0'}`,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -168,7 +169,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
         },
         {
             value: getValueChart(sixth.getDate()) || 0,
-            label: `${sixth.getDate()}/${sixth.getMonth() + 1 || '0'}` ,
+            label: `${sixth.getDate()}-${sixth.getMonth() + 1 || '0'}` ,
             labelWidth: 50,
             topLabelComponent: () => (
                 <Text style={{ color: getThemeColor().Text_Dark_1, fontSize: 14, marginBottom: 6 }}>
@@ -202,12 +203,8 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
                 onPress={(element) => {
                     barData.map((el) => {
                         if (el.label.includes(element.label)) {
-                            const splitDay = el.label.split('/');
-                            const elementDate = moment()
-                                .set('days', parseInt(splitDay[0]) + 10)
-                                .set('months', parseInt(splitDay[1]) - 1)
-                                .format('YYYY-MM-DD');
-                            setHealthyIndex(elementDate);
+                            const splitDay = el.label.split('-');
+                            setHealthyIndex(`${splitDay[1]}-${splitDay[0]}`);
                         }
                     });
                 }}
