@@ -30,7 +30,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
     const styles = myStyles(theme);
     const { route } = props;
     const [data, setData] = useState<user.MomCheckupsResponse[]>([]);
-    const [healthyIndex, setHealthyIndex] = useState<number>(new Date().getTime());
+    const [healthyIndex, setHealthyIndex] = useState<number>(new Date(moment().format('YYYY-MM-DD')).getTime());
 
     const first = moment().subtract(5, 'days').toDate();
     const second = moment().subtract(4, 'days').toDate();
@@ -78,8 +78,6 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
         if (data?.length) {
             data?.map((element, index) => {
                 const dateCompare = new Date(element.createdAt.split('T')[0]).getTime();
-                console.log(element.createdAt.split('T')[0]);
-                console.log(dateCompare === healthyIndex, dateCompare, healthyIndex);
                 if (dateCompare === healthyIndex) {
                     _id = element._id;
                     updatedAt = element.updatedAt;
@@ -214,7 +212,6 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
                         if (el.label.includes(element.label)) {
                             const splitDay = el.label.split('-');
                             const selectDate = new Date(`${moment().get('year')}-${formatTime(splitDay[1])}-${formatTime(splitDay[0])}`).getTime();
-                            console.log('selected', `${moment().get('year')}-${splitDay[1]}-${splitDay[0]}`);
                             setHealthyIndex(selectDate);
                         }
                     });
