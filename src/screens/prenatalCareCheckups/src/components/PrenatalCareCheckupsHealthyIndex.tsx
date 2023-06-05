@@ -17,6 +17,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
     const styles = myStyles(theme);
     const { data } = props;
 
+
     const getStatus = (value: number, min: number, max: number) => {
         if (BigNumber(value).lt(min)) {
             return (

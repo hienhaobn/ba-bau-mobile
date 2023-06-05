@@ -30,7 +30,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
     const styles = myStyles(theme);
     const { route } = props;
     const [data, setData] = useState<user.MomCheckupsResponse[]>([]);
-    const [healthyIndex, setHealthyIndex] = useState<string>('');
+    const [healthyIndex, setHealthyIndex] = useState<number>(new Date().getTime());
 
     const first = moment().subtract(5, 'days').toDate();
     const second = moment().subtract(4, 'days').toDate();
@@ -77,8 +77,10 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
         let pregnancyExam = '';
         if (data?.length) {
             data?.map((element, index) => {
-                console.log('checked', element.createdAt, healthyIndex, element.createdAt.includes(healthyIndex));
-                if (moment(element.createdAt).format('YYYY/MM/DD').includes(healthyIndex)) {
+                const dateCompare = new Date(element.createdAt.split('T')[0]).getTime();
+                console.log(element.createdAt.split('T')[0]);
+                console.log(dateCompare === healthyIndex, dateCompare, healthyIndex);
+                if (dateCompare === healthyIndex) {
                     _id = element._id;
                     updatedAt = element.updatedAt;
                     commonDiseases = element.commonDiseases;
@@ -115,6 +117,13 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
     useEffect(() => {
         getData();
     }, []);
+
+    const formatTime = (value: string) => {
+        if (parseInt(value) < 10) {
+            return `0${value}`;
+        }
+        return value;
+    };
 
     const barData = [
         {
@@ -204,7 +213,9 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
                     barData.map((el) => {
                         if (el.label.includes(element.label)) {
                             const splitDay = el.label.split('-');
-                            setHealthyIndex(`${splitDay[1]}-${splitDay[0]}`);
+                            const selectDate = new Date(`${moment().get('year')}-${formatTime(splitDay[1])}-${formatTime(splitDay[0])}`).getTime();
+                            console.log('selected', `${moment().get('year')}-${splitDay[1]}-${splitDay[0]}`);
+                            setHealthyIndex(selectDate);
                         }
                     });
                 }}
