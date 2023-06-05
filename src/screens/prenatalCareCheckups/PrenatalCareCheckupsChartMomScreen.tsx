@@ -14,7 +14,7 @@ import { useTheme } from 'hooks/useTheme';
 
 import { RootNavigatorParamList } from 'navigation/types';
 
-import { fetchMomCheckupsHistory } from 'states/user/fetchCheckups';
+import { fetchBabyCheckupsHistory, fetchMomCheckupsHistory } from 'states/user/fetchCheckups';
 
 import { Fonts, Sizes } from 'themes';
 
@@ -29,7 +29,8 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
     const { theme } = useTheme();
     const styles = myStyles(theme);
     const { route } = props;
-    const [data, setData] = useState<user.MomCheckupsResponse[]>([]);
+    // const [data, setData] = useState<user.MomCheckupsResponse[]>([]);
+    const [history, setHistory] = useState<user.CheckupsScheduleHistoryResponse>(null);
     const [healthyIndex, setHealthyIndex] = useState<number>(new Date(moment().format('YYYY-MM-DD')).getTime());
 
     const first = moment().subtract(5, 'days').toDate();
@@ -40,20 +41,21 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
     const sixth = moment().toDate();
 
     const getData = async () => {
-        const res = await fetchMomCheckupsHistory();
+        // const res = await fetchMomCheckupsHistory();
+        const res = await fetchBabyCheckupsHistory();
         if (res) {
-            setData(res);
+            setHistory(res);
         }
     };
 
     const getValueChart = (currentDate: number) => {
         let count = 0;
         let index = 0;
-        if (data?.length) {
-            data?.map((element, i) => {
-                const date = parseInt(element.createdAt.split('-')[2]);
+        if (history?.data?.length) {
+            history?.data?.map((element, i) => {
+                const date = parseInt(element?.child?.pregnancyExam?.split('-')[2]);
                 if (currentDate === date) {
-                    count += element.weight;
+                    count += element?.momId?.weight;
                     index++;
                 }
             });
@@ -75,23 +77,23 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
         let weight = 0;
         let _id = '';
         let pregnancyExam = '';
-        if (data?.length) {
-            data?.map((element, index) => {
-                const dateCompare = new Date(element.createdAt.split('T')[0]).getTime();
+        if (history?.data?.length) {
+            history?.data?.map((element, index) => {
+                const dateCompare = new Date(element?.child?.pregnancyExam.split('T')[0]).getTime();
                 if (dateCompare === healthyIndex) {
-                    _id = element._id;
-                    updatedAt = element.updatedAt;
-                    commonDiseases = element.commonDiseases;
-                    idAccount = element.idAccount;
-                    createdAt = element.createdAt;
-                    note = element.note;
-                    weeksOfPregnacy = element.weeksOfPregnacy;
-                    weight += element.weight;
-                    bloodPressure += element.bloodPressure;
-                    eating1hGlycemicIndex += element.eating1hGlycemicIndex;
-                    eating2hGlycemicIndex += element.eating2hGlycemicIndex;
-                    fastingGlycemicIndex += element.fastingGlycemicIndex;
-                    pregnancyExam = element.pregnancyExam
+                    _id = element?.momId?._id;
+                    updatedAt = element?.momId?.updatedAt;
+                    commonDiseases = element?.momId?.commonDiseases;
+                    idAccount = element?.momId?.idAccount;
+                    createdAt = element?.momId?.createdAt;
+                    note = element?.momId?.note;
+                    weeksOfPregnacy = element?.momId?.weeksOfPregnacy;
+                    weight += element?.momId?.weight;
+                    bloodPressure = element?.momId?.bloodPressure;
+                    eating1hGlycemicIndex = element?.momId?.eating1hGlycemicIndex;
+                    eating2hGlycemicIndex = element?.momId?.eating2hGlycemicIndex;
+                    fastingGlycemicIndex = element?.momId?.fastingGlycemicIndex;
+                    pregnancyExam = element?.child?.pregnancyExam
                 }
             });
         }

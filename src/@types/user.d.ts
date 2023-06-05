@@ -150,14 +150,14 @@ declare namespace user {
         createdAt: string;
         updatedAt: string;
         width: number;
-        pregnancyExam: Date;
+        pregnancyExam: string;
         fetalDevelopmentWeekly: FetalDevelopmentWeekly;
     }
 
     interface CheckupsScheduleHistoryResponse {
         data: {
             child: CheckupsScheduleChildResponse;
-            mom: CheckupsScheduleMomResponse;
+            momId: CheckupsScheduleMomResponse;
         }[];
     }
 }

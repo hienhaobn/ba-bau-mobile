@@ -17,9 +17,8 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
     const styles = myStyles(theme);
     const { data } = props;
 
-
     const getStatus = (value: number, min: number, max: number) => {
-        if (BigNumber(min).eq(0) && BigNumber(value).lt(max)) {
+        if (BigNumber(min).eq(0) && BigNumber(value).lt(max) || BigNumber(max).eq(0) || BigNumber(value).eq(0) || BigNumber(value).lt(min)) {
             return (
                 <View style={[styles.statusContainer, { backgroundColor: getThemeColor().Color_Blue }]}>
                     <Text style={styles.statusTxt}>Thấp</Text>
@@ -58,9 +57,6 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
     };
 
     const point = (min: number, max: number, value: number) => {
-        if (value === min) {
-
-        }
         if (value > min) {
             return getDotPosition(0, max + 30, value);
         } else {
@@ -142,13 +138,13 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         )
                     }
                     <View>
-                        <Text style={[styles.dotValue, { left: point(0, 130 + 30, 80) || 0 }]}>
+                        <Text style={[styles.dotValue, { left: point(0, 130 + 30, data.bloodPressure) || 0 }]}>
                             {data.bloodPressure}
                         </Text>
-                        <Text style={[styles.dotValueMinMax, {  left: point(0, 130 + 30, 80) || 0 }]}>
+                        <Text style={[styles.dotValueMinMax, {  left: point(0, 130 + 30, data.bloodPressure) || 0 }]}>
                             mm
                         </Text>
-                        <View style={[styles.dot, { left: point(0, 130 + 30, 80) || 0 }]} >
+                        <View style={[styles.dot, { left: point(0, 130 + 30, data.bloodPressure) || 0 }]} >
                             {renderDot()}
                         </View>
                     </View>
