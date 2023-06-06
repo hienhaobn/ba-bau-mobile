@@ -64,54 +64,35 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
     };
 
     const getOnlyElementChart = () => {
-        let bloodPressure = 0;
-        let commonDiseases = '';
-        let createdAt = '';
-        let eating1hGlycemicIndex = 0;
-        let eating2hGlycemicIndex = 0;
-        let fastingGlycemicIndex = 0;
-        let idAccount = '';
-        let note = '';
-        let updatedAt = '';
-        let weeksOfPregnacy = '';
-        let weight = 0;
-        let _id = '';
-        let pregnancyExam = '';
-        if (history?.data?.length) {
-            history?.data?.map((element, index) => {
-                const dateCompare = new Date(element?.child?.pregnancyExam.split('T')[0]).getTime();
-                if (dateCompare === healthyIndex) {
-                    _id = element?.momId?._id;
-                    updatedAt = element?.momId?.updatedAt;
-                    commonDiseases = element?.momId?.commonDiseases;
-                    idAccount = element?.momId?.idAccount;
-                    createdAt = element?.momId?.createdAt;
-                    note = element?.momId?.note;
-                    weeksOfPregnacy = element?.momId?.weeksOfPregnacy;
-                    weight += element?.momId?.weight;
-                    bloodPressure = element?.momId?.bloodPressure;
-                    eating1hGlycemicIndex = element?.momId?.eating1hGlycemicIndex;
-                    eating2hGlycemicIndex = element?.momId?.eating2hGlycemicIndex;
-                    fastingGlycemicIndex = element?.momId?.fastingGlycemicIndex;
-                    pregnancyExam = element?.child?.pregnancyExam
-                }
-            });
+        const defaultValue = {
+            bloodPressure: 0,
+            commonDiseases: '',
+            createdAt: '',
+            eating1hGlycemicIndex: 0,
+            eating2hGlycemicIndex: 0,
+            fastingGlycemicIndex: 0,
+            idAccount: '',
+            note: '',
+            updatedAt: '',
+            weeksOfPregnacy: '',
+            weight: 0,
+            _id: '',
+            pregnancyExam: '',
         }
-        return {
-            bloodPressure,
-            commonDiseases,
-            createdAt,
-            eating1hGlycemicIndex,
-            eating2hGlycemicIndex,
-            fastingGlycemicIndex,
-            idAccount,
-            note,
-            updatedAt,
-            weeksOfPregnacy,
-            weight,
-            _id,
-            pregnancyExam,
-        };
+        if (history?.data?.length) {
+            const arrFilter = history?.data?.filter((element, index) => {
+                const dateCompare = new Date(element?.child?.pregnancyExam.split('T')[0]).getTime();
+                return dateCompare === healthyIndex;
+            });
+            arrFilter.sort((a, b) => {
+                return new Date(b.momId.createdAt).getTime() - new Date(a.momId.createdAt).getTime();
+            });
+            if (arrFilter.length > 0) {
+                return arrFilter[0].momId;
+            } else {
+                return defaultValue;
+            }
+        }
     };
 
     useEffect(() => {
