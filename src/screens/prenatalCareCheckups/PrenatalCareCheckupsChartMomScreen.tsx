@@ -80,6 +80,7 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
             pregnancyExam: '',
         }
         if (history?.data?.length) {
+            let tmp;
             const arrFilter = history?.data?.filter((element, index) => {
                 const dateCompare = new Date(element?.child?.pregnancyExam.split('T')[0]).getTime();
                 return dateCompare === healthyIndex;
@@ -88,10 +89,11 @@ const PrenatalCareCheckupsChartMomScreen = (props: IPrenatalCareCheckupsChartMom
                 return new Date(b.momId.createdAt).getTime() - new Date(a.momId.createdAt).getTime();
             });
             if (arrFilter.length > 0) {
-                return arrFilter[0].momId;
+                tmp = arrFilter[0].momId;
             } else {
-                return defaultValue;
+                tmp = defaultValue;
             }
+            return tmp;
         }
     };
 

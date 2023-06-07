@@ -69,7 +69,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
     const renderPregnancyWeekByWeek = () => (
         <View style={styles.weekContainer}>
             <Text style={styles.pointTxt}>Tuần thai: </Text>
-            <Text style={styles.week}>{data.weeksOfPregnacy} tuần</Text>
+            <Text style={styles.week}>{data?.weeksOfPregnacy} tuần</Text>
         </View>
     );
 
@@ -81,7 +81,8 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                 backgroundColor: getThemeColor().Color_Red_3,
                 borderRadius: 100,
                 zIndex: 1000,
-            }} />
+            }}
+            />
             <View
                 style={{
                     width: scales(20),
@@ -110,7 +111,8 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         angle={90}
                         start={{ x: 0, y: 1 }}
                         colors={['#F67EA4', '#F67EA4', '#F67EA4']}
-                        style={styles.linearGradient}>
+                        style={styles.linearGradient}
+                    >
                         <Text />
                     </LinearGradient>
                     <>
@@ -168,7 +170,8 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         angle={90}
                         start={{ x: 0, y: 1 }}
                         colors={['#F67EA4', '#F67EA4', '#F67EA4']}
-                        style={styles.linearGradient}>
+                        style={styles.linearGradient}
+                    >
                         <Text />
                     </LinearGradient>
                     {
@@ -211,7 +214,8 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         angle={90}
                         start={{ x: 0, y: 1 }}
                         colors={['#F67EA4', '#F67EA4', '#F67EA4']}
-                        style={styles.linearGradient}>
+                        style={styles.linearGradient}
+                    >
                         <Text />
                     </LinearGradient>
 
@@ -254,7 +258,8 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         angle={90}
                         start={{ x: 0, y: 1 }}
                         colors={['#F67EA4', '#F67EA4', '#F67EA4']}
-                        style={styles.linearGradient}>
+                        style={styles.linearGradient}
+                    >
                         <Text />
                     </LinearGradient>
                     {
