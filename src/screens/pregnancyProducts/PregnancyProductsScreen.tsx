@@ -146,6 +146,7 @@ const myStyles = (theme: string) => {
         image: {
             width: scales(50),
             height: scales(50),
+            borderRadius: scales(8),
         },
         itemContentContainer: {
             flexDirection: 'row',

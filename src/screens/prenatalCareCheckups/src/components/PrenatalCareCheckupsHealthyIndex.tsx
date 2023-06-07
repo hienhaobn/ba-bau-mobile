@@ -97,13 +97,14 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
         </>
     );
 
+    // eslint-disable-next-line complexity
     const renderContent = () => (
         <View style={styles.content}>
             {renderPregnancyWeekByWeek()}
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Huyết áp</Text>
-                    {getStatus(data.bloodPressure, 80, 130)}
+                    {getStatus(data?.bloodPressure, 80, 130)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
@@ -127,7 +128,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         </View>
                     </>
                     {
-                        !BigNumber(data.bloodPressure).eq(80) && (
+                        !BigNumber(data?.bloodPressure).eq(80) && (
                             <View>
                                 <Text style={[styles.dotValue, { left: point(0, 130 + 30, 80) || 0 }]}>
                                     Min
@@ -142,13 +143,13 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         )
                     }
                     <View>
-                        <Text style={[styles.dotValue, { left: point(0, 130 + 30, data.bloodPressure) || 0 }]}>
-                            {data.bloodPressure}
+                        <Text style={[styles.dotValue, { left: point(0, 130 + 30, data?.bloodPressure) || 0 }]}>
+                            {data?.bloodPressure}
                         </Text>
-                        <Text style={[styles.dotValueMinMax, {  left: point(0, 130 + 30, data.bloodPressure) || 0 }]}>
+                        <Text style={[styles.dotValueMinMax, {  left: point(0, 130 + 30, data?.bloodPressure) || 0 }]}>
                             mm
                         </Text>
-                        <View style={[styles.dot, { left: point(0, 130 + 30, data.bloodPressure) || 0 }]} >
+                        <View style={[styles.dot, { left: point(0, 130 + 30, data?.bloodPressure) || 0 }]} >
                             {renderDot()}
                         </View>
                     </View>
@@ -162,7 +163,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                 <Text style={styles.pointTxt}>Chỉ số đường huyết (mmol/L)</Text>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Lúc đói</Text>
-                    {getStatus(data.fastingGlycemicIndex, 0, 130)}
+                    {getStatus(data?.fastingGlycemicIndex, 0, 130)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
@@ -175,7 +176,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         <Text />
                     </LinearGradient>
                     {
-                        !BigNumber(data.fastingGlycemicIndex).eq(130) && (
+                        !BigNumber(data?.fastingGlycemicIndex).eq(130) && (
                             <View>
                                 <Text style={[styles.dotValue, { left: point(0, 130 + 30, 130) || 0 }]}>
                                     Max
@@ -190,13 +191,13 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         )
                     }
                     <View>
-                        <Text style={[styles.dotValue, { left: point(0, 130 + 30, data.fastingGlycemicIndex) || 0 }]}>
-                            {data.fastingGlycemicIndex}
+                        <Text style={[styles.dotValue, { left: point(0, 130 + 30, data?.fastingGlycemicIndex) || 0 }]}>
+                            {data?.fastingGlycemicIndex}
                         </Text>
-                        <Text style={[styles.dotValueMinMax, {  left: point(0, 130 + 30, data.fastingGlycemicIndex) || 0 }]}>
+                        <Text style={[styles.dotValueMinMax, {  left: point(0, 130 + 30, data?.fastingGlycemicIndex) || 0 }]}>
                             mm
                         </Text>
-                        <View style={[styles.dot, { left: point(0, 130 + 30, data.fastingGlycemicIndex) || 0 }]}>
+                        <View style={[styles.dot, { left: point(0, 130 + 30, data?.fastingGlycemicIndex) || 0 }]}>
                             {renderDot()}
                         </View>
                     </View>
@@ -206,7 +207,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Sau ăn 1h</Text>
-                    {getStatus(data.eating1hGlycemicIndex, 0, 180)}
+                    {getStatus(data?.eating1hGlycemicIndex, 0, 180)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
@@ -220,7 +221,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                     </LinearGradient>
 
                     {
-                        !BigNumber(data.eating1hGlycemicIndex).eq(180) && (
+                        !BigNumber(data?.eating1hGlycemicIndex).eq(180) && (
                             <View>
                                 <Text style={[styles.dotValue, { left: point(0, 180 + 30, 180) || 0 }]}>
                                     Max
@@ -235,13 +236,13 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         )
                     }
                     <View>
-                        <Text style={[styles.dotValue, { left: point(0, 180 + 30, data.eating1hGlycemicIndex) || 0 }]}>
-                            {data.eating1hGlycemicIndex}
+                        <Text style={[styles.dotValue, { left: point(0, 180 + 30, data?.eating1hGlycemicIndex) || 0 }]}>
+                            {data?.eating1hGlycemicIndex}
                         </Text>
-                        <Text style={[styles.dotValueMinMax, {  left: point(0, 180 + 30, data.eating1hGlycemicIndex) || 0 }]}>
+                        <Text style={[styles.dotValueMinMax, {  left: point(0, 180 + 30, data?.eating1hGlycemicIndex) || 0 }]}>
                             mm
                         </Text>
-                        <View style={[styles.dot, { left: point(0, 180 + 30, data.eating1hGlycemicIndex) || 0 }]}>
+                        <View style={[styles.dot, { left: point(0, 180 + 30, data?.eating1hGlycemicIndex) || 0 }]}>
                             {renderDot()}
                         </View>
                     </View>
@@ -250,7 +251,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
             <View>
                 <View style={styles.pointContainer}>
                     <Text style={styles.pointTxt}>Sau ăn 2h</Text>
-                    {getStatus(data.eating2hGlycemicIndex, 0, 153)}
+                    {getStatus(data?.eating2hGlycemicIndex, 0, 153)}
                 </View>
                 <View style={styles.progress}>
                     <LinearGradient
@@ -263,7 +264,7 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         <Text />
                     </LinearGradient>
                     {
-                        !BigNumber(data.eating2hGlycemicIndex).eq(153) && (
+                        !BigNumber(data?.eating2hGlycemicIndex).eq(153) && (
                             <View>
                                 <Text style={[styles.dotValue, { left: point(0, 153 + 30, 153) || 0 }]}>
                                     Max
@@ -278,13 +279,13 @@ const PrenatalCareCheckupsHealthyIndex = (props: IPrenatalCareCheckupsHealthyInd
                         )
                     }
                     <View>
-                        <Text style={[styles.dotValue, { left: point(0, 153 + 30, data.eating2hGlycemicIndex) || 0 }]}>
-                            {data.eating2hGlycemicIndex}
+                        <Text style={[styles.dotValue, { left: point(0, 153 + 30, data?.eating2hGlycemicIndex) || 0 }]}>
+                            {data?.eating2hGlycemicIndex}
                         </Text>
-                        <Text style={[styles.dotValueMinMax, {  left: point(0, 153 + 30, data.eating2hGlycemicIndex) || 0 }]}>
+                        <Text style={[styles.dotValueMinMax, {  left: point(0, 153 + 30, data?.eating2hGlycemicIndex) || 0 }]}>
                             mm
                         </Text>
-                        <View style={[styles.dot, { left: point(0, 153 + 30, data.eating2hGlycemicIndex) || 0 }]}>
+                        <View style={[styles.dot, { left: point(0, 153 + 30, data?.eating2hGlycemicIndex) || 0 }]}>
                             {renderDot()}
                         </View>
                     </View>

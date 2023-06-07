@@ -74,7 +74,7 @@ const HomeScreen = (props) => {
     const renderContentHeader = () => (
         <View style={styles.contentHeaderContainer}>
             <View style={styles.fetusInfo}>
-                <Text style={styles.titleFetus}>Lich khám</Text>
+                <Text style={styles.titleFetus}>Lịch khám</Text>
                 <Text style={styles.valueFetus}>{calendar ? moment(calendar).format('DD/MM') : 0}</Text>
             </View>
             <View>
@@ -100,7 +100,7 @@ const HomeScreen = (props) => {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.itemContainer} onPress={goToPrenatalCareCheckups}>
                     <Image source={Images.HomeCalendar} style={styles.imgItem} />
-                    <Text style={styles.itemText}>Lich khám</Text>
+                    <Text style={styles.itemText}>Lịch khám</Text>
                 </TouchableOpacity>
             </View>
             <View style={[styles.rowItems, styles.rowBottom]}>
