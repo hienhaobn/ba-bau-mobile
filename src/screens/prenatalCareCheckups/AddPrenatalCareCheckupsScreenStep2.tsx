@@ -51,6 +51,7 @@ const AddPrenatalCareCheckupsScreenStep2 = (props: IAddPrenatalCareCheckupsScree
                 femurLength: parseFloat(babyFL),
                 headPerimeter: parseFloat(babyHC),
                 pregnancyExam: momCheckups?.pregnancyExam || moment().toDate(),
+                width: parseFloat(babyLength),
             },
         } as user.CheckupsScheduleRequest;
         const response = action === 'EDIT' ? await updateAddPrenatalCareCheckups(child._id, momId._id, body) : await createBabyCheckups(body);

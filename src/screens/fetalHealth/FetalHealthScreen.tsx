@@ -96,7 +96,7 @@ const FetalHealthScreen = () => {
                     Tuần thai: <Text style={styles.textBold}>{element.child.weeksOfPregnacy} tuần</Text>
                 </Text>
                 <Text style={styles.valueRight}>
-                    Chiều dài: <Text style={styles.textBold}>{element.child.femurLength} mm</Text>
+                    Chiều dài: <Text style={styles.textBold}>{element.child.width} mm</Text>
                 </Text>
             </View>
             <View style={styles.row}>

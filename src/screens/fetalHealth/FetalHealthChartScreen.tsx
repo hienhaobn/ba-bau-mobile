@@ -169,13 +169,13 @@ const FetalHealthChartScreen = (props: FetalHealthChartScreenProps) => {
                             {renderDot()}
                         </View>
                     </View>
-                    <Text style={[styles.dotValue, { left: point(child?.fetalDevelopmentWeekly?.CRL?.min, child?.fetalDevelopmentWeekly?.CRL?.max, child?.femurLength) || 0 }]}>
-                        {child?.femurLength || 0}
+                    <Text style={[styles.dotValue, { left: point(child?.fetalDevelopmentWeekly?.CRL?.min, child?.fetalDevelopmentWeekly?.CRL?.max, child?.width) || 0 }]}>
+                        {child?.width || 0}
                     </Text>
-                    <Text style={[styles.dotValueMinMax, { left: point(child?.fetalDevelopmentWeekly?.CRL?.min, child?.fetalDevelopmentWeekly?.CRL?.max, child?.femurLength) || 0 }]}>
+                    <Text style={[styles.dotValueMinMax, { left: point(child?.fetalDevelopmentWeekly?.CRL?.min, child?.fetalDevelopmentWeekly?.CRL?.max, child?.width) || 0 }]}>
                         mm
                     </Text>
-                    <View style={[styles.dot, { left: point(child?.fetalDevelopmentWeekly?.CRL?.min, child?.fetalDevelopmentWeekly?.CRL?.max, child?.femurLength) || 0 }]}>
+                    <View style={[styles.dot, { left: point(child?.fetalDevelopmentWeekly?.CRL?.min, child?.fetalDevelopmentWeekly?.CRL?.max, child?.width) || 0 }]}>
                         {renderDot()}
                     </View>
                 </View>

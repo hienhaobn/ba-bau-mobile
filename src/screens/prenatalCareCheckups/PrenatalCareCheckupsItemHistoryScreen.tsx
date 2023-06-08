@@ -113,7 +113,7 @@ const PrenatalCareCheckupsItemHistoryScreen = (props: IPrenatalCareCheckupsItemH
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Chiều dài (CRL)</Text>
-                    <Text style={styles.valueItem}>{childChart.femurLength}mm</Text>
+                    <Text style={styles.valueItem}>{childChart.width}mm</Text>
                 </View>
                 <View style={styles.itemContainer}>
                     <Text style={styles.titleItem}>Đường kính lưỡng đỉnh (BPD)</Text>
