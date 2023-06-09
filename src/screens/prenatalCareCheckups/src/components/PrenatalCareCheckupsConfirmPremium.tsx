@@ -66,9 +66,7 @@ const PrenatalCareCheckupsConfirmPremium = (
                 <Text style={styles.text}>
                     Với biểu đồ của thai nhi bạn hoàn toàn có thể xem các chỉ số của bé so với tiêu chuẩn.
                 </Text>
-                <View style={styles.groupButton}>
-                    <Button title="Cập nhật" customStyles={styles.buttonConfirm} onPress={handleConfirm} />
-                </View>
+                <Button title="Cập nhật" customStyles={styles.buttonConfirm} onPress={handleConfirm} />
             </View>
         </RNModal>
     );
@@ -111,8 +109,7 @@ const myStyles = (theme: string) => {
             color: color.Text_Dark_1,
         },
         buttonConfirm: {
-            flex: 1,
-            marginLeft: scales(20),
+            marginTop: scales(32),
         },
     });
 };
