@@ -89,9 +89,6 @@ const myStyles = (theme: string) => {
             borderRadius: scales(8),
         },
         groupButton: {
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
             marginTop: scales(32),
         },
         title: {

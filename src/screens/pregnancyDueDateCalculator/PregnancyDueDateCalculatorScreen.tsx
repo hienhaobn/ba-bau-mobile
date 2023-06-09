@@ -62,8 +62,6 @@ const PregnancyDueDateCalculatorScreen = () => {
         </View>
     );
 
-    console.log('date', moment(moment(date, 'YYYY-MM-DD')).add(9, 'months').add(10, 'days').format('DD/MM/YYYY'));
-
     const renderContent = () => (
         <View style={styles.content}>
             {renderHeader()}
@@ -93,18 +91,20 @@ const myStyles = (theme: string) => {
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: color.Color_Primary2,
+            backgroundColor: color.Color_Primary,
             paddingVertical: scales(25),
+            borderRadius: scales(12),
+            marginHorizontal: scales(15),
         },
         titlePregnancyDueDateCalculator: {
             ...Fonts.inter600,
             fontSize: scales(14),
-            color: color.Text_Dark_1,
+            color: color.white,
         },
         datePregnancyDueDateCalculator: {
             ...Fonts.inter600,
             fontSize: scales(14),
-            color: color.Text_Dark_1,
+            color: color.white,
             marginHorizontal: scales(15),
         },
         selectDateContainer: {

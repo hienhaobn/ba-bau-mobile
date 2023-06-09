@@ -37,7 +37,7 @@ const RegisterScreen = () => {
                 setPassword('');
                 setConfirmPassword('');
                 setPhone('');
-                goToVerifyOTP(email, 'Register', () => apiSendOtpRegister({ email, password, phone }));
+                goToVerifyOTP(email, 'Register', () => apiSendOtpRegister({ email, password, phone }), password);
             }
         } catch (error) {
             hideLoading();

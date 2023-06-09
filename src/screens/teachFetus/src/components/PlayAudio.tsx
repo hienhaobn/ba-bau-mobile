@@ -129,6 +129,7 @@ const myStyles = (theme: string) => {
         image: {
             width: scales(50),
             height: scales(50),
+            borderRadius: scales(8),
         },
         headerImg: {
             width: Sizes.scrWidth - scales(30),
@@ -137,8 +138,8 @@ const myStyles = (theme: string) => {
         },
         iconPlay: {
             position: 'absolute',
-            left: scales(25),
-            top: scales(25),
+            left: scales(30),
+            top: scales(30),
         },
     });
 };

@@ -62,7 +62,7 @@ const NutritionalRegimenScreen = () => {
 
     const renderContentFoods = (item: food.FoodCategoryRoot) => (
         <View style={styles.contentFoodContainer}>
-            <TouchableOpacity style={styles.itemContentFoodContainer} onPress={() => goToFoods(item)}>
+            <TouchableOpacity style={styles.itemContentFoodContainer} onPress={() => goToFoods(item)} activeOpacity={1}>
                 <View style={styles.imgContentFoodItemContainer}>
                     <FastImage
                         source={item?.image ? { uri: item?.image } : Images.Meat}
@@ -147,6 +147,7 @@ const myStyles = (theme: string) => {
             shadowOffset: { width: -1, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 3,
+            elevation: 5,
         },
         imgContentFoodItem: {
             width: scales(40),

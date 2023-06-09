@@ -122,7 +122,7 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
             }
         } catch (err) {
             if (err?.message?.includes?.('not grant library permission')) {
-                showCustomToast('User did not grant library permission');
+                showCustomToast('Người dùng không cấp quyền cho thư viện');
             }
         }
     };
@@ -143,7 +143,7 @@ const AddHistoryFetusScreen = (props: AddHistoryFetusScreenProps) => {
             }
         } catch (err) {
             if (err?.message?.includes?.('not grant camera permission')) {
-                showCustomToast('User did not grant library permission');
+                showCustomToast('Người dùng không cấp quyền cho thư viện');
             }
         }
     };
@@ -334,6 +334,7 @@ const myStyles = (theme: string) => {
         image: {
             width: scales(120),
             height: scales(120),
+            borderRadius: scales(12),
         },
         contentHeaderContainer: {
             alignSelf: 'center',

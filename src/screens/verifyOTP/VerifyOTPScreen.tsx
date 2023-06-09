@@ -17,6 +17,8 @@ import { showCustomToast } from 'utils/toast';
 import { hideLoading, showLoading } from '../../components/Loading';
 import { apiRegister } from '../../states/user/fetchRegister';
 import { goToResetPassword } from '../resetPassword/src/utils';
+import { fetchLogin } from 'states/user';
+import { useAppDispatch } from 'states';
 
 interface VerifyOTPScreenProps {
     route: RouteProp<RootNavigatorParamList, 'VerifyOTP'>;
@@ -25,10 +27,12 @@ interface VerifyOTPScreenProps {
 const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
     const { theme } = useTheme();
     const styles = myStyles(theme);
-    const { email, fromScreen, callbackSendOtp } = props.route.params;
+    const { email, fromScreen, callbackSendOtp, password } = props.route.params;
     const [code, setCode] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [securePassword, setSecurePassword] = useState<boolean>(true);
+    // const [password, setPassword] = useState<string>('');
+    // const [securePassword, setSecurePassword] = useState<boolean>(true);
+
+    const dispatch = useAppDispatch();
 
     const renderHeader = () => (
         <View style={styles.tileContainer}>
@@ -44,8 +48,11 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
         }
         if (fromScreen === 'Register' && code.length === 4) {
             try {
-                await apiRegister({ code, email })
+                const res = await apiRegister({ code, email })
                 setCode('');
+                if (res) {
+                    dispatch(fetchLogin({ email, password }));
+                }
             } catch (error) {
                 showCustomToast(error.message);
                 return;
@@ -64,22 +71,22 @@ const VerifyOTPScreen = (props: VerifyOTPScreenProps) => {
         }
     };
 
-    const renderInputPassword = () => {
-        const Icon = SvgIcons[`IcVisibility${securePassword ? 'Off' : ''}`];
-        return (
-            <View style={styles.inputPasswordContainer}>
-                <Text style={styles.title}>Mật khẩu</Text>
-                <Input
-                    value={password}
-                    onChangeText={setPassword}
-                    placeholder="Vui lòng nhập mật khẩu"
-                    secureTextEntry={securePassword}
-                    icon={<Icon width={scales(15)} height={scales(15)} />}
-                    onPressIcon={() => setSecurePassword(!securePassword)}
-                />
-            </View>
-        );
-    };
+    // const renderInputPassword = () => {
+    //     const Icon = SvgIcons[`IcVisibility${securePassword ? 'Off' : ''}`];
+    //     return (
+    //         <View style={styles.inputPasswordContainer}>
+    //             <Text style={styles.title}>Mật khẩu</Text>
+    //             <Input
+    //                 value={password}
+    //                 onChangeText={setPassword}
+    //                 placeholder="Vui lòng nhập mật khẩu"
+    //                 secureTextEntry={securePassword}
+    //                 icon={<Icon width={scales(15)} height={scales(15)} />}
+    //                 onPressIcon={() => setSecurePassword(!securePassword)}
+    //             />
+    //         </View>
+    //     );
+    // };
 
     const renderButton = () => (
         <Button

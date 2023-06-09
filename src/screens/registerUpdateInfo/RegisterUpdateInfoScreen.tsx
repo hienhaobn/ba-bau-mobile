@@ -95,7 +95,7 @@ const RegisterUpdateInfoScreen = (props: RegisterUpdateInfoScreenProps) => {
             }
         } catch (err) {
             if (err?.message?.includes?.('not grant library permission')) {
-                showCustomToast('User did not grant library permission');
+                showCustomToast('Người dùng không cấp quyền cho thư viện');
             }
         }
     };
@@ -116,7 +116,7 @@ const RegisterUpdateInfoScreen = (props: RegisterUpdateInfoScreenProps) => {
             }
         } catch (err) {
             if (err?.message?.includes?.('not grant camera permission')) {
-                showCustomToast('User did not grant library permission');
+                showCustomToast('Người dùng không cấp quyền cho thư viện');
             }
         }
     };

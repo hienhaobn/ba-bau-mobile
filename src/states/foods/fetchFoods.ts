@@ -6,12 +6,12 @@ import { showCustomToast } from 'utils/toast';
 
 export const fetchFoodCategoryRoot = async () => {
     try {
-        showLoading();
+        // showLoading();
         const res: food.FoodCategoryRoot[] = await axiosInstance.get('/food-categories-root');
-        hideLoading();
+        // hideLoading();
         return res;
     } catch (error) {
-        hideLoading();
+        // hideLoading();
         showCustomToast('Thất bại');
         console.log(error);
     }
@@ -19,12 +19,12 @@ export const fetchFoodCategoryRoot = async () => {
 
 export const fetchFoodCategoryByFoodCategoryRootId = async (categoryRootId: string) =>  {
     try {
-        showLoading();
+        // showLoading();
         const res: food.FoodCategory[] = await axiosInstance.get(`/food-categories/root/${categoryRootId}`);
-        hideLoading();
+        // hideLoading();
         return res;
     } catch (error) {
-        hideLoading();
+        // hideLoading();
         showCustomToast(error?.response?.data?.message);
         console.log(error);
     }
@@ -32,12 +32,12 @@ export const fetchFoodCategoryByFoodCategoryRootId = async (categoryRootId: stri
 
 export const fetchFoodsOfCategory = async (categoryId: string) => {
     try {
-        showLoading();
+        // showLoading();
         const res: food.FoodOfCategory[] = await axiosInstance.get(`/foods/category/${categoryId}`);
-        hideLoading();
+        // hideLoading();
         return res;
     } catch (error) {
-        hideLoading();
+        // hideLoading();
         showCustomToast('Thất bại');
         console.log(error);
     }
@@ -46,12 +46,12 @@ export const fetchFoodsOfCategory = async (categoryId: string) => {
 
 export const fetchFoodsOfCategoryById = async (foodsOfCategoryId: string) => {
     try {
-        showLoading();
+        // showLoading();
         const res: food.FoodCategory = await axiosInstance.get(`/food-categories/${foodsOfCategoryId}`);
-        hideLoading();
+        // hideLoading();
         return res;
     } catch (error) {
-        hideLoading();
+        // hideLoading();
         showCustomToast('Thất bại');
         console.log(error);
     }
@@ -69,7 +69,7 @@ export const fetchFoodById = async (id: string) => {
 
 export const saveFood = async (foodId: string) => {
     try {
-        showLoading();
+        // showLoading();
         const res = await axiosInstance.post('/save-food', {
             idFood: foodId,
         });
@@ -102,13 +102,13 @@ export const removeSaveFood = async (foodId: string) => {
 }
 export const fetchFoodSaved = async () => {
     try {
-        showLoading();
+        // showLoading();
         const res: food.FoodSave[] = await axiosInstance.get(`/save-food`);
-        hideLoading();
+        // hideLoading();
 
         return res;
     } catch (error) {
-        hideLoading();
+        // hideLoading();
         showCustomToast('get data failed');
         console.log(error);
     }

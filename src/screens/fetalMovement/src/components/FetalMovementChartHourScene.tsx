@@ -174,6 +174,7 @@ const FetalMovementChartHourScene = () => {
             backgroundColor={getThemeColor().Color_Bg}
             activeOpacity={1}
             width={Sizes.scrWidth}
+            barWidth={scales(20)}
             xAxisLabelTextStyle={{
                 ...Fonts.inter600,
                 color: getThemeColor().Text_Dark_1,

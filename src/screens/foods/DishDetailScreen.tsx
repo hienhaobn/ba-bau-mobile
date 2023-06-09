@@ -157,6 +157,7 @@ const myStyles = (theme: string) => {
             width: Sizes.scrWidth - scales(30),
             height: scales(188),
             marginBottom: scales(15),
+            borderRadius: scales(15),
         },
         titleHeader: {
             ...Fonts.inter600,

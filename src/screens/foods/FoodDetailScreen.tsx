@@ -34,7 +34,7 @@ const TABS = [
     {
         key: FoodDetailTab.dish,
         title: 'Món ngon',
-    }
+    },
 ]
 
 const FoodDetailScreen = (props: IFoodDetailScreenProps) => {
@@ -91,7 +91,7 @@ const FoodDetailScreen = (props: IFoodDetailScreenProps) => {
             <FastImage
                 source={foodCategory?.image ? { uri: foodCategory?.image } : Images.Beef}
                 style={styles.headerImg}
-                resizeMode="contain"
+                resizeMode='cover'
             />
             <Text style={styles.titleHeader}>{foodCategory?.name}</Text>
             <Text style={styles.desc}>{foodDetail?.[0]?.description}</Text>
@@ -165,6 +165,7 @@ const myStyles = (theme: string) => {
             width: Sizes.scrWidth - scales(30),
             height: scales(188),
             marginBottom: scales(15),
+            borderRadius: scales(15),
         },
         titleHeader: {
             ...Fonts.inter600,

@@ -130,6 +130,7 @@ const FetalMovementChartDayScene = () => {
                 color: getThemeColor().Text_Dark_1,
                 fontSize: scales(12),
             }}
+            barWidth={scales(20)}
             rotateLabel
             onPress={(element) => {
                 const splitDateSelect = element.label.split('/');

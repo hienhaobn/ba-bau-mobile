@@ -52,6 +52,7 @@ declare namespace user {
         email: string;
         fromScreen?: 'ForgotPassword' | 'Register';
         callbackSendOtp: () => { message: string; success: boolean };
+        password?: string;
     }
 
     interface UserForgotPasswordRequest {

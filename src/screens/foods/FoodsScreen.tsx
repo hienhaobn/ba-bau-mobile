@@ -154,6 +154,7 @@ const myStyles = (theme: string) => {
         image: {
             width: scales(50),
             height: scales(50),
+            borderRadius: scales(8),
         },
         itemContentContainer: {
             backgroundColor: color.Color_Bg,
@@ -161,10 +162,6 @@ const myStyles = (theme: string) => {
             paddingVertical: scales(15),
             marginBottom: scales(15),
 
-            shadowColor: color.Text_Dark_1,
-            shadowOffset: { width: -1, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 3,
         },
         itemContent: {
             flex: 1,

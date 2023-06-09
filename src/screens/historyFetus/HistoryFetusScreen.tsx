@@ -64,7 +64,6 @@ const HistoryFetusScreen = () => {
     );
 
     const renderItem = (item: fetal.FetalHistory) => {
-        console.log(item);
         return (
             <TouchableOpacity style={styles.itemContentContainer} activeOpacity={0.9} onPress={() => goToAddHistoryFetus('EDIT', item)}>
                 <FastImage source={item?.image ? { uri: item?.image } : Images.Babe3} style={styles.image} />
@@ -131,6 +130,7 @@ const myStyles = (theme: string) => {
         image: {
             width: scales(50),
             height: scales(50),
+            borderRadius: scales(8),
         },
         itemContentContainer: {
             flexDirection: 'row',

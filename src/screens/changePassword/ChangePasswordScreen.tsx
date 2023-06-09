@@ -23,7 +23,7 @@ function ChangePasswordScreen(props) {
 
     const validateInputPassword = () => {
         if (password !== confirmPassword) {
-            showCustomToast('Password is incorrect');
+            showCustomToast('Mật khẩu không khớp');
             return true;
         }
     };

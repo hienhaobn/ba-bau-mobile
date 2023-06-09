@@ -1,7 +1,6 @@
 import axios from 'axios';
 import axiosInstance from 'services/api-requests';
 import { showCustomToast } from 'utils/toast';
-import { resetStack } from 'navigation/utils';
 
 export const apiSendOtpRegister = async (user: user.SendOtpRegisterRequest) => {
     try {
@@ -27,7 +26,7 @@ export const apiRegister = async (user: user.ConfirmRegisterRequest) => {
             return;
         }
         showCustomToast('Đăng ký thành công');
-        resetStack('Login');
+        return response;
     } catch (error) {
         showCustomToast(error.message);
         return;
